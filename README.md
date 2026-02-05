@@ -59,15 +59,15 @@ Documentación del proyecto de plataforma tecnológica para Beiqa - Representaci
 
 ## Módulos de la Plataforma
 
-| # | Módulo | Descripción | Estado |
-|---|--------|-------------|--------|
-| 1 | [[03-Requirements/Functional-Requirements/01-Scraper|Scraper]] | Extracción de propiedades de portales | 📝 Especificando |
-| 2 | Data Ingestion | Integración de fuentes externas | 📋 Por especificar |
-| 3 | Base de Datos | Almacenamiento centralizado | 📝 Diseñando |
-| 4 | Market Intelligence | Análisis de mercado | 📋 Por especificar |
-| 5 | Geospatial | Análisis geoespacial | 📋 Por especificar |
-| 6 | AI Brain | Matching y automatización | 📋 Por especificar |
-| 7 | Tenant Portal | Portal para clientes | 📋 Por especificar |
+| #   | Módulo                                               | Descripción                     | Estado                                |                  |
+| --- | ---------------------------------------------------- | ------------------------------- | ------------------------------------- | ---------------- |
+| 1   | [[03-Requirements/Functional-Requirements/01-Scraper | Scraper                         | Extracción de propiedades de portales | 📝 Especificando |
+| 2   | Data Ingestion                                       | Integración de fuentes externas | 📋 Por especificar                    |                  |
+| 3   | Base de Datos                                        | Almacenamiento centralizado     | 📝 Diseñando                          |                  |
+| 4   | Market Intelligence                                  | Análisis de mercado             | 📋 Por especificar                    |                  |
+| 5   | Geospatial                                           | Análisis geoespacial            | 📋 Por especificar                    |                  |
+| 6   | AI Brain                                             | Matching y automatización       | 📋 Por especificar                    |                  |
+| 7   | Tenant Portal                                        | Portal para clientes            | 📋 Por especificar                    |                  |
 
 ---
 
