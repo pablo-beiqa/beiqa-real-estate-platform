@@ -21,12 +21,12 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 
 ### Objetivos Medibles
 
-| Objetivo | Métrica | Target | Cómo Medir |
-|----------|---------|--------|------------|
-| Reducir tiempo de búsqueda | Horas por proyecto | -50% | Tracking de tiempo |
-| Mejorar cobertura de mercado | % propiedades captadas vs mercado | >80% | Comparación con portales |
-| Aumentar satisfacción del cliente | NPS | >50 | Encuestas |
-| Acelerar cierre de deals | Días promedio de deal | -20% | CRM |
+| Objetivo                          | Métrica                           | Target | Cómo Medir               |
+| --------------------------------- | --------------------------------- | ------ | ------------------------ |
+| Reducir tiempo de búsqueda        | Horas por proyecto                | -50%   | Tracking de tiempo       |
+| Mejorar cobertura de mercado      | % propiedades captadas vs mercado | >80%   | Comparación con portales |
+| Aumentar satisfacción del cliente |                                   | >50    | Encuestas                |
+| Acelerar cierre de deals          | Días promedio de deal             | -20%   | CRM                      |
 
 ## Usuarios
 
