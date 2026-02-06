@@ -9,19 +9,19 @@ Documentación del proyecto de plataforma tecnológica para Beiqa - Representaci
 ## Quick Links
 
 ### Por dónde empezar
-- [[Vision-and-Goals|Visión y Objetivos]]
-- [[Business-Context|Contexto de Negocio]]
-- [[System-Architecture|Arquitectura del Sistema]]
-- [[Phase-0-Investigation|Fase 0: Investigación]]
+- [Visión y Objetivos](./00-Overview/Vision-and-Goals.md)
+- [Contexto de Negocio](./01-Discovery/Business-Context.md)
+- [Arquitectura del Sistema](./04-Architecture/System-Architecture.md)
+- [Fase 0: Investigación](./06-Roadmap/Phase-0-Investigation.md)
 
 ### Para el equipo técnico
-- [[Source-Catalog|Catálogo de Fuentes de Datos]]
-- [[Database-Options|Opciones de Base de Datos]]
-- [[Data-Model|Modelo de Datos]]
+- [Catálogo de Fuentes de Datos](./02-Research/Data-Sources-Research/Source-Catalog.md)
+- [Opciones de Base de Datos](./02-Research/Technology-Research/Database-Options.md)
+- [Modelo de Datos](./03-Requirements/Data-Requirements/Data-Model.md)
 
 ### Para stakeholders
-- [[Executive-Summary|Resumen Ejecutivo]]
-- [[Total-Budget|Estimación de Presupuesto]]
+- [Resumen Ejecutivo](./09-Communication/Stakeholder-Presentations/Executive-Summary.md)
+- [Estimación de Presupuesto](./02-Research/Cost-Estimates/Total-Budget.md)
 
 ---
 
@@ -61,7 +61,7 @@ Documentación del proyecto de plataforma tecnológica para Beiqa - Representaci
 
 | #   | Módulo                                               | Descripción                     | Estado                                |                  |
 | --- | ---------------------------------------------------- | ------------------------------- | ------------------------------------- | ---------------- |
-| 1   | [[03-Requirements/Functional-Requirements/01-Scraper | Scraper                         | Extracción de propiedades de portales | 📝 Especificando |
+| 1   | [Scraper](./03-Requirements/Functional-Requirements/01-Scraper.md) | Extracción de propiedades de portales | 📝 Especificando |
 | 2   | Data Ingestion                                       | Integración de fuentes externas | 📋 Por especificar                    |                  |
 | 3   | Base de Datos                                        | Almacenamiento centralizado     | 📝 Diseñando                          |                  |
 | 4   | Market Intelligence                                  | Análisis de mercado             | 📋 Por especificar                    |                  |
@@ -89,20 +89,20 @@ Documentación del proyecto de plataforma tecnológica para Beiqa - Representaci
 ## Documentos Clave
 
 ### Investigación Activa
-- [[Portal-Comparison|Comparativo de Portales]]
-- [[INEGI-APIs|APIs de INEGI]]
-- [[Google-Maps-Platform|Google Maps Platform]]
-- [[Catastro-Research|Datos Catastrales]]
-- [[Providers-Evaluation|Proveedores Comerciales]]
+- [Comparativo de Portales](./02-Research/Scraper-Research/Portal-Comparison.md)
+- [APIs de INEGI](./02-Research/Data-Sources-Research/INEGI-APIs.md)
+- [Google Maps Platform](./02-Research/Data-Sources-Research/Google-Maps-Platform.md)
+- [Datos Catastrales](./08-Data-Sources/Government/Catastro-Research.md)
+- [Proveedores Comerciales](./08-Data-Sources/Commercial/Providers-Evaluation.md)
 
 ### Diseño
-- [[Data-Model|Modelo de Datos]]
-- [[System-Architecture|Arquitectura del Sistema]]
-- [[User-Personas|User Personas]]
+- [Modelo de Datos](./03-Requirements/Data-Requirements/Data-Model.md)
+- [Arquitectura del Sistema](./04-Architecture/System-Architecture.md)
+- [User Personas](./05-User-Experience/User-Personas.md)
 
 ### Decisiones
-- [[ADR-001-Database-Choice|ADR-001: Base de Datos]]
-- [[ADR-Template|Template para ADRs]]
+- [ADR-001: Base de Datos](./07-Decisions/ADR-001-Database-Choice.md)
+- [Template para ADRs](./07-Decisions/ADR-Template.md)
 
 ---
 

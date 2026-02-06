@@ -24,7 +24,7 @@ Este documento cataloga TODAS las fuentes de datos potenciales para la plataform
 | 10 | (Otros por identificar) | | | | 🔴 | |
 
 **Documentos detallados**: 
-- [[Portal-Comparison|Comparativo de Portales]]
+- [Comparativo de Portales](../Scraper-Research/Portal-Comparison.md)
 
 ---
 
@@ -48,9 +48,9 @@ Este documento cataloga TODAS las fuentes de datos potenciales para la plataform
 | 14 | IMSS | Datos de empleo | ¿? | ¿? | 🔴 | |
 
 **Documentos detallados**:
-- [[INEGI-APIs|Investigación INEGI]]
-- [[02-Research/Data-Sources-Research/datos-gob-mx|Investigación datos.gob.mx]]
-- [[02-Research/Data-Sources-Research/Catastro-Access|Acceso a Catastro]]
+- [Investigación INEGI](./INEGI-APIs.md)
+- [Investigación datos.gob.mx](./datos-gob-mx.md)
+- [Acceso a Catastro](./Catastro-Access.md)
 
 ---
 
@@ -69,7 +69,7 @@ Este documento cataloga TODAS las fuentes de datos potenciales para la plataform
 | 9 | (Proveedores locales) | ¿? | México | ¿? | 🔴 | |
 
 **Documentos detallados**:
-- [[02-Research/Data-Sources-Research/Commercial-Data-Providers|Proveedores Comerciales]]
+- [Proveedores Comerciales](./Commercial-Data-Providers.md)
 
 ---
 
@@ -87,8 +87,8 @@ Este documento cataloga TODAS las fuentes de datos potenciales para la plataform
 | 8 | Foursquare Places | POIs | Pay per use | ¿? | 🔴 | |
 
 **Documentos detallados**:
-- [[Google-Maps-Platform|Google Maps Platform]]
-- [[02-Research/Technology-Research/Geospatial-Stack|Stack Geoespacial]]
+- [Google Maps Platform](./Google-Maps-Platform.md)
+- [Stack Geoespacial](../Technology-Research/Geospatial-Stack.md)
 
 ---
 
