@@ -3,7 +3,7 @@
 > Plataforma tecnológica interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos de Beiqa.
 
 **Fase actual**: 🟢 Discovery / Investigación  
-**Última actualización**: 2026-02-05
+**Última actualización**: 2026-02-06
 
 ---
 
@@ -168,10 +168,11 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 | Fecha | Cambio |
 |-------|--------|
+| 2026-02-06 | Expansión masiva de cuestionarios de producto: de 118 a 463 preguntas en 9 módulos. Nomenclatura clara Beiqa vs La Plataforma |
 | 2026-02-05 | Reestructuración del README: mejor orientación a stakeholders, tech stack summary, documentos clave refinados |
 | 2026-02-04 | Creación de estructura inicial de documentación |
 | 2026-02-04 | Definición de módulos y arquitectura de alto nivel |
 
 ---
 
-*Última actualización: 2026-02-05*
+*Última actualización: 2026-02-06*
