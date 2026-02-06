@@ -10,7 +10,7 @@ Este documento es el **hub central** de toda la investigación del proyecto BEIQ
 
 | Fase | Nombre | Estado | Documentos |
 |------|--------|--------|------------|
-| R-0 | Fundación | 🔴 Sin iniciar | README, Research-Overview, 8 Product Questions |
+| R-0 | Fundación | 🔴 Sin iniciar | README, Research-Overview, 9 Product Questions |
 | R-1 | Datos Core | 🔴 Sin iniciar | Competitive Landscape, Data Acquisition, Deduplication, Portal Comparison |
 | R-2 | Tecnología y Plataforma | 🔴 Sin iniciar | Tech Stack, Interface, DB, GIS, Data Sources, INEGI, Market Intel, AI |
 | R-3 | Validación y Factibilidad | 🔴 Sin iniciar | Architecture Validation, Budget, Feasibility |
@@ -96,6 +96,7 @@ Cuestionarios de visión de producto. Preguntas puras en español, sin respuesta
 | [05-Geoespacial-y-GIS.md](./Product-Questions/05-Geoespacial-y-GIS.md) | 🔴 | Mapas, polígonos, GIS |
 | [06-Cerebro-IA.md](./Product-Questions/06-Cerebro-IA.md) | 🔴 | Capacidades de IA |
 | [07-Portal-Tenants.md](./Product-Questions/07-Portal-Tenants.md) | 🔴 | Portal para clientes |
+| [08-Interfaz-Interna-y-Experiencia-Equipo.md](./Product-Questions/08-Interfaz-Interna-y-Experiencia-Equipo.md) | 🔴 | Cómo interactúa el equipo interno (dashboard vs IA vs híbrido) |
 
 ### Fase R-1: Datos Core
 

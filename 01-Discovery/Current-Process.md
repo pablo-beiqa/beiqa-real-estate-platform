@@ -1,6 +1,6 @@
 # Proceso Actual de Trabajo
 
-## Descripción del Proceso Sin BEIQA
+## Descripción del Proceso Sin Plataforma/Producto
 
 Este documento describe cómo trabaja actualmente el equipo de Beiqa sin la plataforma, para entender qué automatizar y mejorar.
 
@@ -70,40 +70,45 @@ Este documento describe cómo trabaja actualmente el equipo de Beiqa sin la plat
 
 ## Herramientas Actuales
 
-| Herramienta | Uso Principal | Problemas |
-|-------------|---------------|-----------|
-| HubSpot | CRM, pipeline de deals | No tiene info de propiedades |
-| Excel/Sheets | Tracking de propiedades | Disperso, no centralizado |
-| Inmuebles24 | Búsqueda de propiedades | Manual, no se guarda |
-| Vivanuncios | Búsqueda de propiedades | Manual, no se guarda |
-| Google Maps | Ver ubicación de propiedades | Sin análisis avanzado |
-| Email | Comunicación con clientes | Sin centralizar |
-| WhatsApp | Comunicación rápida | Sin tracking |
-| Teléfono | Llamadas | Sin registro sistemático |
+
+| Herramienta  | Uso Principal                | Problemas                    |
+| ------------ | ---------------------------- | ---------------------------- |
+| HubSpot      | CRM, pipeline de deals       | No tiene info de propiedades |
+| Excel/Sheets | Tracking de propiedades      | Disperso, no centralizado    |
+| Inmuebles24  | Búsqueda de propiedades      | Manual, no se guarda         |
+| Vivanuncios  | Búsqueda de propiedades      | Manual, no se guarda         |
+| Google Maps  | Ver ubicación de propiedades | Sin análisis avanzado        |
+| Email        | Comunicación con clientes    | Sin centralizar              |
+| WhatsApp     | Comunicación rápida          | Sin tracking                 |
+| Teléfono     | Llamadas                     | Sin registro sistemático     |
+
 
 ## Preguntas a Validar con el Equipo
 
-- [ ] ¿Dónde se documentan exactamente los requerimientos del cliente?
-- [ ] ¿Cómo se guarda el shortlist de propiedades actualmente?
-- [ ] ¿Qué formato tienen las presentaciones para clientes?
-- [ ] ¿Cómo se comunican las actualizaciones al cliente?
-- [ ] ¿Cuánto tiempo promedio toma cada etapa?
-- [ ] ¿Cuáles son los principales cuellos de botella?
+- ¿Dónde se documentan exactamente los requerimientos del cliente?
+- ¿Cómo se guarda el shortlist de propiedades actualmente?
+- ¿Qué formato tienen las presentaciones para clientes?
+- ¿Cómo se comunican las actualizaciones al cliente?
+- ¿Cuánto tiempo promedio toma cada etapa?
+- ¿Cuáles son los principales cuellos de botella?
 
 ## Oportunidades de Mejora
 
-| Etapa | Pain Point | Cómo BEIQA Ayuda |
-|-------|------------|------------------|
-| Búsqueda | Manual, lenta | Scraper automatizado |
-| Análisis | Sin herramientas | Market Intel + Geospatial |
-| Presentación | Manual | Reportes automáticos |
-| Seguimiento | Disperso | Portal + tracking |
-| Comunicación | Sin centralizar | AI Brain + logs |
+
+| Etapa        | Pain Point       | Cómo BEIQA Ayuda          |
+| ------------ | ---------------- | ------------------------- |
+| Búsqueda     | Manual, lenta    | Scraper automatizado      |
+| Análisis     | Sin herramientas | Market Intel + Geospatial |
+| Presentación | Manual           | Reportes automáticos      |
+| Seguimiento  | Disperso         | Portal + tracking         |
+| Comunicación | Sin centralizar  | AI Brain + logs           |
+
 
 ---
 
 ## Próximos Pasos
 
-- [ ] Entrevistas con usuarios para validar proceso
-- [ ] Shadowing de un proyecto real
-- [ ] Medir tiempos actuales para comparar después
+- Entrevistas con usuarios para validar proceso
+- Shadowing de un proyecto real
+- Medir tiempos actuales para comparar después
+

@@ -23,7 +23,7 @@ La [Arquitectura del Sistema](../04-Architecture/System-Architecture.md) es un d
 - **Audiencia**: Pablo y stakeholders
 - **Propósito**: Definir completamente QUÉ se quiere construir antes de investigar cómo
 - **Ubicación**: `02-Research/Product-Questions/`
-- **Cantidad**: 8 documentos, uno por módulo
+- **Cantidad**: 9 documentos, uno por módulo (incluye Interfaz Interna)
 
 ### Capa 2: Investigación Técnica (Technical Research)
 
@@ -62,6 +62,7 @@ Crear estructura de navegación y todos los cuestionarios de producto. Pablo y s
 | `Product-Questions/05-Geoespacial-y-GIS.md` | 🔴 |
 | `Product-Questions/06-Cerebro-IA.md` | 🔴 |
 | `Product-Questions/07-Portal-Tenants.md` | 🔴 |
+| `Product-Questions/08-Interfaz-Interna-y-Experiencia-Equipo.md` | 🔴 |
 
 ### Fase R-1: Datos Core (Semana 1)
 

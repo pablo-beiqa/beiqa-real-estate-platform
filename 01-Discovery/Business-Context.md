@@ -13,6 +13,7 @@
 ## El Negocio de Tenant Representation
 
 ### ¿Qué hace Beiqa?
+
 Beiqa representa a empresas (tenants) que buscan espacios comerciales, industriales o de oficinas. A diferencia de brokers que representan propietarios, Beiqa trabaja exclusivamente del lado del arrendatario.
 
 ### Flujo Típico de un Proyecto
@@ -49,50 +50,58 @@ Beiqa representa a empresas (tenants) que buscan espacios comerciales, industria
 
 ### Tipos de Inmuebles que Maneja
 
-| Tipo | Descripción | Volumen |
-|------|-------------|---------|
-| Industrial | Bodegas, naves, centros de distribución | Principal |
-| Retail | Locales comerciales | Secundario |
-| Oficinas | Espacios corporativos | Secundario |
-| Terrenos | Para desarrollo | Ocasional |
-| Uso mixto | Combinaciones | Ocasional |
+
+| Tipo       | Descripción                             | Volumen    |
+| ---------- | --------------------------------------- | ---------- |
+| Industrial | Bodegas, naves, centros de distribución | Principal  |
+| Retail     | Locales comerciales                     | Secundario |
+| Oficinas   | Espacios corporativos                   | Secundario |
+| Terrenos   | Para desarrollo                         | Ocasional  |
+| Uso mixto  | Combinaciones                           | Ocasional  |
+
 
 ## Proceso Actual (Sin BEIQA)
 
 ### Herramientas Actuales
 
-| Herramienta | Uso | Problema |
-|-------------|-----|----------|
-| HubSpot | CRM, seguimiento de clientes | Información de propiedades separada |
-| Excel/Sheets | Control de propiedades, comparativos | Disperso, desactualizado |
-| Portales web | Búsqueda manual de propiedades | Tiempo intensivo, no centralizado |
-| Email | Comunicación con clientes | Sin tracking sistemático |
-| Red de contactos | Referidos, boca a boca | No documentado |
+
+| Herramienta      | Uso                                  | Problema                            |
+| ---------------- | ------------------------------------ | ----------------------------------- |
+| HubSpot          | CRM, seguimiento de clientes         | Información de propiedades separada |
+| Excel/Sheets     | Control de propiedades, comparativos | Disperso, desactualizado            |
+| Portales web     | Búsqueda manual de propiedades       | Tiempo intensivo, no centralizado   |
+| Email            | Comunicación con clientes            | Sin tracking sistemático            |
+| Red de contactos | Referidos, boca a boca               | No documentado                      |
+
 
 ### Fuentes de Información Actuales
 
-- Inmuebles24, Vivanuncios, otros portales
+- Easy Brokers, Spot2, Inmuebles24, Vivanuncios, otros portales
 - Red de brokers y desarrolladores
 - Contactos directos con propietarios
 - Noticias del sector
 
 ## Volumen de Operación
 
-| Métrica | Valor Actual |
-|---------|--------------|
-| Proyectos activos por mes | 1-10 |
-| Clientes en cartera | 20+ |
-| Propiedades evaluadas por proyecto | Variable |
-| Tiempo promedio por deal | Por medir |
+
+| Métrica                            | Valor Actual |
+| ---------------------------------- | ------------ |
+| Proyectos activos por mes          | 1-10         |
+| Clientes en cartera                | 3            |
+| Propiedades evaluadas por proyecto | Variable     |
+| Tiempo promedio por deal           | Por medir    |
+
 
 ## Propuesta de Valor Actual
 
 **Diferenciadores de Beiqa hoy**:
+
 1. Representación exclusiva del tenant (no conflicto de interés)
 2. Conocimiento del mercado local
 3. Red de contactos
 
 **Diferenciadores que BEIQA habilitaría**:
+
 1. Cobertura completa del mercado (scraping automatizado)
 2. Inteligencia de mercado superior (datos + análisis)
 3. Respuesta más rápida (búsqueda automatizada)
@@ -105,3 +114,4 @@ Beiqa representa a empresas (tenants) que buscan espacios comerciales, industria
 - [Proceso Actual Detallado](./Current-Process.md)
 - [Pain Points](./Pain-Points.md)
 - [Visión y Objetivos](../00-Overview/Vision-and-Goals.md)
+
