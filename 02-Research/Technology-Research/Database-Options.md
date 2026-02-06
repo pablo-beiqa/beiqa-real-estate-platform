@@ -1,159 +1,159 @@
-# Investigación: Opciones de Base de Datos
+# Investigación: Hosting de Base de Datos
 
-## Objetivo
-
-Evaluar opciones de base de datos para el almacenamiento de datos de BEIQA, considerando requerimientos relacionales y geoespaciales.
-
+**Fase**: R-2 (Tecnología y Plataforma)
 **Estado**: 🔴 Por investigar
+**Depende de**: Tech Stack Decision (ADR-005)
 
 ---
 
-## Requerimientos de Almacenamiento
+## Decisión Tomada: Motor de Base de Datos
 
-### Tipos de Datos a Almacenar
+> **PostgreSQL + PostGIS es la decisión clara** para BEIQA. No hay alternativa que ofrezca el mismo nivel de soporte geoespacial + relacional + text search en un solo motor.
+>
+> La pregunta abierta es: **¿DÓNDE hostear PostgreSQL + PostGIS?**
 
-| Tipo | Volumen Estimado | Características |
-|------|------------------|-----------------|
-| Propiedades | 50K+ registros | Relacional + coordenadas |
-| Clientes | 20+ registros | Relacional |
-| Búsquedas | Variable | Relacional |
-| Comunicaciones | Alto volumen | Texto + metadata |
-| Documentos | Variable | Archivos (separado) |
-| Geometrías | Muchas capas | Polígonos, puntos, líneas |
-| Series temporales | Histórico | Precios, vacancy por tiempo |
+### Justificación de PostgreSQL + PostGIS
 
-### Requerimientos Funcionales
-
-- [ ] Queries relacionales estándar (JOIN, WHERE, etc.)
-- [ ] Queries geoespaciales (within, distance, intersects)
-- [ ] Búsqueda de texto completo
-- [ ] Índices eficientes para consultas frecuentes
-- [ ] ACID compliance
-- [ ] Backups automatizados
-- [ ] Escalabilidad futura
+| Requerimiento | PostgreSQL + PostGIS | Alternativas |
+|---------------|---------------------|-------------|
+| Queries relacionales (JOIN, WHERE) | ✅ Excelente | MySQL: ✅, MongoDB: ⚠️ |
+| Queries geoespaciales (within, distance, intersects) | ✅ Excelente (PostGIS) | MySQL Spatial: ⚠️ Básico, MongoDB: ⚠️ |
+| Búsqueda full-text en español | ✅ Bueno (tsvector, unaccent) | Bueno en todas |
+| Índices eficientes (GiST, GIN, BRIN) | ✅ Excelente | Limitado en otras |
+| ACID compliance | ✅ | ✅ MySQL, ⚠️ MongoDB |
+| Open source, sin vendor lock-in | ✅ | ✅ |
 
 ---
 
-## Opciones a Evaluar
+## Opciones de Hosting a Evaluar
 
-### Opción 1: PostgreSQL + PostGIS
+### Opción 1: Supabase
 
 | Criterio | Evaluación |
 |----------|------------|
-| **Descripción** | DB relacional con extensión geoespacial madura |
-| **Pros** | - Soporte geoespacial completo - Maduro y estable - Gran comunidad - Open source - ACID compliant |
-| **Cons** | - Requiere conocimiento específico PostGIS - Setup más complejo |
-| **Costo** | Open source (gratis), hosting varía |
-| **Experiencia del equipo** | 🔴 Por verificar |
-| **Hosting options** | AWS RDS, GCP Cloud SQL, Azure, self-hosted |
+| PostGIS disponible | ✅ Sí (extensión habilitada) |
+| Free tier | 500 MB, 50K rows |
+| Pro tier | $25/mes -- 8 GB, 500K rows |
+| Backups | Automáticos (diarios en Pro) |
+| APIs automáticas | ✅ REST + GraphQL generados |
+| Auth incluido | ✅ Supabase Auth |
+| Storage incluido | ✅ Supabase Storage |
+| Dashboard | ✅ SQL editor, table view |
+| Región | 🔴 ¿Cuál es la más cercana a CDMX? |
+| Latencia estimada | 🔴 Por medir |
 
-**Preguntas de investigación**:
-- [ ] ¿El equipo tiene experiencia con PostgreSQL?
-- [ ] ¿Qué hosting option es más conveniente?
-- [ ] ¿Cuál es el costo estimado de hosting?
+**Preguntas:**
+- [ ] ¿PostGIS en Supabase tiene todas las funciones necesarias (ST_DWithin, ST_Intersects, etc.)?
+- [ ] ¿El límite de 8 GB en Pro es suficiente para el volumen estimado?
+- [ ] ¿Se puede acceder directamente a PostgreSQL (no solo via Supabase APIs)?
+- [ ] ¿Qué pasa si necesitamos migrar de Supabase?
 
----
-
-### Opción 2: MySQL + MySQL Spatial
-
-| Criterio | Evaluación |
-|----------|------------|
-| **Descripción** | DB relacional popular con funciones espaciales |
-| **Pros** | - Muy conocido - Fácil de usar - Buen hosting disponible |
-| **Cons** | - Funciones geoespaciales menos completas que PostGIS - Limitaciones en tipos de geometría |
-| **Costo** | Open source, hosting varía |
-| **Experiencia del equipo** | 🔴 Por verificar |
-
----
-
-### Opción 3: MongoDB + Geospatial Indexes
+### Opción 2: AWS RDS for PostgreSQL
 
 | Criterio | Evaluación |
 |----------|------------|
-| **Descripción** | DB de documentos con soporte geoespacial |
-| **Pros** | - Schema flexible - Bueno para datos heterogéneos - Fácil de empezar |
-| **Cons** | - No ACID completo - Geospatial limitado vs PostGIS - Más costoso a escala |
-| **Costo** | Atlas free tier, luego pay per use |
-| **Experiencia del equipo** | 🔴 Por verificar |
+| PostGIS disponible | ✅ Sí |
+| Free tier | 12 meses, db.t3.micro |
+| Costo estimado (t3.small + 20GB) | ~$30-50/mes |
+| Backups | Automáticos, snapshots |
+| Multi-AZ | Disponible (costo extra) |
+| Región cercana a CDMX | us-east-1 (Virginia) |
+| Latencia estimada | 🔴 Por medir |
 
----
+**Preguntas:**
+- [ ] ¿Cuál es la instancia mínima para nuestro volumen?
+- [ ] ¿Cuánto cuesta el storage adicional?
+- [ ] ¿Se necesita VPC/Security Groups especiales?
 
-### Opción 4: Supabase (PostgreSQL managed)
-
-| Criterio | Evaluación |
-|----------|------------|
-| **Descripción** | PostgreSQL hosted con APIs automáticas |
-| **Pros** | - Setup muy rápido - APIs REST automáticas - Auth incluido - PostGIS disponible |
-| **Cons** | - Menos control - Vendor lock-in - Límites en free tier |
-| **Costo** | Free tier, luego $25/mes+ |
-
----
-
-### Opción 5: PlanetScale (MySQL managed)
+### Opción 3: GCP Cloud SQL for PostgreSQL
 
 | Criterio | Evaluación |
 |----------|------------|
-| **Descripción** | MySQL serverless con branching |
-| **Pros** | - Serverless - Branching para desarrollo - Escalable |
-| **Cons** | - Sin soporte geoespacial robusto - Relativamente nuevo |
-| **Costo** | Free tier limitado |
+| PostGIS disponible | ✅ Sí |
+| Free tier | $300 crédito por 90 días |
+| Costo estimado | ~$30-60/mes |
+| Backups | Automáticos |
+| Región cercana a CDMX | us-central1 (Iowa) |
+
+### Opción 4: Neon (Serverless PostgreSQL)
+
+| Criterio | Evaluación |
+|----------|------------|
+| PostGIS disponible | ✅ Sí |
+| Free tier | 0.5 GiB storage, 100 hours/mes |
+| Launch tier | $19/mes -- 10 GiB, 300 hours |
+| Serverless | ✅ Escala a cero cuando no se usa |
+| Branching | ✅ Base de datos de prueba instantánea |
+| Latencia estimada | 🔴 Por medir (cold start?) |
+
+**Preguntas:**
+- [ ] ¿El cold start afecta queries después de inactividad?
+- [ ] ¿PostGIS funciona sin limitaciones en Neon?
+- [ ] ¿300 compute hours/mes son suficientes?
+
+### Opción 5: Railway
+
+| Criterio | Evaluación |
+|----------|------------|
+| PostGIS disponible | 🔴 Por verificar |
+| Costo | $5/mes base + uso |
+| Simplicidad | ✅ Muy fácil |
+| Backups | 🔴 Por verificar |
+
+### Opción 6: Self-Hosted (VPS)
+
+| Criterio | Evaluación |
+|----------|------------|
+| PostGIS disponible | ✅ Sí (instalar manualmente) |
+| Costo | $10-40/mes (DigitalOcean, Hetzner) |
+| Control | ✅ Total |
+| Mantenimiento | ❌ Manual (updates, backups, security) |
+| Justificación | Solo si necesitamos control absoluto |
 
 ---
 
-## Matriz de Comparación
+## Matriz de Comparación Actualizada
 
-| Criterio | PostgreSQL+PostGIS | MySQL Spatial | MongoDB | Supabase |
-|----------|-------------------|---------------|---------|----------|
-| Relacional | ✅ Excelente | ✅ Excelente | ⚠️ Limitado | ✅ Excelente |
-| Geoespacial | ✅ Excelente | ⚠️ Básico | ⚠️ Básico | ✅ Excelente |
-| Full-text search | ✅ Bueno | ✅ Bueno | ✅ Bueno | ✅ Bueno |
-| Facilidad setup | ⚠️ Media | ✅ Fácil | ✅ Fácil | ✅ Muy fácil |
-| Costo inicial | ✅ Bajo | ✅ Bajo | ✅ Bajo | ✅ Gratis |
-| Escalabilidad | ✅ Alta | ✅ Alta | ✅ Alta | ⚠️ Media |
-| Vendor lock-in | ✅ Ninguno | ✅ Ninguno | ⚠️ Medio | ⚠️ Medio |
-
----
-
-## Almacenamiento de Archivos (Separado)
-
-| Opción | Descripción | Costo |
-|--------|-------------|-------|
-| AWS S3 | Object storage de AWS | Pay per use |
-| Google Cloud Storage | Object storage de GCP | Pay per use |
-| Azure Blob | Object storage de Azure | Pay per use |
-| MinIO | Self-hosted S3-compatible | Self-hosted |
-| Cloudflare R2 | S3-compatible, sin egress fees | Pay per use |
-
-**Decisión**: Dependerá del cloud provider elegido.
+| Criterio | Supabase | AWS RDS | GCP Cloud SQL | Neon | Railway |
+|----------|----------|---------|---------------|------|---------|
+| PostGIS | ✅ | ✅ | ✅ | ✅ | 🔴 |
+| Costo MVP | ✅ $0-25 | ⚠️ $30-50 | ⚠️ $30-60 | ✅ $0-19 | ✅ $5-20 |
+| Facilidad setup | ✅ Muy fácil | ⚠️ Medio | ⚠️ Medio | ✅ Fácil | ✅ Fácil |
+| Backups auto | ✅ | ✅ | ✅ | ✅ | 🔴 |
+| Extras incluidos | ✅ Auth, Storage, APIs | ❌ | ❌ | ❌ | ❌ |
+| Lock-in | ⚠️ Medio | ⚠️ Alto | ⚠️ Alto | ⚠️ Bajo | ⚠️ Bajo |
+| Escalabilidad | ⚠️ Media | ✅ Alta | ✅ Alta | ✅ Alta | ⚠️ Media |
 
 ---
 
-## Recomendación Preliminar
+## Almacenamiento de Archivos (Complementario)
 
-**Para BEIQA, la recomendación preliminar es PostgreSQL + PostGIS** porque:
+La base de datos no almacena archivos pesados. Se necesita object storage separado:
 
-1. Mejor soporte geoespacial (crítico para el módulo Geospatial)
-2. ACID compliance (importante para datos de negocio)
-3. Maduro y estable
-4. Buenas opciones de hosting managed
-5. Open source (sin vendor lock-in)
+| Opción | Costo | Sin egress fees | Compatible S3 |
+|--------|-------|-----------------|---------------|
+| Cloudflare R2 | Bajo | ✅ | ✅ |
+| AWS S3 | Bajo | ❌ | ✅ |
+| Supabase Storage | Incluido | Varía | No |
+| GCP Cloud Storage | Bajo | ❌ | Parcial |
 
-**Sin embargo**, esta decisión debe validarse con:
-- [ ] Experiencia del equipo de desarrollo
-- [ ] Costos de hosting en el provider elegido
-- [ ] Prueba de concepto con datos reales
+> **Recomendación**: Si se elige Supabase, usar Supabase Storage. Si no, Cloudflare R2 por zero egress.
 
 ---
 
-## Próximos Pasos
+## Decisión (Por Tomar)
 
-1. [ ] Verificar experiencia del equipo con PostgreSQL
-2. [ ] Estimar costos de hosting (AWS RDS vs Supabase vs otros)
-3. [ ] Hacer PoC con datos de muestra
-4. [ ] Documentar decisión en ADR
+🔴 _Depende de ADR-004 (Cloud Provider) y evaluación de costos reales_
 
 ---
 
-## Hallazgos
+## Acciones de Investigación
 
-*(Documentar aquí los resultados de la investigación)*
+1. [ ] Verificar PostGIS completo en Supabase (funciones, extensiones)
+2. [ ] Verificar PostGIS en Neon
+3. [ ] Verificar PostGIS en Railway
+4. [ ] Medir latencia desde CDMX para cada opción (ping test)
+5. [ ] Estimar storage necesario (# propiedades × tamaño promedio)
+6. [ ] Calcular costo mensual real para cada opción
+7. [ ] Hacer PoC con la opción más prometedora
+8. [ ] Documentar decisión final

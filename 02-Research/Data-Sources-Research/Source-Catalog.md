@@ -1,124 +1,264 @@
 # Catálogo de Fuentes de Datos
 
-## Objetivo
-
-Este documento cataloga TODAS las fuentes de datos potenciales para la plataforma BEIQA. Cada fuente debe ser investigada y evaluada antes de decidir cuáles integrar.
-
-**Estado**: 🔴 Por investigar | 🟡 En investigación | 🟢 Evaluado | ✅ Aprobado | ❌ Descartado
+**Fase**: R-2 (Tecnología y Plataforma)
+**Estado**: 🔴 Por investigar
+**Depende de**: Cuestionario 02-Ingestion-de-Datos (R-0)
 
 ---
 
-## 1. Portales Inmobiliarios (Scraping)
+## Objetivo
 
-| # | Portal | Tipo Inmuebles | Cobertura | API | Estado | Responsable |
-|---|--------|----------------|-----------|-----|--------|-------------|
-| 1 | Inmuebles24 | Todos | Nacional | ¿? | 🔴 | |
-| 2 | Vivanuncios | Todos | Nacional | ¿? | 🔴 | |
-| 3 | Segundamano | Todos | Nacional | ¿? | 🔴 | |
-| 4 | Metros Cúbicos | Todos | Nacional | ¿? | 🔴 | |
-| 5 | Lamudi | Todos | Nacional | ¿? | 🔴 | |
-| 6 | Propiedades.com | Todos | Nacional | ¿? | 🔴 | |
-| 7 | EasyBroker | Comercial | Nacional | ¿? | 🔴 | |
-| 8 | Solili | Industrial | Nacional | ¿? | 🔴 | |
-| 9 | LoopNet México | Comercial | Nacional | ¿? | 🔴 | |
-| 10 | (Otros por identificar) | | | | 🔴 | |
+Catalogar TODAS las fuentes de datos potenciales para BEIQA, con preguntas de investigación específicas por fuente y estrategia de integración.
 
-**Documentos detallados**: 
-- [Comparativo de Portales](../Scraper-Research/Portal-Comparison.md)
+> **Nota**: Este documento fue expandido para incluir preguntas de investigación por fuente y consolidar la estrategia de fuentes de datos que antes era un documento separado.
+
+**Leyenda de estado**: 🔴 Por investigar | 🟡 En investigación | 🟢 Evaluado | ✅ Aprobado para MVP | ❌ Descartado | 🔵 Post-MVP
+
+---
+
+## 1. Portales Inmobiliarios
+
+> Detalle completo en [Portal-Comparison.md](../Scraper-Research/Portal-Comparison.md) y [Data-Acquisition-Strategy.md](../Data-Acquisition/Data-Acquisition-Strategy.md)
+
+| # | Portal | Tipo | Método | Estado |
+|---|--------|------|--------|--------|
+| 1 | EasyBroker | Comercial/Brokers | API pública | 🔴 MVP |
+| 2 | Inmuebles24 | Todos | Por determinar | 🔴 Post-MVP |
+| 3 | Vivanuncios | Todos | Por determinar | 🔴 Post-MVP |
+| 4 | Lamudi | Todos | Por determinar | 🔴 Post-MVP |
+| 5 | Metros Cúbicos | Todos | Por determinar | 🔴 Post-MVP |
+| 6 | Propiedades.com | Todos | Por determinar | 🔴 Post-MVP |
+| 7 | Solili | Industrial | Posible suscripción | 🔴 Evaluar |
+| 8 | LoopNet México | Comercial | Por determinar | 🔴 Post-MVP |
 
 ---
 
 ## 2. Fuentes Gubernamentales (Públicas)
 
-| # | Fuente | Tipo de Datos | Formato | Acceso | Estado | Responsable |
-|---|--------|---------------|---------|--------|--------|-------------|
-| 1 | INEGI - DENUE | Unidades económicas | API, CSV, SHP | Público | 🔴 | |
-| 2 | INEGI - Cartografía | Polígonos territoriales | SHP, GeoJSON | Público | 🔴 | |
-| 3 | INEGI - Censos | Demográficos | CSV, API | Público | 🔴 | |
-| 4 | datos.gob.mx | Múltiples datasets | CSV, JSON | Público | 🔴 | |
-| 5 | DataMéxico | Económicos integrados | Web, ¿API? | Público | 🔴 | |
-| 6 | SEDATU | Desarrollo urbano | Varía | Varía | 🔴 | |
-| 7 | Catastro (por estado) | Valores, propietarios | Varía | Varía | 🔴 | |
-| 8 | Registro Público | Titularidad | Varía | Solicitud | 🔴 | |
-| 9 | SIGCDMX | Info geográfica CDMX | Web | Público | 🔴 | |
-| 10 | Planes Desarrollo Urbano | Zonificación | PDF, mapas | Varía | 🔴 | |
-| 11 | SCT/SICT | Infraestructura transporte | Varía | Público | 🔴 | |
-| 12 | Banco de México | Indicadores económicos | API | Público | 🔴 | |
-| 13 | CONAPO | Proyecciones población | CSV | Público | 🔴 | |
-| 14 | IMSS | Datos de empleo | ¿? | ¿? | 🔴 | |
+### INEGI - DENUE (Directorio Estadístico Nacional de Unidades Económicas)
 
-**Documentos detallados**:
-- [Investigación INEGI](./INEGI-APIs.md)
-- [Investigación datos.gob.mx](./datos-gob-mx.md)
-- [Acceso a Catastro](./Catastro-Access.md)
+| Campo | Valor |
+|-------|-------|
+| URL | inegi.org.mx/servicios/api_denue.html |
+| Tipo de datos | Unidades económicas: ubicación, actividad, tamaño |
+| Formato | REST API, CSV, SHP |
+| Acceso | Público, token gratuito |
+| Costo | $0 |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿Cuáles son los códigos SCIAN relevantes para inmuebles C/I?
+- [ ] ¿Cuál es el rate limit de la API?
+- [ ] ¿Cuántas unidades económicas hay en CDMX por código SCIAN relevante?
+- [ ] ¿Qué calidad tienen las coordenadas?
+- [ ] ¿Se pueden hacer queries masivas o hay límite por consulta?
+
+**Valor para BEIQA:** Mapear empresas por zona para análisis de demanda y proximidad.
+
+> Detalle completo en [INEGI-APIs.md](./INEGI-APIs.md)
+
+---
+
+### INEGI - Cartografía (Marco Geoestadístico)
+
+| Campo | Valor |
+|-------|-------|
+| Datos | Polígonos: estados, municipios, AGEB, manzanas |
+| Formato | SHP, GeoJSON |
+| Acceso | Descarga pública |
+| Costo | $0 |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿Dónde descargar shapefiles actualizados para CDMX?
+- [ ] ¿Qué sistema de coordenadas usan? (¿EPSG:4326 o EPSG:6372?)
+- [ ] ¿Cuál es el peso de los archivos para CDMX?
+- [ ] ¿Con qué frecuencia se actualizan?
+
+**Valor para BEIQA:** Definir zonas/submercados usando polígonos oficiales.
+
+---
+
+### INEGI - Censos
+
+| Campo | Valor |
+|-------|-------|
+| Datos | Demografía, economía, vivienda por AGEB |
+| Formato | CSV, API |
+| Acceso | Público |
+| Costo | $0 |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿Hay API para datos censales o solo descarga?
+- [ ] ¿Qué granularidad geográfica tienen? (¿AGEB? ¿Municipio?)
+- [ ] ¿Qué datos censales son relevantes para decisiones inmobiliarias?
+
+---
+
+### datos.gob.mx
+
+| Campo | Valor |
+|-------|-------|
+| Datos | Múltiples datasets federales |
+| Formato | CSV, JSON |
+| Acceso | Público |
+| Costo | $0 |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿Qué datasets son relevantes? (desarrollo urbano, infraestructura, indicadores económicos)
+- [ ] ¿Hay APIs o solo descarga manual?
+- [ ] ¿Con qué frecuencia se actualizan?
+
+> **Nota**: Anteriormente se planeó un archivo `datos-gob-mx.md` separado. Se consolida aquí.
+
+---
+
+### Catastro (CDMX)
+
+| Campo | Valor |
+|-------|-------|
+| Datos | Valores catastrales, límites de lotes, propietarios |
+| Formato | Varía por estado |
+| Acceso | Varía (solicitud, portal web, OpenData) |
+| Costo | Variable |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿CDMX tiene portal de catastro con datos abiertos?
+- [ ] ¿Qué datos son accesibles sin solicitud formal?
+- [ ] ¿Hay restricciones legales para uso de datos catastrales?
+- [ ] ¿Los valores catastrales se correlacionan con valores de mercado?
+
+> **Nota**: Anteriormente se planeó un archivo `Catastro-Access.md` separado. Se consolida aquí.
+
+---
+
+### Banco de México
+
+| Campo | Valor |
+|-------|-------|
+| Datos | Indicadores económicos: inflación, tipo de cambio, tasas |
+| Formato | API (SIE) |
+| Acceso | Público |
+| Costo | $0 |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿Qué indicadores son relevantes para el sector inmobiliario?
+- [ ] ¿La API del SIE es fácil de consumir?
+- [ ] ¿Con qué frecuencia se actualizan los datos?
+
+---
+
+### SEDATU / Planes de Desarrollo Urbano
+
+| Campo | Valor |
+|-------|-------|
+| Datos | Zonificación, uso de suelo, planes de desarrollo |
+| Formato | PDF, mapas, varía |
+| Acceso | Varía |
+| Estado | 🔴 Por investigar |
+
+**Preguntas de investigación:**
+- [ ] ¿CDMX tiene planes de desarrollo urbano digitalizados?
+- [ ] ¿Se pueden extraer zonas de uso de suelo en formato geoespacial?
+- [ ] ¿Existe SIGCDMX con capas útiles?
+
+---
+
+### DataMéxico
+
+| Campo | Valor |
+|-------|-------|
+| URL | datamexico.org |
+| Datos | Datos económicos integrados (comercio, empleo, industria) |
+| Formato | Web, posible API |
+| Acceso | Público |
+| Estado | 🔴 Por investigar |
+
+---
+
+### Otros Gubernamentales
+
+| Fuente | Datos | Relevancia | Estado |
+|--------|-------|------------|--------|
+| SIGCDMX | Info geográfica CDMX | Media-Alta | 🔴 |
+| SCT/SICT | Infraestructura transporte | Media | 🔴 |
+| CONAPO | Proyecciones población | Baja | 🔴 |
+| IMSS | Datos de empleo | Baja | 🔴 |
+| Registro Público | Titularidad | Baja | 🔴 |
 
 ---
 
 ## 3. Proveedores Comerciales
 
-| # | Proveedor | Tipo de Datos | Cobertura | Costo Est. | Estado | Responsable |
-|---|-----------|---------------|-----------|------------|--------|-------------|
-| 1 | CBRE Research | Market reports, vacancy | Nacional | ¿? | 🔴 | |
-| 2 | JLL Research | Market intelligence | Nacional | ¿? | 🔴 | |
-| 3 | Cushman & Wakefield | MarketBeat, analytics | Nacional | ¿? | 🔴 | |
-| 4 | Newmark | Research | Nacional | ¿? | 🔴 | |
-| 5 | Colliers | Research | Nacional | ¿? | 🔴 | |
-| 6 | SoftPro | Software inmobiliario | México | ¿? | 🔴 | |
-| 7 | Real Capital Analytics | Transacciones | Global | ¿? | 🔴 | |
-| 8 | CoStar | Datos RE | ¿México? | ¿? | 🔴 | |
-| 9 | (Proveedores locales) | ¿? | México | ¿? | 🔴 | |
+> **Nota**: Anteriormente se planeó un archivo `Commercial-Data-Providers.md` separado. Se difiere a post-MVP. Notas clave se capturan aquí.
 
-**Documentos detallados**:
-- [Proveedores Comerciales](./Commercial-Data-Providers.md)
+| # | Proveedor | Datos | Costo Est. | Relevancia | Estado |
+|---|-----------|-------|------------|------------|--------|
+| 1 | CBRE Research | Market reports, vacancy | Alto | Alta | 🔵 Post-MVP |
+| 2 | JLL Research | Market intelligence | Alto | Alta | 🔵 Post-MVP |
+| 3 | Cushman & Wakefield | MarketBeat, analytics | Alto | Alta | 🔵 Post-MVP |
+| 4 | Colliers | Research reports | Alto | Media | 🔵 Post-MVP |
+| 5 | Real Capital Analytics | Transacciones | Muy alto | Media | 🔵 Post-MVP |
+| 6 | CoStar | Datos RE completos | Muy alto | Alta (si opera en MX) | 🔵 Post-MVP |
+
+**Preguntas diferidas a post-MVP:**
+- ¿Alguno ofrece APIs o solo reportes PDF?
+- ¿Cuál es el costo real de suscripción?
+- ¿Los datos justifican el costo para una empresa del tamaño de Beiqa?
 
 ---
 
 ## 4. APIs de Mapas y Geolocalización
 
-| # | Servicio | Funcionalidades | Modelo Precio | Costo Est. | Estado | Responsable |
-|---|----------|-----------------|---------------|------------|--------|-------------|
-| 1 | Google Maps Platform | Maps, Places, Routes | Pay per use | ¿? | 🔴 | |
-| 2 | Mapbox | Maps, Geocoding | Pay per use | ¿? | 🔴 | |
-| 3 | HERE | Maps, Routing | Pay per use | ¿? | 🔴 | |
-| 4 | OpenStreetMap | Base map data | Gratis | $0 | 🔴 | |
-| 5 | Leaflet | Visualización | Gratis | $0 | 🔴 | |
-| 6 | OpenRouteService | Routing | Gratis | $0 | 🔴 | |
-| 7 | Nominatim | Geocoding | Gratis | $0 | 🔴 | |
-| 8 | Foursquare Places | POIs | Pay per use | ¿? | 🔴 | |
+> Detalle completo en [Google-Maps-Platform.md](./Google-Maps-Platform.md) (ahora estrategia GIS completa)
 
-**Documentos detallados**:
-- [Google Maps Platform](./Google-Maps-Platform.md)
-- [Stack Geoespacial](../Technology-Research/Geospatial-Stack.md)
+| # | Servicio | Uso | Costo | Estado |
+|---|----------|-----|-------|--------|
+| 1 | Google Maps Platform | Mapas, Places, Geocoding, Routes | Pay per use ($200 crédito) | 🔴 |
+| 2 | Mapbox | Mapas, isócronas, custom styles | Free tier generoso | 🔴 |
+| 3 | OpenStreetMap + Leaflet | Mapas base + visualización | Gratis | 🔴 |
+| 4 | Overture Maps Foundation | Datos abiertos de mapas | Gratis | 🔴 |
+| 5 | OpenRouteService | Routing, isócronas | Gratis | 🔴 |
+| 6 | Nominatim | Geocoding | Gratis | 🔴 |
 
 ---
 
 ## 5. Otras Fuentes Potenciales
 
-| # | Fuente | Tipo de Datos | Relevancia | Estado |
-|---|--------|---------------|------------|--------|
-| 1 | Noticias sector | Anuncios inversión | Media | 🔴 |
-| 2 | LinkedIn | Señales expansión empresas | Baja | 🔴 |
-| 3 | Bases de datos internas Beiqa | Histórico, conocimiento | Alta | 🔴 |
-| 4 | (Por identificar) | | | 🔴 |
+| # | Fuente | Datos | Relevancia | Estado |
+|---|--------|-------|------------|--------|
+| 1 | Noticias del sector | Señales de inversión/expansión | Baja | 🔵 Post-MVP |
+| 2 | LinkedIn | Señales de crecimiento empresarial | Baja | 🔵 Post-MVP |
+| 3 | Bases internas de Beiqa | Histórico, conocimiento tribal | Alta | 🔴 MVP |
+| 4 | Overture Maps | Building footprints, POIs | Media | 🔴 |
 
 ---
 
-## Matriz de Priorización
+## Matriz de Priorización Actualizada
 
-| Fuente | Valor para Negocio | Complejidad Técnica | Costo | Prioridad |
-|--------|-------------------|---------------------|-------|-----------|
-| Portales (scraping) | Alto | Media | Bajo | 🔴 ALTA |
-| INEGI DENUE | Alto | Baja | Gratis | 🔴 ALTA |
-| Google Maps | Alto | Baja | Medio | 🟡 MEDIA |
-| Proveedores comerciales | Medio | Baja | Alto | 🟡 MEDIA |
-| Catastro | Medio | Alta | Bajo | 🟢 BAJA |
+| Fuente | Valor de Negocio | Complejidad | Costo | Prioridad |
+|--------|-----------------|-------------|-------|-----------|
+| EasyBroker API | Alto | Baja | $0 | 🔴 **MVP** |
+| INEGI DENUE API | Alto | Baja | $0 | 🔴 **MVP** |
+| INEGI Cartografía | Alto (zonas) | Baja | $0 | 🔴 **MVP** |
+| Mapas (Leaflet/Google) | Alto | Baja-Media | $0-15/mes | 🔴 **MVP** |
+| Bases internas Beiqa | Alto | Baja | $0 | 🔴 **MVP** |
+| Otros portales (scraping) | Medio | Media-Alta | Bajo | 🟡 Post-MVP |
+| INEGI Censos | Medio | Baja | $0 | 🟡 Post-MVP |
+| Banco de México | Bajo | Baja | $0 | 🟢 Diferido |
+| Catastro CDMX | Medio | Alta | Bajo | 🟢 Diferido |
+| Proveedores comerciales | Medio | Baja | Alto | 🔵 Diferido |
 
 ---
 
 ## Próximos Pasos
 
-- [ ] Asignar responsable a cada fuente
-- [ ] Investigar las de prioridad ALTA primero
-- [ ] Documentar hallazgos en archivos individuales
-- [ ] Estimar costos donde aplique
-- [ ] Decidir cuáles incluir en MVP
+1. [ ] Investigar fuentes de prioridad **MVP** primero
+2. [ ] Documentar hallazgos por fuente en este documento
+3. [ ] Estimar costos donde aplique
+4. [ ] Crear pipeline de ingestión para fuentes MVP
+5. [ ] Decidir cuáles incluir en MVP final

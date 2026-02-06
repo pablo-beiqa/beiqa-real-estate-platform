@@ -1,161 +1,207 @@
-# Investigación: Google Maps Platform
+# Estrategia GIS y Geoespacial
+
+**Fase**: R-2 (Tecnología y Plataforma)
+**Estado**: 🔴 Por investigar
+**Depende de**: Cuestionario 05-Geoespacial-y-GIS (R-0)
+
+> **Nota**: Este documento se expandió de una evaluación de Google Maps a una **estrategia GIS completa**, cubriendo todas las opciones de plataforma geoespacial para BEIQA.
+
+---
 
 ## Objetivo
 
-Evaluar las APIs de Google Maps Platform para las necesidades de BEIQA y estimar costos.
-
-**Estado**: 🔴 Por investigar
+Definir la estrategia completa de GIS para BEIQA: qué plataforma de mapas usar, cómo almacenar y consultar datos geoespaciales, cómo renderizar mapas, y cómo integrar datos de gobierno y fuentes externas.
 
 ---
 
-## APIs Potencialmente Necesarias
+## Componentes de la Estrategia GIS
 
-### 1. Maps JavaScript API
+### 1. Almacenamiento Geoespacial (Backend)
 
-**Uso**: Visualización de mapas interactivos en la aplicación.
+**Decisión tomada: PostGIS** (extensión de PostgreSQL)
 
-| Campo | Valor |
-|-------|-------|
-| Precio | $7.00 USD / 1,000 cargas de mapa |
-| Free tier | $200/mes de crédito gratuito |
-| Documentación | https://developers.google.com/maps/documentation/javascript |
+| Capacidad | PostGIS |
+|-----------|---------|
+| Almacenar puntos (propiedades) | ✅ POINT geometry |
+| Almacenar polígonos (zonas) | ✅ POLYGON, MULTIPOLYGON |
+| Búsqueda por radio | ✅ ST_DWithin |
+| Búsqueda dentro de polígono | ✅ ST_Within, ST_Intersects |
+| Cálculo de distancias | ✅ ST_Distance |
+| Overlay de capas | ✅ ST_Intersection, ST_Union |
+| Importar shapefiles | ✅ shp2pgsql o ogr2ogr |
+| Importar GeoJSON | ✅ Nativo |
+| Importar KML | ✅ Via ogr2ogr |
+| Índices espaciales | ✅ GiST index |
 
-**Preguntas**:
-- [ ] ¿Cuántas cargas de mapa estimamos por mes?
-- [ ] ¿El crédito gratuito es suficiente para MVP?
-
----
-
-### 2. Places API
-
-**Uso**: Buscar puntos de interés (POIs) - carreteras, puertos, aeropuertos, etc.
-
-| Campo | Valor |
-|-------|-------|
-| Precio - Basic | $17.00 / 1,000 requests |
-| Precio - Details | $17.00 / 1,000 requests |
-| Precio - Autocomplete | $2.83 / 1,000 requests |
-
-**Preguntas**:
-- [ ] ¿Cuántos POIs necesitamos buscar?
-- [ ] ¿Podemos cachear los POIs para reducir requests?
-- [ ] ¿Hay alternativas gratuitas (OSM, Foursquare)?
+**Preguntas por investigar:**
+- [ ] ¿Cuáles funciones PostGIS necesitamos para el MVP?
+- [ ] ¿Qué SRID usar? (4326 WGS84 estándar, o EPSG:6372 para México)
 
 ---
 
-### 3. Geocoding API
+### 2. Plataforma de Mapas (Frontend Rendering)
 
-**Uso**: Convertir direcciones a coordenadas (lat/long).
+| Opción | Tipo | Costo | Calidad México | Customización | Offline | Estado |
+|--------|------|-------|----------------|---------------|---------|--------|
+| **Google Maps Platform** | Comercial | Pay per use ($200 crédito/mes) | ✅ Excelente | ⚠️ Limitada | ❌ | 🔴 |
+| **Mapbox** | Comercial | Free tier generoso, luego pay per use | ✅ Buena | ✅ Alta (Studio) | ✅ | 🔴 |
+| **Leaflet + OSM** | Open source | Gratis | ✅ Buena (OSM) | ✅ Alta | ⚠️ | 🔴 |
+| **OpenLayers** | Open source | Gratis | ✅ Buena | ✅ Alta | ⚠️ | 🔴 |
+| **deck.gl** | Open source | Gratis | ✅ (usa tiles externos) | ✅ Muy alta | ❌ | 🔴 |
 
-| Campo | Valor |
-|-------|-------|
-| Precio | $5.00 / 1,000 requests |
+#### Google Maps Platform -- Detalle
 
-**Preguntas**:
-- [ ] ¿Cuántas direcciones necesitamos geocodificar?
-- [ ] ¿Los portales ya dan coordenadas o solo direcciones?
-- [ ] ¿Podemos usar Nominatim (gratis) como alternativa?
+| API | Uso en BEIQA | Precio | Free tier |
+|-----|-------------|--------|-----------|
+| Maps JavaScript API | Mapa interactivo | $7/1000 cargas | $200/mes crédito |
+| Places API | Buscar POIs | $17/1000 requests | Incluido en crédito |
+| Geocoding API | Dirección → coordenadas | $5/1000 requests | Incluido |
+| Routes API | Cálculo de rutas | $5-10/1000 requests | Incluido |
+| Distance Matrix API | Matrices de distancia | $5/1000 elementos | Incluido |
 
----
+**Estimación para MVP (6-15 usuarios, ~500 cargas/mes):**
+- Maps: ~$3.50/mes
+- Geocoding: ~$2.50/mes (500 geocodes)
+- Places: ~$8.50/mes (500 POI lookups)
+- **Total: ~$15/mes → cubierto por crédito gratuito de $200/mes**
 
-### 4. Routes API / Directions API
+#### Mapbox -- Detalle
 
-**Uso**: Calcular rutas y tiempos de viaje.
+| Feature | Disponibilidad | Precio |
+|---------|---------------|--------|
+| Map rendering | ✅ | 50K cargas gratis/mes, luego $5/1000 |
+| Geocoding | ✅ | 100K requests gratis/mes |
+| Isochrones | ✅ | Incluido |
+| Navigation | ✅ | Incluido |
+| Studio (custom styles) | ✅ | Gratis |
+| Customización visual | ✅ Mucho mejor que Google | |
 
-| Campo | Valor |
-|-------|-------|
-| Precio | $5.00 - $10.00 / 1,000 requests |
+#### Leaflet + OpenStreetMap -- Detalle
 
-**Preguntas**:
-- [ ] ¿Necesitamos cálculo de rutas en tiempo real?
-- [ ] ¿O solo distancias punto a punto?
-- [ ] ¿Podemos usar OpenRouteService (gratis)?
-
----
-
-### 5. Distance Matrix API
-
-**Uso**: Matriz de distancias entre múltiples puntos.
-
-| Campo | Valor |
-|-------|-------|
-| Precio | $5.00 / 1,000 elementos |
-| Elemento | Cada combinación origen-destino |
-
-**Preguntas**:
-- [ ] ¿Necesitamos matrices de distancia?
-- [ ] ¿O solo distancias individuales?
-
----
-
-## Estimación de Costos (Por Calcular)
-
-### Escenario MVP
-
-| API | Uso Estimado/Mes | Precio Unitario | Costo Mensual |
-|-----|------------------|-----------------|---------------|
-| Maps JS | ??? cargas | $7/1000 | $??? |
-| Geocoding | ??? requests | $5/1000 | $??? |
-| Places | ??? requests | $17/1000 | $??? |
-| Routes | ??? requests | $5/1000 | $??? |
-| **TOTAL** | | | **$???** |
-| Crédito gratuito | | | -$200 |
-| **TOTAL REAL** | | | **$???** |
-
-### Escenario Producción
-
-*(Calcular después de validar MVP)*
+| Feature | Disponibilidad | Notas |
+|---------|---------------|-------|
+| Map rendering | ✅ | Tiles gratis (OSM, Stamen, CartoDB) |
+| Geocoding | Via Nominatim (gratis) | Menor precisión que Google |
+| Clustering | Via plugins | Leaflet.markercluster |
+| Dibujar polígonos | Via plugins | Leaflet.draw |
+| Heatmaps | Via plugins | Leaflet.heat |
+| Costo | $0 | Completamente gratis |
 
 ---
 
-## Alternativas a Evaluar
+### 3. Overture Maps Foundation
 
-### OpenStreetMap + Herramientas Open Source
+| Campo | Evaluación |
+|-------|------------|
+| Descripción | Datos de mapa abiertos (Linux Foundation + Meta, Microsoft, AWS, TomTom) |
+| Datos disponibles | Edificios, POIs, transporte, límites administrativos, direcciones |
+| Cobertura México | 🔴 Por evaluar |
+| Formato | GeoParquet, GeoJSON |
+| Costo | Gratis |
+| Actualización | Releases periódicos |
 
-| Funcionalidad | Google | Alternativa Open Source | Trade-off |
-|---------------|--------|------------------------|-----------|
-| Mapas base | Maps JS | Leaflet + OSM tiles | Menos features, gratis |
-| Geocoding | Geocoding API | Nominatim | Menor precisión, gratis |
-| Routing | Routes API | OpenRouteService | Límites de uso, gratis |
-| Places/POIs | Places API | Overpass API (OSM) | Datos diferentes, gratis |
-
-### Mapbox
-
-| Campo | Google Maps | Mapbox |
-|-------|-------------|--------|
-| Pricing | Pay per use | Free tier más generoso |
-| Customization | Limitado | Alta personalización |
-| Calidad en México | Excelente | Buena |
-
-### HERE
-
-| Campo | Valor |
-|-------|-------|
-| Cobertura México | Por verificar |
-| Pricing | Pay per use |
+**Preguntas por investigar:**
+- [ ] ¿Qué calidad tienen los datos de Overture para México/CDMX?
+- [ ] ¿Los building footprints son suficientes para nuestro uso?
+- [ ] ¿Los POIs incluyen infraestructura industrial relevante?
+- [ ] ¿Cómo se integra con PostGIS?
 
 ---
 
-## Preguntas de Decisión
+### 4. Formatos de Datos Geoespaciales
 
-1. [ ] ¿Cuál es el presupuesto mensual máximo para APIs de mapas?
-2. [ ] ¿Qué nivel de calidad/precisión necesitamos?
-3. [ ] ¿Podemos empezar con alternativas gratuitas y migrar después?
-4. [ ] ¿Qué tan importante es la UX de los mapas para clientes?
+| Formato | Origen | Cómo ingestar | Herramienta |
+|---------|--------|---------------|-------------|
+| Shapefile (.shp) | INEGI, gobierno | ogr2ogr o shp2pgsql → PostGIS | GDAL/OGR |
+| GeoJSON | APIs, exports | INSERT directo en PostGIS | Nativo |
+| KML | Google Earth, exports | ogr2ogr → PostGIS | GDAL/OGR |
+| CSV con lat/lon | Portales, Excel | ST_MakePoint en INSERT | SQL |
+| GeoParquet | Overture Maps | Carga via Python (geopandas) | geopandas + SQLAlchemy |
+
+**Pipeline propuesto:**
+```
+Archivo externo → ogr2ogr/geopandas → PostGIS → API → Frontend (mapa)
+```
+
+---
+
+### 5. Gestión de Zonas y Polígonos
+
+| Tipo de zona | Fuente | Formato | Cómo almacenar |
+|-------------|--------|---------|----------------|
+| Entidades (estados) | INEGI Marco Geoestadístico | SHP | PostGIS MULTIPOLYGON |
+| Municipios | INEGI | SHP | PostGIS MULTIPOLYGON |
+| AGEB | INEGI | SHP | PostGIS MULTIPOLYGON |
+| Corredores industriales | Definidos por Beiqa | Dibujados en mapa | PostGIS POLYGON |
+| Colonias/Códigos Postales | INEGI/Correos | SHP/CSV | PostGIS POLYGON |
+| Zonas custom del cliente | Dibujadas por el equipo | Mapa interactivo | PostGIS POLYGON |
+
+**Preguntas por investigar:**
+- [ ] ¿Cuántos polígonos de zona necesitamos para CDMX?
+- [ ] ¿El equipo necesita poder dibujar zonas custom?
+- [ ] ¿Los polígonos del INEGI son suficientes o se necesitan zonas más granulares?
+
+---
+
+### 6. Análisis de Proximidad
+
+| Análisis | Descripción | Implementación |
+|----------|-------------|----------------|
+| Radio de búsqueda | "Propiedades a < 5km del aeropuerto" | PostGIS ST_DWithin |
+| Isócrona | "Qué alcanzas en 30 min en auto" | Mapbox Isochrone API o OpenRouteService |
+| Distancia a POIs | "Distancia a carretera más cercana" | PostGIS ST_Distance + tabla de POIs |
+| Nearest N | "5 propiedades más cercanas al cliente" | PostGIS ORDER BY ST_Distance LIMIT N |
+
+---
+
+### 7. Renderización y Performance
+
+| Estrategia | Mejor para | Complejidad |
+|------------|-----------|-------------|
+| Tiles raster (pre-generados) | Mapas base | Alta (necesita tile server) |
+| Tiles vector (Mapbox/protobuf) | Mapas interactivos, zoom smooth | Media (Mapbox ofrece esto) |
+| GeoJSON directo | < 1000 features | Baja (carga todo en browser) |
+| Clustering | Muchos puntos | Baja (plugin de Leaflet/Mapbox) |
+
+**Para BEIQA MVP:** GeoJSON directo + clustering es suficiente para cientos de propiedades.
+
+---
+
+## Recomendación Preliminar por Componente
+
+| Componente | Recomendación MVP | Alternativa | Justificación |
+|------------|-------------------|-------------|---------------|
+| Backend GIS | PostGIS | N/A | Ya decidido |
+| Mapa frontend | Leaflet + OSM (gratis) | Mapbox (si se necesita más) | $0, suficiente para MVP |
+| Geocoding | Google Geocoding API | Nominatim | Precisión en direcciones mexicanas |
+| POIs | Google Places | Overture Maps | Calidad en México |
+| Isócronas | OpenRouteService | Mapbox Isochrone | Gratis |
+| Polígonos CDMX | INEGI shapefiles | N/A | Gratis, oficial |
+| Pipeline de datos | ogr2ogr + geopandas | N/A | Estándar de la industria |
+
+---
+
+## Estimación de Costos GIS
+
+### Escenario MVP (costo mensual)
+
+| Componente | Costo |
+|------------|-------|
+| PostGIS | Incluido en hosting DB |
+| Leaflet + OSM | $0 |
+| Google Geocoding (500 requests/mes) | ~$2.50 (cubierto por crédito) |
+| Google Places (500 requests/mes) | ~$8.50 (cubierto por crédito) |
+| INEGI Shapefiles | $0 |
+| **Total GIS mensual MVP** | **~$0-11/mes** |
 
 ---
 
 ## Acciones de Investigación
 
-1. [ ] Crear cuenta en Google Cloud Platform
-2. [ ] Habilitar APIs en modo de prueba
-3. [ ] Hacer pruebas de cada API con datos de México
-4. [ ] Evaluar calidad de geocoding en direcciones mexicanas
-5. [ ] Comparar con alternativas gratuitas
-6. [ ] Calcular estimación de costos realista
-
----
-
-## Hallazgos
-
-*(Documentar aquí los resultados de la investigación)*
+1. [ ] Evaluar calidad de datos Overture Maps para CDMX
+2. [ ] Descargar y probar shapefiles de INEGI para CDMX
+3. [ ] Hacer PoC de mapa con Leaflet + datos de propiedades
+4. [ ] Probar geocoding de direcciones mexicanas (Google vs Nominatim)
+5. [ ] Evaluar isochrone APIs (OpenRouteService vs Mapbox)
+6. [ ] Medir performance con volumen estimado de propiedades
+7. [ ] Documentar decisión final por componente

@@ -6,20 +6,24 @@ BEIQA es una plataforma interna que centraliza la búsqueda de inmuebles comerci
 
 ## Problema que Resuelve
 
-| Problema Actual | Impacto | Cómo BEIQA lo Resuelve |
-|-----------------|---------|------------------------|
-| Búsqueda manual en múltiples portales | Pérdida de tiempo, oportunidades perdidas | Scraper automatizado + búsqueda centralizada |
-| Información dispersa (Excel, HubSpot, emails) | Decisiones con información incompleta | Base de datos unificada |
-| Falta de inteligencia de mercado | Menor valor agregado para clientes | Análisis y reportes automatizados |
-| Sin análisis geoespacial | Análisis de ubicación manual y limitado | Mapas interactivos y análisis de proximidad |
-| Datos desactualizados | Recomendaciones basadas en info obsoleta | Actualización automática diaria |
+
+| Problema Actual                               | Impacto                                   | Cómo BEIQA lo Resuelve                       |
+| --------------------------------------------- | ----------------------------------------- | -------------------------------------------- |
+| Búsqueda manual en múltiples portales         | Pérdida de tiempo, oportunidades perdidas | Scraper automatizado + búsqueda centralizada |
+| Información dispersa (Excel, HubSpot, emails) | Decisiones con información incompleta     | Base de datos unificada                      |
+| Falta de inteligencia de mercado              | Menor valor agregado para clientes        | Análisis y reportes automatizados            |
+| Sin análisis geoespacial                      | Análisis de ubicación manual y limitado   | Mapas interactivos y análisis de proximidad  |
+| Datos desactualizados                         | Recomendaciones basadas en info obsoleta  | Actualización automática diaria              |
+
 
 ## Objetivos del Producto
 
 ### Objetivo Principal
+
 Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recomendaciones a clientes, diferenciando a Beiqa de brokers tradicionales.
 
 ### Objetivos Medibles
+
 
 | Objetivo                          | Métrica                           | Target | Cómo Medir               |
 | --------------------------------- | --------------------------------- | ------ | ------------------------ |
@@ -28,9 +32,11 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 | Aumentar satisfacción del cliente |                                   | >50    | Encuestas                |
 | Acelerar cierre de deals          | Días promedio de deal             | -20%   | CRM                      |
 
+
 ## Usuarios
 
 ### Usuarios Primarios: Equipo Beiqa
+
 - **Rol**: Ejecutivos comerciales y de operaciones
 - **Cantidad**: 6-15 personas
 - **Necesidades principales**:
@@ -40,6 +46,7 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
   - Comparar opciones de propiedades
 
 ### Usuarios Secundarios: Clientes (Tenants)
+
 - **Rol**: Empresas en expansión buscando espacios
 - **Cantidad**: 20+ clientes activos
 - **Necesidades principales**:
@@ -53,6 +60,7 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 **Modelo actual de Beiqa**: Comisión por transacción inmobiliaria cerrada.
 
 **Cómo BEIQA aporta al modelo**:
+
 - Mayor eficiencia = más deals cerrados con mismo equipo
 - Mejor inteligencia = mayor valor percibido por clientes
 - Diferenciación = ventaja competitiva sobre brokers tradicionales
@@ -69,3 +77,4 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 - [Contexto de Negocio](../01-Discovery/Business-Context.md)
 - [Pain Points Detallados](../01-Discovery/Pain-Points.md)
 - [Definición del MVP](../06-Roadmap/MVP-Definition.md)
+

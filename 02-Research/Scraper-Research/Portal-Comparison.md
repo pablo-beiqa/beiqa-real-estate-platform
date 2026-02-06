@@ -1,28 +1,59 @@
 # Comparativo de Portales Inmobiliarios
 
+**Fase**: R-1 (Datos Core)
+**Estado**: 🔴 Por investigar
+**Depende de**: [Data Acquisition Strategy](../Data-Acquisition/Data-Acquisition-Strategy.md)
+
+---
+
 ## Objetivo
 
-Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volumen de datos, y prioridad de integración.
+Evaluar cada portal inmobiliario para determinar el **método de adquisición óptimo** (API, scraping, extensión, manual), volumen de datos, y prioridad de integración.
 
-**Estado**: 🔴 Por investigar
+> **Nota**: Este documento se reestructuró para evaluar portales por método de adquisición, no solo por factibilidad de scraping. Ver [Data-Acquisition-Strategy.md](../Data-Acquisition/Data-Acquisition-Strategy.md) para la estrategia general.
 
 ---
 
 ## Portales a Evaluar
 
-### 1. Inmuebles24
+### 1. EasyBroker (PRIORIDAD MVP)
+
+| Criterio | Valor | Notas |
+|----------|-------|-------|
+| URL | easybroker.com | |
+| Especialización | Comercial, profesional | Enfocado en brokers |
+| Cobertura geográfica | Nacional | |
+| **¿Tiene API oficial?** | **Sí** | REST API pública confirmada |
+| Método de adquisición recomendado | **API** | Investigar cobertura y límites |
+| Propiedades comerciales/industriales CDMX | 🔴 Por contar | |
+| Rate limits de API | 🔴 Por investigar | |
+| Campos disponibles via API | 🔴 Por investigar | |
+| ¿Incluye coordenadas? | 🔴 Por verificar | |
+| ¿Incluye imágenes (URLs)? | 🔴 Por verificar | |
+| **Factibilidad** | 🟡 Alta (API disponible) | Pendiente validar cobertura |
+
+**Acciones**:
+- [ ] Obtener API key de prueba
+- [ ] Documentar endpoints y campos disponibles
+- [ ] Hacer request de prueba para CDMX comercial/industrial
+- [ ] Contar volumen disponible
+- [ ] Evaluar si API cubre necesidades del MVP
+
+---
+
+### 2. Inmuebles24
 
 | Criterio | Valor | Notas |
 |----------|-------|-------|
 | URL | inmuebles24.com | |
 | Tipos de inmuebles | Todos | Residencial, comercial, industrial |
 | Cobertura geográfica | Nacional | |
-| ¿Tiene API oficial? | 🔴 Por investigar | |
-| Propiedades comerciales/industriales | 🔴 Por contar | |
+| ¿Tiene API oficial? | 🔴 Por investigar | Probablemente no |
+| Método de adquisición recomendado | 🔴 Por determinar | Scraping o extensión Chrome |
+| Propiedades comerciales/industriales CDMX | 🔴 Por contar | |
 | Estructura HTML | 🔴 Por analizar | |
 | Protección anti-bot | 🔴 Por verificar | |
 | ¿Incluye coordenadas? | 🔴 Por verificar | |
-| Frecuencia de actualización | 🔴 Por monitorear | |
 | Términos de servicio | 🔴 Por revisar | |
 | **Factibilidad** | 🔴 Por determinar | |
 
@@ -30,34 +61,19 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 - [ ] Inspeccionar estructura HTML de listings
 - [ ] Verificar si hay API interna en Network tab
 - [ ] Contar propiedades comerciales/industriales
-- [ ] Revisar términos de servicio
+- [ ] Revisar robots.txt y términos de servicio
 - [ ] Probar request simple
 
 ---
 
-### 2. Vivanuncios
+### 3. Vivanuncios
 
 | Criterio | Valor | Notas |
 |----------|-------|-------|
 | URL | vivanuncios.com.mx | |
 | Tipos de inmuebles | Todos | |
-| Cobertura geográfica | Nacional | |
 | ¿Tiene API oficial? | 🔴 Por investigar | |
-| Propiedades comerciales/industriales | 🔴 Por contar | |
-| Estructura HTML | 🔴 Por analizar | |
-| Protección anti-bot | 🔴 Por verificar | |
-| ¿Incluye coordenadas? | 🔴 Por verificar | |
-| **Factibilidad** | 🔴 Por determinar | |
-
----
-
-### 3. Metros Cúbicos
-
-| Criterio | Valor | Notas |
-|----------|-------|-------|
-| URL | metroscubicos.com | |
-| Tipos de inmuebles | Todos | |
-| Cobertura geográfica | Nacional | |
+| Método de adquisición recomendado | 🔴 Por determinar | |
 | **Factibilidad** | 🔴 Por determinar | |
 
 ---
@@ -68,26 +84,29 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 |----------|-------|-------|
 | URL | lamudi.com.mx | |
 | Tipos de inmuebles | Todos | |
-| Cobertura geográfica | Nacional | |
+| ¿Tiene API oficial? | 🔴 Por investigar | |
+| Método de adquisición recomendado | 🔴 Por determinar | |
 | **Factibilidad** | 🔴 Por determinar | |
 
 ---
 
-### 5. Propiedades.com
+### 5. Metros Cúbicos
+
+| Criterio | Valor | Notas |
+|----------|-------|-------|
+| URL | metroscubicos.com | |
+| Tipos de inmuebles | Todos | |
+| Método de adquisición recomendado | 🔴 Por determinar | |
+| **Factibilidad** | 🔴 Por determinar | |
+
+---
+
+### 6. Propiedades.com
 
 | Criterio | Valor | Notas |
 |----------|-------|-------|
 | URL | propiedades.com | |
-| **Factibilidad** | 🔴 Por determinar | |
-
----
-
-### 6. EasyBroker
-
-| Criterio | Valor | Notas |
-|----------|-------|-------|
-| URL | easybroker.com | |
-| Especialización | Comercial, profesional | Enfocado en brokers |
+| Método de adquisición recomendado | 🔴 Por determinar | |
 | **Factibilidad** | 🔴 Por determinar | |
 
 ---
@@ -98,7 +117,8 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 |----------|-------|-------|
 | URL | solili.mx | |
 | Especialización | Industrial | Enfoque industrial |
-| **Factibilidad** | 🔴 Por determinar | |
+| Método de adquisición recomendado | 🔴 Por determinar | Posiblemente suscripción/datos, no scraping |
+| **Factibilidad** | 🔴 Por determinar | Puede ser competidor más que fuente |
 
 ---
 
@@ -108,28 +128,27 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 |----------|-------|-------|
 | URL | loopnet.com (sección México) | |
 | Especialización | Comercial | |
-| **Factibilidad** | 🔴 Por determinar | |
+| Método de adquisición recomendado | 🔴 Por determinar | |
+| **Factibilidad** | 🔴 Por determinar | Cobertura México probablemente baja |
 
 ---
 
-## Matriz Comparativa (Por Completar)
+## Matriz Comparativa por Método de Adquisición
 
-| Portal | API | # Props C/I | Anti-bot | Coords | Legal | Prioridad |
-|--------|-----|-------------|----------|--------|-------|-----------|
-| Inmuebles24 | ? | ? | ? | ? | ? | ? |
-| Vivanuncios | ? | ? | ? | ? | ? | ? |
-| Metros Cúbicos | ? | ? | ? | ? | ? | ? |
-| Lamudi | ? | ? | ? | ? | ? | ? |
-| Propiedades.com | ? | ? | ? | ? | ? | ? |
-| EasyBroker | ? | ? | ? | ? | ? | ? |
-| Solili | ? | ? | ? | ? | ? | ? |
-| LoopNet MX | ? | ? | ? | ? | ? | ? |
+| Portal | API | Scraping | Extensión | CSV | Prioridad MVP | # Props C/I CDMX |
+|--------|-----|----------|-----------|-----|---------------|-------------------|
+| EasyBroker | ✅ Sí | Fallback | Fallback | N/A | 🔴 **#1** | ? |
+| Inmuebles24 | ? | ? | ? | ? | 🟡 #2 | ? |
+| Vivanuncios | ? | ? | ? | ? | 🟡 | ? |
+| Lamudi | ? | ? | ? | ? | 🟢 | ? |
+| Metros Cúbicos | ? | ? | ? | ? | 🟢 | ? |
+| Propiedades.com | ? | ? | ? | ? | 🟢 | ? |
+| Solili | ? | N/A | N/A | ? | 🟡 | ? |
+| LoopNet MX | ? | ? | ? | ? | 🟢 | ? |
 
 ---
 
-## Estructura de Datos por Portal
-
-### Campos Comunes a Capturar
+## Campos Comunes a Capturar (Todos los Portales)
 
 | Campo | Descripción | Importancia |
 |-------|-------------|-------------|
@@ -148,33 +167,11 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 
 ### Campos Específicos por Tipo
 
-**Industrial/Bodegas**:
-- Altura de techo
-- Puertas de andén
-- Capacidad de carga de piso
-- Área de maniobras
+**Industrial/Bodegas**: Altura de techo, puertas de andén, capacidad de carga de piso, área de maniobras
 
-**Oficinas**:
-- Piso
-- Estacionamientos
-- Edificio inteligente
+**Oficinas**: Piso, estacionamientos, edificio inteligente
 
-**Retail**:
-- Frente (metros)
-- Ubicación en centro comercial
-
----
-
-## Herramientas de Scraping a Evaluar
-
-| Herramienta | Tipo | Mejor para | Notas |
-|-------------|------|------------|-------|
-| Scrapy | Framework Python | Alto volumen, estructurado | |
-| Playwright | Browser automation | JavaScript-heavy sites | |
-| Puppeteer | Browser automation | Similar a Playwright | |
-| BeautifulSoup | Parser | HTML estático simple | |
-| Selenium | Browser automation | Sitios complejos | |
-| requests-html | Hybrid | Rendering JS simple | |
+**Retail**: Frente (metros), ubicación en centro comercial
 
 ---
 
@@ -189,6 +186,7 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 
 ### Mitigaciones de Riesgo
 
+- **API primero**: Siempre preferir API oficial sobre scraping
 - Rate limiting (no sobrecargar servidores)
 - Respetar robots.txt donde sea razonable
 - No almacenar datos personales de terceros
@@ -198,15 +196,10 @@ Evaluar cada portal inmobiliario para determinar factibilidad de scraping, volum
 
 ## Próximos Pasos
 
-1. [ ] Hacer análisis técnico de Inmuebles24 (prioritario)
-2. [ ] Hacer análisis técnico de Vivanuncios
-3. [ ] Revisar términos de servicio de todos
-4. [ ] Contar propiedades comerciales/industriales por portal
-5. [ ] Crear PoC de scraping para el portal más factible
-6. [ ] Decidir portales para MVP
-
----
-
-## Hallazgos
-
-*(Documentar aquí los resultados de la investigación)*
+1. [ ] **EasyBroker API** -- investigar a fondo (PRIORIDAD)
+2. [ ] Inmuebles24 -- análisis técnico de adquisición
+3. [ ] Revisar términos de servicio de todos los portales
+4. [ ] Contar propiedades comerciales/industriales por portal en CDMX
+5. [ ] Definir método de adquisición por portal
+6. [ ] Crear PoC con EasyBroker API
+7. [ ] Decidir portales para MVP vs. post-MVP
