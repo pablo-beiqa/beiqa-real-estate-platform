@@ -88,15 +88,15 @@ Cuestionarios de visión de producto. Preguntas puras en español, sin respuesta
 | Documento | Estado | Descripción |
 |-----------|--------|-------------|
 | [Research-Overview.md](./Research-Overview.md) | 🔴 | Metodología, fases, tracker de estado |
-| [00-Vision-General.md](./Product-Questions/00-Vision-General.md) | 🔴 | Visión general del producto |
-| [01-Scraper-y-Adquisicion-de-Datos.md](./Product-Questions/01-Scraper-y-Adquisicion-de-Datos.md) | 🔴 | Adquisición de datos de propiedades |
-| [02-Ingestion-de-Datos.md](./Product-Questions/02-Ingestion-de-Datos.md) | 🔴 | Ingestión de datos externos estructurados |
-| [03-Base-de-Datos.md](./Product-Questions/03-Base-de-Datos.md) | 🔴 | Estructura de la base de datos |
-| [04-Inteligencia-de-Mercado.md](./Product-Questions/04-Inteligencia-de-Mercado.md) | 🔴 | Inteligencia de mercado |
-| [05-Geoespacial-y-GIS.md](./Product-Questions/05-Geoespacial-y-GIS.md) | 🔴 | Mapas, polígonos, GIS |
-| [06-Cerebro-IA.md](./Product-Questions/06-Cerebro-IA.md) | 🔴 | Capacidades de IA |
-| [07-Portal-Tenants.md](./Product-Questions/07-Portal-Tenants.md) | 🔴 | Portal para clientes |
-| [08-Interfaz-Interna-y-Experiencia-Equipo.md](./Product-Questions/08-Interfaz-Interna-y-Experiencia-Equipo.md) | 🔴 | Cómo interactúa el equipo interno (dashboard vs IA vs híbrido) |
+| [Product-Questions-Vision-General.md](../00-Overview/Product-Questions-Vision-General.md) | 🔴 | Visión general del producto |
+| [Product-Questions-Scraper.md](./Scraper-Research/Product-Questions-Scraper.md) | 🔴 | Adquisición de datos de propiedades |
+| [Product-Questions-Ingestion.md](./Data-Sources-Research/Product-Questions-Ingestion.md) | 🔴 | Ingestión de datos externos estructurados |
+| [Product-Questions-Base-de-Datos.md](./Technology-Research/Product-Questions-Base-de-Datos.md) | 🔴 | Estructura de la base de datos |
+| [Product-Questions Inteligencia de Mercado](./Market-Intelligence/Product-Questions.md) | 🔴 | Inteligencia de mercado |
+| [Product-Questions-Geoespacial.md](./Data-Sources-Research/Product-Questions-Geoespacial.md) | 🔴 | Mapas, polígonos, GIS |
+| [Product-Questions IA](./AI-Strategy/Product-Questions.md) | 🔴 | Capacidades de IA |
+| [Product-Questions Portal Tenants](./Tenant-Portal/Product-Questions.md) | 🔴 | Portal para clientes |
+| [Product-Questions-Interfaz.md](./Technology-Research/Product-Questions-Interfaz.md) | 🔴 | Cómo interactúa el equipo interno (dashboard vs IA vs híbrido) |
 
 ### Fase R-1: Datos Core
 
