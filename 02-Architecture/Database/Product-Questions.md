@@ -17,8 +17,8 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [Data-Model.md](../../03-Requirements/Data-Requirements/Data-Model.md) — Modelo de datos propuesto (PROPERTY, CLIENT, ZONE, etc.)
-> - [System-Architecture.md](../../04-Architecture/System-Architecture.md) — PostgreSQL + PostGIS como decisión preliminar
+> - [Data-Model.md](./Data-Model.md) — Modelo de datos propuesto (PROPERTY, CLIENT, ZONE, etc.)
+> - [System-Architecture.md](../System-Architecture.md) — PostgreSQL + PostGIS como decisión preliminar
 >
 > **Las preguntas buscan validar y profundizar el modelo desde la perspectiva del usuario.**
 

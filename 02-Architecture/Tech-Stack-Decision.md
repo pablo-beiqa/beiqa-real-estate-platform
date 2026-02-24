@@ -65,7 +65,7 @@ Documentar y resolver TODAS las decisiones tecnológicas abiertas. Cada decisió
 
 ## ADR-003: Interfaz de Usuario
 
-> **Documento dedicado**: [Interface-Strategy.md](./Interface-Strategy.md) -- análisis completo de opciones de interfaz.
+> **Documento dedicado**: [Interface-Strategy.md](../01-Modules/Internal-App/Research/Interface-Strategy.md) -- análisis completo de opciones de interfaz.
 
 | Opción | Complejidad | Time to MVP | Skill del usuario |
 |--------|-------------|-------------|-------------------|
