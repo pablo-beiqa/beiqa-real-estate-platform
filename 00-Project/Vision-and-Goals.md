@@ -35,29 +35,28 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 
 ## Usuarios
 
-### Usuarios Primarios: Equipo Beiqa
+### Usuarios activos (Fase 1)
 
-- **Rol**: Ejecutivos comerciales y de operaciones
-- **Cantidad**: 6-15 personas
+- **Rol**: Tech Lead (Fabrizio), Ops (Jerónimo), CEO (Pablo)
+- **Cantidad**: 4 usuarios internos activos
 - **Necesidades principales**:
   - Encontrar propiedades que cumplan criterios específicos
-  - Generar reportes de mercado para clientes
-  - Rastrear comunicaciones y seguimientos
-  - Comparar opciones de propiedades
+  - Ver todas las propiedades del mercado sin búsqueda manual
+  - Gestionar shortlists por cliente
 
-### Usuarios Secundarios: Clientes (Tenants)
+### Usuarios futuros (Fase 2+)
 
-- **Rol**: Empresas en expansión buscando espacios
-- **Cantidad**: 20+ clientes activos
+- **Rol**: Clientes de Beiqa (tenants corporativos)
 - **Necesidades principales**:
-  - Ver propiedades preseleccionadas
-  - Acceder a reportes de mercado
+  - Ver propiedades preseleccionadas en portal web
   - Dar feedback sobre opciones
   - Seguimiento de su proceso de búsqueda
 
 ## Modelo de Negocio
 
 **Modelo actual de Beiqa**: Comisión por transacción inmobiliaria cerrada.
+
+**Desarrollo**: Interno (Fabrizio + Pamela). Sin outsource.
 
 **Cómo BEIQA aporta al modelo**:
 
@@ -67,7 +66,8 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 
 ## Alcance Geográfico
 
-- **Fase inicial**: México (enfoque en zonas industriales principales)
+- **Fase 1**: CDMX, Estado de México, Morelos, Puebla
+- **Inventario actual**: ~60,000 propiedades en sistema
 - **Expansión futura**: Por definir según crecimiento del negocio
 
 ---

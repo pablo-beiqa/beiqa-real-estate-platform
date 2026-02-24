@@ -1,36 +1,51 @@
 # Scraper
 
-**Fase del proyecto**: Fase 1 — MVP
-**Estado**: 🟡 En diseño
-**Owner**: Por definir
+**Fase del proyecto**: Fase 1 — Scrapers & Inventario
+**Estado**: 🟢 En desarrollo
+**Owner**: Fabrizio
 
 ---
 
 ## Descripcion
 
-El modulo de Scraper es el motor de captura automatizada de listados inmobiliarios comerciales e industriales en Mexico. Se encarga de extraer informacion de propiedades publicadas en los principales portales inmobiliarios del pais — Inmuebles24, EasyBroker, Propiedades.com, entre otros — de forma periodica y sistematica. Cada ejecucion recorre las paginas de resultados de estos portales, extrae los datos clave de cada propiedad (superficie, precio, ubicacion, tipo, contacto del broker) y los almacena en la base de datos centralizada de BEIQA.
+El modulo de Scraper es el motor de captura automatizada de listados inmobiliarios comerciales e industriales en Mexico. Usa **Apify** (actor contratado) para extraer propiedades de portales inmobiliarios de forma periodica y sistematica. Cada ejecucion extrae los datos clave de cada propiedad (superficie, precio, ubicacion, tipo, contacto del broker) y los almacena en Supabase via n8n.
 
-Actualmente el equipo de BEIQA dedica horas significativas a buscar propiedades manualmente en multiples portales, copiar datos a hojas de calculo y mantener esa informacion actualizada. Este modulo elimina ese trabajo repetitivo, garantizando que la base de datos interna siempre contenga los listados mas recientes del mercado. Ademas, incluye un pipeline de normalizacion que homologa formatos de superficie, moneda, clasificacion de tipo de inmueble y ubicacion, permitiendo que los datos sean comparables sin importar el portal de origen.
+El actor de Apify maneja internamente rate limiting, proxies y anti-bot — no hay codigo Python de scraping. La normalizacion y el upsert en Supabase ocurren en n8n.
+
+---
+
+## Estado actual
+
+| Componente | Estado | Notas |
+|-----------|--------|-------|
+| Apify actor Inmuebles24 | ✅ Activo | Actor contratado, corriendo |
+| ~60K propiedades en Supabase | ✅ Activo | Al 24 feb 2026 |
+| Cron semanal (n8n) | ✅ Activo | Ejecucion automatica |
+| Trigger manual (Slack) | ✅ Activo | Jeronimo puede disparar desde Slack |
+| Normalizacion en n8n | 🟡 En progreso | Todos los campos |
+| Deduplicacion activa | 🟡 En progreso | Tabla `possible_duplicates` + RPC |
+| AI extraction (Trigger.dev + Claude) | 🟡 En progreso | `property_features` por poblar |
+| EasyBroker (segundo portal) | 🔴 Pendiente | Apify actor por contratar |
 
 ---
 
 ## Objetivos
 
-1. Automatizar la captura de propiedades comerciales/industriales desde al menos 3 portales inmobiliarios mexicanos, eliminando la busqueda manual diaria.
-2. Reducir en un 50% el tiempo que el equipo dedica a la busqueda y registro de propiedades nuevas en el mercado.
+1. Automatizar la captura de propiedades comerciales/industriales desde al menos 2 portales (Inmuebles24 + EasyBroker).
+2. Reducir en un 50% el tiempo que el equipo dedica a la busqueda y registro de propiedades.
 3. Mantener la base de datos con informacion fresca: al menos el 80% de los listados activos actualizados en los ultimos 7 dias.
 
 ---
 
 ## Metricas de Exito / KPIs
 
-| Metrica | Target | Como se mide |
+| Metrica | Target | Estado actual |
 |---------|--------|--------------|
-| Propiedades capturadas | >5,000 listados activos en base de datos | Conteo en BD con filtro de status activo |
-| Portales soportados | >=3 portales en produccion | Conteo de scrapers activos con ejecucion exitosa en ultimas 48h |
-| Frescura de datos | >=80% de listados actualizados en ultimos 7 dias | Query: (listados con last_scraped < 7 dias) / (total listados activos) |
-| Tasa de exito de ejecucion | >=95% de ejecuciones sin error critico | Logs del scheduler: ejecuciones exitosas / total ejecuciones |
-| Tiempo de busqueda manual ahorrado | Reduccion del 50% vs baseline | Encuesta al equipo antes/despues de implementacion |
+| Propiedades en base de datos | >60,000 listados activos | ✅ ~60K al 24 feb |
+| Portales soportados | >=2 en produccion | 🟡 1 activo (Inmuebles24) |
+| Frescura de datos | >=80% actualizados en 7 dias | 🟡 En progreso |
+| Tasa de exito de ejecucion | >=95% sin error critico | ✅ Monitoreado via Slack + error_logs |
+| property_features pobladas | >80% de listings | 🟡 Trigger.dev + Claude en progreso |
 
 ---
 
@@ -38,24 +53,36 @@ Actualmente el equipo de BEIQA dedica horas significativas a buscar propiedades 
 
 | Entregable | Descripcion | Estado |
 |-----------|-------------|--------|
-| Scrapers por portal | Modulos de extraccion especificos para Inmuebles24, EasyBroker y al menos un portal adicional, con manejo de paginacion y detalle | 🔴 |
-| Pipeline de normalizacion | Proceso que homologa superficies (m2), precios (MXN/USD), tipos de inmueble, y ubicaciones a un esquema unificado | 🔴 |
-| Scheduler de ejecucion | Sistema de programacion de ejecuciones periodicas (cron/Celery) con reintentos y manejo de fallos | 🔴 |
-| Dashboard de ejecucion | Panel donde el equipo puede ver estado de los scrapers, ultima ejecucion, errores, y estadisticas de captura | 🔴 |
-| Detector de duplicados | Logica para identificar la misma propiedad publicada en multiples portales y consolidarla en un solo registro | 🔴 |
+| Apify actor Inmuebles24 | Extraccion de propiedades comerciales/industriales | ✅ Activo |
+| Pipeline n8n | Normalizacion + upsert en Supabase | 🟡 En progreso |
+| Cron + Slack trigger | Ejecucion automatica semanal + manual | ✅ Activo |
+| Deduplicacion | `possible_duplicates` + RPC + reviews | 🟡 En progreso |
+| AI extraction | Trigger.dev extrae `property_features` de descripciones | 🟡 En progreso |
+| EasyBroker | Segundo portal de scraping | 🔴 Por iniciar |
+
+---
+
+## Stack del modulo
+
+| Componente | Tecnologia | Notas |
+|-----------|-----------|-------|
+| Scraping | Apify (actor contratado) | Sin Python, sin Playwright propio |
+| Orquestacion | n8n Cloud | Webhook Apify → n8n → Supabase |
+| Jobs AI | Trigger.dev + Claude API | Batch extraction de property_features |
+| Base de datos | Supabase (inmuebles24_listings) | 14 migrations, trigger populate_geo |
+| Monitoring | Slack + error_logs table | Alertas automaticas |
 
 ---
 
 ## Dependencias
 
 ### Necesita (upstream)
-- **Base de datos (Arquitectura)** → Esquema de tablas para propiedades, historial de precios, y metadatos de ejecucion
-- **Servicio de geocodificacion** → Para normalizar direcciones y obtener coordenadas lat/lng de cada propiedad
+- **Base de datos (Arquitectura)** → Esquema de tablas para propiedades, historial de precios, metadatos
 
 ### Depende de este (downstream)
-- **Internal App** → Consume los listados capturados para mostrarlos al equipo de BEIQA
-- **Market Intelligence** → Usa datos historicos de precios y disponibilidad para generar analisis de mercado
-- **AI Brain** → Utiliza las descripciones y atributos de propiedades para matching y NLP
+- **Internal App** → Consume los listados capturados
+- **Market Intelligence** → Datos historicos de precios para analisis
+- **AI Brain** → Descripciones y atributos para matching y NLP
 
 ---
 
@@ -63,16 +90,18 @@ Actualmente el equipo de BEIQA dedica horas significativas a buscar propiedades 
 
 | # | Riesgo | Impacto | Probabilidad | Mitigacion |
 |---|--------|---------|--------------|------------|
-| 1 | Cambios en HTML/estructura de los portales que rompan los scrapers | Alto | Alta | Implementar alertas de fallo, tests de estructura, y modularizar selectores para facilitar actualizacion rapida |
-| 2 | Restricciones legales o de terminos de uso de los portales (robots.txt, cease & desist) | Alto | Media | Respetar robots.txt, implementar rate limiting conservador, evaluar APIs oficiales donde existan |
-| 3 | Rate limiting o bloqueo de IP por parte de los portales | Medio | Alta | Rotacion de user-agents, delays aleatorios entre requests, uso de proxies si es necesario |
-| 4 | Datos inconsistentes o incompletos entre portales | Medio | Alta | Pipeline de validacion robusto, campos obligatorios vs opcionales, logs de calidad de datos |
-| 5 | Escalabilidad del scheduler conforme se agreguen portales y zonas | Bajo | Media | Disenar arquitectura de colas desde el inicio (Celery/Redis), ejecucion por lotes |
+| 1 | Cambios en estructura del portal que rompan el actor de Apify | Medio | Media | Apify maneja gran parte, pero puede requerir actualizar el actor |
+| 2 | Rate limiting adicional del portal | Bajo | Baja | Apify maneja proxies y rate limiting internamente |
+| 3 | Datos inconsistentes o incompletos | Medio | Alta | Pipeline de validacion en n8n, logs de calidad |
+| 4 | EasyBroker API / scraping diferente a Inmuebles24 | Medio | Media | Evaluar si hay API oficial; Apify puede tener actor ya disponible |
 
 ---
 
 ## Documentos del Modulo
 
-- [Product Questions](./Product-Questions.md) — Cuestionario de discovery
 - [Requirements](./Requirements.md) — Capacidades y criterios de aceptacion
 - [Research/](./Research/) — Investigacion tecnica
+
+---
+
+*Actualizado: 2026-02-24*

@@ -1,167 +1,100 @@
 # ADR-001: Elección de Base de Datos
 
-**Fecha**: 2026-02-04  
-**Estado**: Propuesto  
-**Decisores**: [Por definir]
+**Fecha**: 2026-02-04
+**Estado**: ✅ Aceptado — Febrero 2026
+**Decisores**: Fabrizio (Tech Lead), Pablo (CEO)
+
+---
+
+## Decisión
+
+**Supabase (PostgreSQL 15 + PostGIS)**
+
+Supabase fue elegido como la plataforma de base de datos. Provee PostgreSQL con PostGIS, junto con Auth, Storage, REST API automática y RLS en un solo servicio.
 
 ---
 
 ## Contexto
 
 BEIQA necesita una base de datos que soporte:
-- Datos relacionales tradicionales (propiedades, clientes, búsquedas)
-- Datos geoespaciales (coordenadas, polígonos, búsquedas por área)
-- Volumen estimado de 50K+ propiedades
-- Consultas complejas con JOINs y filtros múltiples
-- Historial de datos (5+ años)
+- Datos relacionales (propiedades, brokers, tenants, deals)
+- Datos geoespaciales (coordenadas, búsqueda por área, análisis por zona)
+- Volumen de 60K+ propiedades (ya alcanzado en Fase 1)
+- Consultas complejas con filtros múltiples
+- API automática para el frontend (sin backend custom)
 
 ---
 
-## Opciones Consideradas
+## Justificación de la decisión
 
-### 1. PostgreSQL + PostGIS
+| Criterio | Por qué Supabase |
+|---------|-----------------|
+| **All-in-one** | DB + Auth + Storage + REST API automática en un solo servicio. Sin necesidad de FastAPI, Express, ni Auth0 separados. |
+| **PostGIS incluido** | Soporte geoespacial completo desde el día 1. Extensión habilitada. |
+| **Row Level Security** | RLS nativo permite controlar qué datos ve cada usuario directamente en la DB. |
+| **Free tier → Pro tier** | $0 en desarrollo, $25/mes en producción. No pagar por lo que no se usa. |
+| **API REST automática** | Supabase genera automáticamente una API REST desde el schema. Sin backend custom. |
+| **Migrations** | Sistema de migrations limpio, compatible con el flujo de trabajo de Fabrizio. |
+| **Velocidad de implementación** | 14 migrations implementadas en días. Setup mucho más rápido que self-hosted. |
 
-**Descripción**: Base de datos relacional open-source con extensión geoespacial madura.
+---
 
-✅ **Pros**:
-- Soporte geoespacial más completo del mercado (PostGIS)
-- ACID compliant
-- Gran comunidad y documentación
-- Open source (sin vendor lock-in)
-- Múltiples opciones de hosting (AWS RDS, GCP CloudSQL, Supabase, etc.)
-- Maduro y estable
+## Estado actual (Febrero 2026)
 
-❌ **Cons**:
-- Requiere conocimiento específico de PostGIS
-- Setup más complejo que alternativas managed
-- Tuning de performance requiere expertise
+- 14 migrations activas en producción
+- ~60,000 propiedades en tabla `inmuebles24_listings`
+- PostGIS activo: trigger `populate_geo` operando
+- RLS configurado
+- RPC functions: `tendencia_precios`, `precio_promedio_m2`
+- Costo real: $0-25/mes (free tier → Pro cuando se active más carga)
+
+Ver schema completo: [Database/Schema-Real.md](../Database/Schema-Real.md)
+
+---
+
+## Opciones consideradas (para referencia)
+
+### 1. PostgreSQL + PostGIS (self-hosted)
+- Pros: sin vendor lock-in, control total
+- Contras: setup complejo, necesita DevOps, más lento para iterar
+- **No elegido**: Supabase provee lo mismo con menos overhead
 
 ### 2. MySQL + MySQL Spatial
+- Pros: conocido
+- Contras: geoespacial inferior a PostGIS
+- **No elegido**: geoespacial es crítico
 
-**Descripción**: Base de datos relacional popular con funciones espaciales.
+### 3. MongoDB
+- Pros: schema flexible
+- Contras: no ACID completo, geoespacial limitado
+- **No elegido**: datos relacionales y transacciones necesarios
 
-✅ **Pros**:
-- Muy conocido, fácil encontrar desarrolladores
-- Buen ecosistema de herramientas
-- Múltiples opciones de hosting
-
-❌ **Cons**:
-- Funciones geoespaciales menos completas que PostGIS
-- No soporta algunos tipos de geometría avanzados
-- Índices espaciales menos eficientes
-
-### 3. MongoDB + Geospatial Indexes
-
-**Descripción**: Base de datos de documentos con índices geoespaciales.
-
-✅ **Pros**:
-- Schema flexible
-- Fácil de empezar (Atlas free tier)
-- Bueno para datos heterogéneos
-
-❌ **Cons**:
-- No es ACID completo (important para datos de negocio)
-- Geospatial limitado comparado con PostGIS
-- Más costoso a escala
-- Queries relacionales complejos son difíciles
-
-### 4. Supabase (PostgreSQL managed)
-
-**Descripción**: PostgreSQL hosted con APIs automáticas y dashboard.
-
-✅ **Pros**:
-- Setup muy rápido
-- APIs REST/GraphQL automáticas
-- Auth incluido
-- PostGIS disponible
-- Free tier generoso
-
-❌ **Cons**:
-- Menos control sobre configuración
-- Vendor lock-in moderado
-- Límites en operaciones avanzadas
+### 4. Neon / AWS RDS / GCP Cloud SQL
+- Alternativas de PostgreSQL managed
+- **No elegido**: Supabase agrega Auth + Storage + REST API que los otros no tienen
 
 ---
 
-## Análisis de Requerimientos vs Opciones
-
-| Requerimiento | PostgreSQL+PostGIS | MySQL Spatial | MongoDB | Supabase |
-|---------------|-------------------|---------------|---------|----------|
-| Datos relacionales | ✅✅ | ✅✅ | ⚠️ | ✅✅ |
-| Datos geoespaciales | ✅✅ | ⚠️ | ⚠️ | ✅✅ |
-| Queries complejos | ✅✅ | ✅✅ | ⚠️ | ✅✅ |
-| ACID | ✅✅ | ✅✅ | ⚠️ | ✅✅ |
-| Facilidad setup | ⚠️ | ✅ | ✅✅ | ✅✅ |
-| Escalabilidad | ✅✅ | ✅✅ | ✅✅ | ⚠️ |
-| Costo inicial | ✅ | ✅ | ✅✅ | ✅✅ |
-| Vendor lock-in | ✅✅ | ✅✅ | ⚠️ | ⚠️ |
-
----
-
-## Decisión
-
-**Decisión pendiente** - A validar en Fase 0.
-
-### Recomendación Preliminar
-
-**PostgreSQL + PostGIS** se recomienda preliminarmente porque:
-
-1. **Geoespacial crítico**: El análisis geoespacial es core para BEIQA, y PostGIS es el estándar de la industria
-2. **ACID necesario**: Los datos de negocio (clientes, búsquedas, deals) requieren transacciones confiables
-3. **Sin vendor lock-in**: Open source permite flexibilidad de hosting
-4. **Ecosistema maduro**: Herramientas, documentación, y comunidad robustas
-
-### Opción de implementación
-
-| Opción | Cuándo elegir |
-|--------|---------------|
-| Self-managed (EC2/VM) | Si tenemos DevOps expertise y queremos control total |
-| AWS RDS | Si usamos AWS como cloud provider |
-| GCP Cloud SQL | Si usamos GCP como cloud provider |
-| Supabase | Para MVP rápido, migrar después si necesario |
-
----
-
-## Validación Necesaria (Fase 0)
-
-Antes de confirmar esta decisión:
-
-1. [ ] Verificar experiencia del equipo con PostgreSQL
-2. [ ] Hacer PoC con queries geoespaciales reales
-3. [ ] Estimar costos de hosting en diferentes providers
-4. [ ] Probar carga de datos geográficos (shapefiles, KML)
-5. [ ] Validar performance con volumen esperado
-
----
-
-## Consecuencias (si se confirma PostgreSQL)
+## Consecuencias
 
 ### Positivas
+- API REST lista desde el primer día (sin backend custom)
+- Auth incluido (Supabase Auth, sin Auth0)
+- Storage incluido (sin S3)
+- PostGIS para geoespacial
+- Costo mínimo en early stage
 
-- Capacidad geoespacial completa desde día 1
-- Flexibilidad para queries complejos
-- Herramientas de migración maduras (Alembic, Flyway)
-- Integración con la mayoría de ORMs (SQLAlchemy, Prisma, TypeORM)
-
-### Negativas
-
-- Curva de aprendizaje para PostGIS
-- Necesidad de tuning para queries geoespaciales complejos
-- Setup inicial más trabajo que alternativas managed
-
-### Riesgos
-
-- Performance de queries espaciales con muchos polígonos - mitigar con índices apropiados
-- Complejidad de migraciones geoespaciales - mitigar con buena práctica
+### A monitorear
+- Cuando los jobs de Trigger.dev (batch AI) generen carga analítica real, considerar read replica o schema `analytics` con materialized views
+- Supabase tiene límites en el free tier — monitorear uso
 
 ---
 
-## Notas Adicionales
+## Decisiones relacionadas
 
-- Considerar usar ORM que soporte bien geoespacial (GeoAlchemy2 para Python, PostGIS extensions para Prisma)
-- Planificar estrategia de backups incluyendo datos geoespaciales
-- Documentar convenciones de CRS (coordinate reference system) desde el inicio
+- Stack completo: [02-Architecture/Stack-Decidido.md](../Stack-Decidido.md)
+- Schema implementado: [02-Architecture/Database/Schema-Real.md](Schema-Real.md)
 
 ---
 
-*Relacionado con*: ADR-002 (Cloud Provider), ADR-003 (Backend Framework)
+*ADR creado: 2026-02-04 | Actualizado a ✅ Aceptado: 2026-02-24*

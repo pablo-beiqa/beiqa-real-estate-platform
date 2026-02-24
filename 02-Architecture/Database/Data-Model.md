@@ -1,10 +1,14 @@
 # Modelo de Datos - BEIQA Platform
 
+> ⚠️ **Nota importante**: Este modelo es la visión original de discovery (febrero 2026). El schema implementado en producción tiene una estructura diferente.
+>
+> **Para el schema real que está corriendo en Supabase, ver: [Schema-Real.md](./Schema-Real.md)**
+
 ## Objetivo
 
 Definir las entidades principales y sus relaciones para la base de datos centralizada.
 
-**Estado**: 🟡 En diseño (borrador)
+**Estado**: 📚 Referencia histórica — visión original de discovery
 
 ---
 
