@@ -30,7 +30,7 @@ Se realizó una entrevista en varias rondas (1–8) para definir la estrategia d
 
 ## Corrección crítica sobre la arquitectura
 
-El [System Architecture](../../04-Architecture/System-Architecture.md) **no** está 80–90 % cerrado. Es una lista de deseos. Supuestos **no** decididos:
+El [System Architecture](../02-Architecture/System-Architecture.md) **no** está 80–90 % cerrado. Es una lista de deseos. Supuestos **no** decididos:
 
 - **Método de adquisición de datos**: Podría ser scraping automatizado, extensiones de navegador, APIs, importación manual, herramientas Chrome o híbrido. La arquitectura asume scraping automatizado — no validado.
 - **Programación**: Cron automático, disparo manual o híbrido — no decidido.

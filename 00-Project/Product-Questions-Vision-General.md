@@ -17,10 +17,10 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [Vision-and-Goals.md](../../00-Overview/Vision-and-Goals.md) — Visión, problema, objetivos medibles, usuarios, modelo de negocio
-> - [Business-Context.md](../../01-Discovery/Business-Context.md) — Contexto del negocio
-> - [Current-Process.md](../../01-Discovery/Current-Process.md) — Proceso manual actual
-> - [Pain-Points.md](../../01-Discovery/Pain-Points.md) — Puntos de dolor detallados
+> - [Vision-and-Goals.md](./Vision-and-Goals.md) — Visión, problema, objetivos medibles, usuarios, modelo de negocio
+> - [Business-Context.md](./Business-Context.md) — Contexto del negocio
+> - [Current-Process.md](./Current-Process.md) — Proceso manual actual
+> - [Pain-Points.md](./Pain-Points.md) — Puntos de dolor detallados
 >
 > **Las preguntas a continuación buscan lo que FALTA — la información delta que aún no se ha capturado.**
 

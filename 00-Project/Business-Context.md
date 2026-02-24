@@ -113,5 +113,5 @@ Beiqa representa a empresas (tenants) que buscan espacios comerciales, industria
 
 - [Proceso Actual Detallado](./Current-Process.md)
 - [Pain Points](./Pain-Points.md)
-- [Visión y Objetivos](../00-Overview/Vision-and-Goals.md)
+- [Visión y Objetivos](./Vision-and-Goals.md)
 

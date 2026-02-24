@@ -10,7 +10,7 @@ Este documento define la metodología de investigación, el orden de dependencia
 
 > **Primero entender QUÉ construir (Product Questions), luego investigar CÓMO construirlo (Technical Research).**
 
-La [Arquitectura del Sistema](../04-Architecture/System-Architecture.md) es un documento de VISIÓN, no un diseño validado. Cada suposición debe ser verificada con evidencia antes de comprometer recursos.
+La [Arquitectura del Sistema](../02-Architecture/System-Architecture.md) es un documento de VISIÓN, no un diseño validado. Cada suposición debe ser verificada con evidencia antes de comprometer recursos.
 
 ---
 

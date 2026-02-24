@@ -74,7 +74,7 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 
 ## Referencias
 
-- [Contexto de Negocio](../01-Discovery/Business-Context.md)
-- [Pain Points Detallados](../01-Discovery/Pain-Points.md)
-- [Definición del MVP](../06-Roadmap/MVP-Definition.md)
+- [Contexto de Negocio](./Business-Context.md)
+- [Pain Points Detallados](./Pain-Points.md)
+- [Definición del MVP](../03-Roadmap/Phase-1-MVP.md)
 
