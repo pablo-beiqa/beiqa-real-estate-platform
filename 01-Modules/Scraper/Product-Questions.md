@@ -17,9 +17,9 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [Current-Process.md](../../01-Discovery/Current-Process.md) — Proceso manual actual de búsqueda
-> - [Pain-Points.md](../../01-Discovery/Pain-Points.md) — Dolor de búsqueda manual en múltiples portales
-> - [Portal-Comparison.md](../Scraper-Research/Portal-Comparison.md) — Lista de portales a evaluar
+> - [Current-Process.md](../../00-Project/Current-Process.md) — Proceso manual actual de búsqueda
+> - [Pain-Points.md](../../00-Project/Pain-Points.md) — Dolor de búsqueda manual en múltiples portales
+> - [Portal-Comparison.md](./Research/Portal-Comparison.md) — Lista de portales a evaluar
 >
 > **Las preguntas buscan lo que FALTA sobre el proceso real de adquisición de datos.**
 

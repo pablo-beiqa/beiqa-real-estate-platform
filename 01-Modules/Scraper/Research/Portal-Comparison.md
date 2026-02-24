@@ -2,7 +2,7 @@
 
 **Fase**: R-1 (Datos Core)
 **Estado**: 🔴 Por investigar
-**Depende de**: [Data Acquisition Strategy](../Data-Acquisition/Data-Acquisition-Strategy.md)
+**Depende de**: [Data Acquisition Strategy](./Data-Acquisition-Strategy.md)
 
 ---
 
@@ -10,7 +10,7 @@
 
 Evaluar cada portal inmobiliario para determinar el **método de adquisición óptimo** (API, scraping, extensión, manual), volumen de datos, y prioridad de integración.
 
-> **Nota**: Este documento se reestructuró para evaluar portales por método de adquisición, no solo por factibilidad de scraping. Ver [Data-Acquisition-Strategy.md](../Data-Acquisition/Data-Acquisition-Strategy.md) para la estrategia general.
+> **Nota**: Este documento se reestructuró para evaluar portales por método de adquisición, no solo por factibilidad de scraping. Ver [Data-Acquisition-Strategy.md](./Data-Acquisition-Strategy.md) para la estrategia general.
 
 ---
 

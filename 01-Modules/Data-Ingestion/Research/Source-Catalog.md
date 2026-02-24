@@ -18,7 +18,7 @@ Catalogar TODAS las fuentes de datos potenciales para BEIQA, con preguntas de in
 
 ## 1. Portales Inmobiliarios
 
-> Detalle completo en [Portal-Comparison.md](../Scraper-Research/Portal-Comparison.md) y [Data-Acquisition-Strategy.md](../Data-Acquisition/Data-Acquisition-Strategy.md)
+> Detalle completo en [Portal-Comparison.md](../../Scraper/Research/Portal-Comparison.md) y [Data-Acquisition-Strategy.md](../../Scraper/Research/Data-Acquisition-Strategy.md)
 
 | # | Portal | Tipo | Método | Estado |
 |---|--------|------|--------|--------|
@@ -214,7 +214,7 @@ Catalogar TODAS las fuentes de datos potenciales para BEIQA, con preguntas de in
 
 ## 4. APIs de Mapas y Geolocalización
 
-> Detalle completo en [Google-Maps-Platform.md](./Google-Maps-Platform.md) (ahora estrategia GIS completa)
+> Detalle completo en [Google-Maps-Platform.md](../../Geospatial/Research/Google-Maps-Platform.md) (ahora estrategia GIS completa)
 
 | # | Servicio | Uso | Costo | Estado |
 |---|----------|-----|-------|--------|

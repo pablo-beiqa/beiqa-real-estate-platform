@@ -17,7 +17,7 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [System-Architecture.md](../../04-Architecture/System-Architecture.md) — AI Brain (GenTik): matching, NLP, resúmenes, recomendaciones
+> - [System-Architecture.md](../../02-Architecture/System-Architecture.md) — AI Brain (GenTik): matching, NLP, resúmenes, recomendaciones
 >
 > **Las preguntas buscan definir el ROL de la IA desde la perspectiva del usuario.**
 

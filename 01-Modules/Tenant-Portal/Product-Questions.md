@@ -18,8 +18,8 @@
 > - **Portal de Clientes** = La interfaz externa donde los clientes de Beiqa interactúan
 >
 > **Ya documentado en:**
-> - [System-Architecture.md](../../04-Architecture/System-Architecture.md) — Tenant Portal: propiedades shortlisted, mapa, comparativos, reportes, feedback
-> - [Vision-and-Goals.md](../../00-Overview/Vision-and-Goals.md) — Usuarios secundarios: empresas en expansión
+> - [System-Architecture.md](../../02-Architecture/System-Architecture.md) — Tenant Portal: propiedades shortlisted, mapa, comparativos, reportes, feedback
+> - [Vision-and-Goals.md](../../00-Project/Vision-and-Goals.md) — Usuarios secundarios: empresas en expansión
 >
 > **Las preguntas buscan entender la experiencia del CLIENTE, no la tecnología.**
 

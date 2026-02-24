@@ -10,7 +10,7 @@
 
 Evaluar TODOS los métodos de adquisición de datos de propiedades y determinar la estrategia óptima para BEIQA. La arquitectura completa depende de esta decisión.
 
-> **Corrección crítica**: La [Arquitectura del Sistema](../../04-Architecture/System-Architecture.md) asume scraping automatizado. Esto NO está validado. Podría ser API, extensión de Chrome, importación manual, o un híbrido.
+> **Corrección crítica**: La [Arquitectura del Sistema](../../../02-Architecture/System-Architecture.md) asume scraping automatizado. Esto NO está validado. Podría ser API, extensión de Chrome, importación manual, o un híbrido.
 
 ---
 

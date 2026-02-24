@@ -17,8 +17,8 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [System-Architecture.md](../../04-Architecture/System-Architecture.md) — Geospatial Analysis Engine, PostGIS
-> - [Google-Maps-Platform.md](../Data-Sources-Research/Google-Maps-Platform.md) — APIs de Google Maps evaluadas
+> - [System-Architecture.md](../../02-Architecture/System-Architecture.md) — Geospatial Analysis Engine, PostGIS
+> - [Google-Maps-Platform.md](./Research/Google-Maps-Platform.md) — APIs de Google Maps evaluadas
 >
 > **Las preguntas buscan entender el USO REAL de mapas y análisis geográfico por el equipo.**
 

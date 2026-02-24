@@ -17,8 +17,8 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [Vision-and-Goals.md](../../00-Overview/Vision-and-Goals.md) — "Falta de inteligencia de mercado" como problema clave
-> - [Pain-Points.md](../../01-Discovery/Pain-Points.md) — Análisis manual y limitado
+> - [Vision-and-Goals.md](../../00-Project/Vision-and-Goals.md) — "Falta de inteligencia de mercado" como problema clave
+> - [Pain-Points.md](../../00-Project/Pain-Points.md) — Análisis manual y limitado
 >
 > **Las preguntas buscan profundizar en el proceso de inteligencia de mercado actual y deseado.**
 

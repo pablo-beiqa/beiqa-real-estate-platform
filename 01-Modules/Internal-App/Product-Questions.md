@@ -24,9 +24,9 @@
 > Este cuestionario busca definir qué experiencia debe tener el equipo interno antes de que la investigación técnica elija tecnologías (dashboard vs IA vs low-code).
 >
 > **Ya documentado en:**
-> - [Current-Process.md](../../01-Discovery/Current-Process.md) — Cómo trabaja el equipo hoy
-> - [Pain-Points.md](../../01-Discovery/Pain-Points.md) — Dolor de búsqueda manual
-> - [System-Architecture.md](../../04-Architecture/System-Architecture.md) — Diagrama que muestra "Internal App Web" (supuesto no validado)
+> - [Current-Process.md](../../00-Project/Current-Process.md) — Cómo trabaja el equipo hoy
+> - [Pain-Points.md](../../00-Project/Pain-Points.md) — Dolor de búsqueda manual
+> - [System-Architecture.md](../../02-Architecture/System-Architecture.md) — Diagrama que muestra "Internal App Web" (supuesto no validado)
 >
 > **Las preguntas buscan lo que FALTA sobre la forma de trabajo deseada.**
 

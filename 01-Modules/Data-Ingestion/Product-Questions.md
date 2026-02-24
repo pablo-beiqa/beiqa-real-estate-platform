@@ -17,8 +17,8 @@
 > - **La Plataforma** = El producto de software que estamos construyendo para Beiqa
 >
 > **Ya documentado en:**
-> - [Source-Catalog.md](../Data-Sources-Research/Source-Catalog.md) — Catálogo de 40+ fuentes potenciales
-> - [INEGI-APIs.md](../Data-Sources-Research/INEGI-APIs.md) — APIs del INEGI
+> - [Source-Catalog.md](./Research/Source-Catalog.md) — Catálogo de 40+ fuentes potenciales
+> - [INEGI-APIs.md](./Research/INEGI-APIs.md) — APIs del INEGI
 >
 > **Las preguntas buscan entender el VALOR de cada tipo de dato, no los detalles técnicos.**
 
