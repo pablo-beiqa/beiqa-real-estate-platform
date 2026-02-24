@@ -8,7 +8,7 @@
 
 ## Objetivo
 
-Revisar componente por componente la [Arquitectura del Sistema](../04-Architecture/System-Architecture.md) contra los hallazgos de la investigación. Determinar qué suposiciones son válidas, cuáles necesitan cambiar, y cuáles son innecesarias para el MVP.
+Revisar componente por componente la [Arquitectura del Sistema](../02-Architecture/System-Architecture.md) contra los hallazgos de la investigación. Determinar qué suposiciones son válidas, cuáles necesitan cambiar, y cuáles son innecesarias para el MVP.
 
 > **Recordatorio**: El documento de arquitectura es una VISIÓN escrita ANTES de la investigación. No es un diseño validado.
 
@@ -38,7 +38,7 @@ Para cada componente de la arquitectura:
 | Frecuencia propuesta | Diaria/semanal |  |
 | Realidad | 🔴 _Depende de respuestas del equipo en R-0_ |  |
 
-**Referencia**: [Data-Acquisition-Strategy.md](./Data-Acquisition/Data-Acquisition-Strategy.md)
+**Referencia**: [Data-Acquisition-Strategy.md](../01-Modules/Scraper/Research/Data-Acquisition-Strategy.md)
 
 **Validación**: 🔴 _Pendiente hallazgos de R-1_
 
@@ -55,7 +55,7 @@ Para cada componente de la arquitectura:
 | Fuentes | INEGI, Google APIs, proveedores comerciales |  |
 | Realidad según investigación | 🔴 _INEGI DENUE + Cartografía probablemente MVP, resto diferido_ |  |
 
-**Referencia**: [Source-Catalog.md](./Data-Sources-Research/Source-Catalog.md), [INEGI-APIs.md](./Data-Sources-Research/INEGI-APIs.md)
+**Referencia**: [Source-Catalog.md](../01-Modules/Data-Ingestion/Research/Source-Catalog.md), [INEGI-APIs.md](../01-Modules/Data-Ingestion/Research/INEGI-APIs.md)
 
 **Validación**: 🔴 _Pendiente_
 
@@ -70,7 +70,7 @@ Para cada componente de la arquitectura:
 | Formatos | KML, Shapefiles, GeoJSON |  |
 | Herramientas | ogr2ogr, geopandas, shp2pgsql |  |
 
-**Referencia**: [Google-Maps-Platform.md](./Data-Sources-Research/Google-Maps-Platform.md) (estrategia GIS)
+**Referencia**: [Google-Maps-Platform.md](../01-Modules/Geospatial/Research/Google-Maps-Platform.md) (estrategia GIS)
 
 **Validación**: 🔴 _Pendiente_
 
@@ -85,7 +85,7 @@ Para cada componente de la arquitectura:
 | Dirección | Bidireccional |  |
 | Cuestión abierta | ¿Qué datos necesitan sincronizarse? ¿Es MVP? |  |
 
-**Referencia**: Cuestionario [00-Vision-General.md](./Product-Questions/00-Vision-General.md) pregunta 6
+**Referencia**: Cuestionario [00-Vision-General.md](../00-Project/Product-Questions-Vision-General.md) pregunta 6
 
 **Validación**: 🔴 _Pendiente respuestas de R-0_
 
@@ -101,7 +101,7 @@ Para cada componente de la arquitectura:
 | Hosting | No especificado | 🔴 ADR-005 pendiente |
 | Modelo de datos | PROPERTY, CLIENT, ZONE, etc. | 🔴 ¿Necesita PROPERTY_SOURCE para dedup? |
 
-**Referencia**: [Database-Options.md](./Technology-Research/Database-Options.md), [Deduplication-Strategy.md](./Data-Acquisition/Deduplication-Strategy.md)
+**Referencia**: [Database-Options.md](../02-Architecture/Database/Database-Options.md), [Deduplication-Strategy.md](../02-Architecture/Deduplication-Strategy.md)
 
 **Cambio necesario**: Agregar tabla `PROPERTY_SOURCE` al modelo de datos para soportar deduplicación.
 
@@ -146,7 +146,7 @@ Para cada componente de la arquitectura:
 | Funciones MVP | Precio promedio/zona, distribución, conteo |  |
 | Funciones diferidas | Tendencias, vacancia, absorción |  |
 
-**Referencia**: [Market-Intelligence-Strategy.md](./Market-Intelligence/Market-Intelligence-Strategy.md)
+**Referencia**: [Market-Intelligence-Strategy.md](../01-Modules/Market-Intelligence/Research/Market-Intelligence-Strategy.md)
 
 ---
 
@@ -159,7 +159,7 @@ Para cada componente de la arquitectura:
 | Funciones MVP | Búsqueda por radio/polígono, proximidad |  |
 | Implementación | PostGIS queries (no necesita engine separado) |  |
 
-**Referencia**: [Google-Maps-Platform.md](./Data-Sources-Research/Google-Maps-Platform.md) (estrategia GIS)
+**Referencia**: [Google-Maps-Platform.md](../01-Modules/Geospatial/Research/Google-Maps-Platform.md) (estrategia GIS)
 
 **Nota**: Puede ser queries PostGIS directas, no necesariamente un "engine" separado.
 
@@ -174,7 +174,7 @@ Para cada componente de la arquitectura:
 | Funciones MVP | Deduplicación de casos ambiguos |  |
 | Funciones diferidas | NLP, matching, reportes, chat |  |
 
-**Referencia**: [AI-Strategy.md](./AI-Strategy/AI-Strategy.md)
+**Referencia**: [AI-Strategy.md](../01-Modules/AI-Brain/Research/AI-Strategy.md)
 
 **Cambio necesario**: Reducir scope para MVP. No es un "brain" -- es un servicio de dedup.
 
@@ -223,7 +223,7 @@ Para cada componente de la arquitectura:
 | ¿MVP? | 🔴 _ADR-003 pendiente_ |  |
 | Alternativas | Low-code, chatbot, Airtable-like, híbrido |  |
 
-**Referencia**: [Interface-Strategy.md](./Technology-Research/Interface-Strategy.md)
+**Referencia**: [Interface-Strategy.md](../01-Modules/Internal-App/Research/Interface-Strategy.md)
 
 ### Tenant Portal (Web)
 

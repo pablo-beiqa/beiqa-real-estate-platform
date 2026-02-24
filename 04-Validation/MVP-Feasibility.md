@@ -33,7 +33,7 @@ Consolidar todos los hallazgos de investigación en una decisión clara de GO / 
 
 | Aspecto | Hallazgo |
 |---------|----------|
-| Costo estimado total año 1 | 🔴 _Ver [Total-Budget.md](../Cost-Estimates/Total-Budget.md)_ |
+| Costo estimado total año 1 | 🔴 _Ver [Total-Budget.md](./Total-Budget.md)_ |
 | ¿Cabe en $50K-$100K? | 🔴 _Preliminar: Sí ($36K-$72K estimado)_ |
 | Riesgo | Scope creep, costos de desarrollo mayores a estimados |
 | Mitigación | MVP estricto, equipo con precio fijo por entregable |
@@ -79,7 +79,7 @@ Consolidar todos los hallazgos de investigación en una decisión clara de GO / 
 | ADR-005 DB Hosting | 🔴 |
 | ADR-006 Scheduling | 🔴 |
 
-_Referencia: [Tech-Stack-Decision.md](../Technology-Research/Tech-Stack-Decision.md)_
+_Referencia: [Tech-Stack-Decision.md](../02-Architecture/Tech-Stack-Decision.md)_
 
 ### 6. Equipo Contratable
 
