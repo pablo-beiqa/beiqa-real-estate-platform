@@ -1,60 +1,78 @@
-# Stakeholders - BEIQA Platform
+# Stakeholders — BEIQA Platform
 
-## Decision Makers
+> **Actualizado**: Febrero 2026
 
+---
 
-| Rol                      | Responsabilidad en el Proyecto             | Input Principal                                |
-| ------------------------ | ------------------------------------------ | ---------------------------------------------- |
-| CEO / Fundador           | Aprobación final, visión estratégica       | Dirección del producto, prioridades de negocio |
-| Líder Comercial / Ventas | Requisitos de negocio, adopción del equipo | Features necesarios, workflows actuales        |
-| Líder Técnico            | Decisiones de arquitectura, factibilidad   | Implementación, estimaciones técnicas          |
+## Equipo Actual
 
+| Nombre | Rol | Responsabilidad principal |
+|--------|-----|--------------------------|
+| **Pablo** | CEO / Product Owner | Visión estratégica, aprobación final, prioridades de negocio |
+| **Fabrizio** | Tech Lead | Arquitectura, desarrollo backend, decisiones técnicas, DB, integraciones |
+| **Jerónimo** | Ops / Llamadas | Operaciones, llamadas con clientes, trigger manual de scraping vía Slack |
+| **Pamela** | Frontend Developer | Desarrollo de Internal App y Tenant Portal (Next.js) |
+| **Alex** | Advisor externo | Consultoría técnica y de datos (participó en llamada de arquitectura 23 feb) |
+
+---
 
 ## Usuarios del Sistema
 
-### Equipo Comercial Beiqa
+### Usuarios activos (Fase 1)
 
-- **Tamaño**: 6-15 personas
-- **Uso esperado**: Diario
-- **Features críticos para ellos**: Búsqueda, filtros, mapas, reportes
+| Usuario | Rol | Uso esperado | Features críticos |
+|---------|-----|--------------|------------------|
+| Fabrizio | Tech Lead | Admin + uso diario | Todo — es el dev |
+| Jerónimo | Ops | Uso diario | Trigger scraping, ver propiedades, reportes |
+| Pablo | CEO/PO | Revisión periódica | Dashboard, reportes, estado del proyecto |
 
-### Clientes (Tenants)
+### Usuarios futuros (Fase 2)
 
-- **Tamaño**: 20+ empresas
-- **Uso esperado**: Semanal durante proceso de búsqueda
-- **Features críticos para ellos**: Portal con propiedades, like/dislike, documentos
+| Usuario | Rol | Uso esperado | Features críticos |
+|---------|-----|--------------|------------------|
+| Pamela | Frontend | Desarrollo | Internal App + Portal |
+| Tenants (clientes) | Empresas buscando espacio | Semanal durante proceso | Portal con propiedades, shortlist, mapa |
+
+---
 
 ## Matriz RACI
 
-
-| Actividad                   | CEO | Líder Comercial | Líder Técnico | Equipo Dev |
-| --------------------------- | --- | --------------- | ------------- | ---------- |
-| Definir visión del producto | A   | C               | C             | I          |
-| Priorizar features          | A   | R               | C             | I          |
-| Aprobar presupuesto         | A/R | I               | C             | I          |
-| Definir arquitectura        | I   | C               | A/R           | C          |
-| Desarrollo                  | I   | I               | A             | R          |
-| Testing y validación        | I   | R               | A             | R          |
-| Capacitación de usuarios    | I   | A/R             | C             | C          |
-
+| Actividad | Pablo (CEO) | Fabrizio (Tech) | Jerónimo (Ops) | Pamela (FE) |
+|-----------|------------|----------------|----------------|-------------|
+| Definir visión del producto | A | C | C | I |
+| Priorizar features | A | R | C | I |
+| Aprobar presupuesto | A/R | C | I | I |
+| Definir arquitectura | I | A/R | I | C |
+| Desarrollo backend | I | R/A | I | I |
+| Desarrollo frontend | I | A | I | R |
+| Operaciones / scraping | I | A | R | I |
+| Testing y validación | C | A | R | R |
 
 **Leyenda**: R = Responsable, A = Accountable, C = Consultado, I = Informado
 
+---
+
 ## Canales de Comunicación
 
+| Stakeholder | Canal | Frecuencia |
+|-------------|-------|-----------|
+| Pablo ↔ Fabrizio | Slack / llamadas | Según necesidad |
+| Equipo completo | Slack | Diario |
+| Jerónimo | Slack (triggers manuales) | Diario en operaciones |
+| Alex (advisor) | Llamadas | Según necesidad |
 
-| Stakeholder     | Canal Preferido       | Frecuencia  |
-| --------------- | --------------------- | ----------- |
-| CEO             | Reuniones ejecutivas  | Quincenal   |
-| Líder Comercial | Reuniones de producto | Semanal     |
-| Líder Técnico   | Daily standups        | Diario      |
-| Equipo Beiqa    | Demos + feedback      | Cada sprint |
+---
 
+## Contactos para Decisiones
 
-## Próximos Pasos de Engagement
+| Decisión | Quién aprueba |
+|---------|--------------|
+| Cambios de stack / arquitectura | Fabrizio (consulta Pablo) |
+| Nuevas features | Pablo (consulta Fabrizio) |
+| Cambios de presupuesto | Pablo |
+| Accesos a herramientas | Fabrizio |
+| Onboarding de nuevo portal | Fabrizio + Jerónimo |
 
-- Agendar kickoff con todos los stakeholders
-- Entrevistas individuales para capturar requisitos detallados
-- Definir proceso de feedback y aprobaciones
-- Establecer cadencia de comunicación regular
+---
 
+*Actualizado: 2026-02-24*

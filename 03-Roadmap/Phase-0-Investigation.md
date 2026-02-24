@@ -1,11 +1,19 @@
 # Fase 0: Investigación y Diseño
 
+> ✅ **COMPLETADA** — Febrero 2026
+>
+> Todas las decisiones técnicas tomadas. Las decisiones están documentadas en [02-Architecture/Stack-Decidido.md](../02-Architecture/Stack-Decidido.md).
+>
+> El proyecto pasó a desarrollo activo (Fase 1). Ver: [Fase-Real-1-Scrapers.md](./Fase-Real-1-Scrapers.md)
+
+---
+
 ## Objetivo
 
 Validar factibilidad técnica, completar diseño, y tomar decisiones arquitectónicas antes de iniciar desarrollo.
 
-**Duración estimada**: 2-4 semanas  
-**Estado**: 🟢 Activa
+**Duración estimada**: 2-4 semanas
+**Estado**: ✅ COMPLETADA — Febrero 2026
 
 ---
 

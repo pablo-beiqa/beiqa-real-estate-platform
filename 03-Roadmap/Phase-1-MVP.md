@@ -1,222 +1,109 @@
-# Fase 1: MVP (Minimum Viable Product)
+# Roadmap: Las 3 Fases del Proyecto
 
-## Objetivo
-
-Entregar una versión funcional mínima que permita a Beiqa empezar a usar la plataforma para operaciones básicas.
-
-**Duración estimada**: 6-8 semanas (post Fase 0)  
-**Estado**: 🔴 Por iniciar
-
----
-
-## Alcance del MVP
-
-### Incluido en MVP
-
-| Módulo | Funcionalidad |
-|--------|---------------|
-| **Scraper** | Scraping básico de 2-3 portales principales |
-| **Base de datos** | Estructura core de propiedades, clientes, búsquedas |
-| **Internal App** | CRUD de propiedades (ver, filtrar, buscar) |
-| **Internal App** | Mapa básico con propiedades |
-| **Internal App** | Gestión básica de clientes y búsquedas |
-| **Internal App** | Shortlists por cliente |
-
-### Excluido del MVP (Fases posteriores)
-
-| Módulo | Funcionalidad | Fase |
-|--------|---------------|------|
-| Data Ingestion | Integración INEGI, Google APIs | Fase 2 |
-| Geospatial | Análisis avanzado, capas, zonas | Fase 2 |
-| Market Intelligence | KPIs, tendencias, reportes automáticos | Fase 2 |
-| AI Brain | Matching inteligente, NLP | Fase 3 |
-| Tenant Portal | Portal web para clientes | Fase 4 |
+> **Actualizado**: 2026-02-24
+>
+> Este documento reemplaza el plan original de MVP de 6-8 semanas con 4 sprints. El proyecto ya está en desarrollo activo.
+>
+> Para el estado detallado de la Fase 1 actual: **[→ Fase-Real-1-Scrapers.md](./Fase-Real-1-Scrapers.md)**
 
 ---
 
-## Funcionalidades MVP Detalladas
+## Visión del roadmap
 
-### 1. Módulo Scraper (MVP)
+```
+FASE 1: Scrapers & Inventario     FASE 2: Portal & Datos           FASE 3: AI Brain
+(4-5 semanas)                     (4-5 semanas)                    (4-5 semanas)
+━━━━━━━━━━━━━━━━━━━━━━            ━━━━━━━━━━━━━━━━━━━━━━━━━        ━━━━━━━━━━━━━━━━━━
+🟢 EN CURSO                       🔴 Por iniciar                   🔴 Por iniciar
 
-| ID | Feature | Descripción | Prioridad |
-|----|---------|-------------|-----------|
-| SCR-MVP-01 | Scraping Inmuebles24 | Extraer propiedades comerciales/industriales | Alta |
-| SCR-MVP-02 | Scraping Portal 2 | Extraer de segundo portal | Alta |
-| SCR-MVP-03 | Normalización básica | Unificar formatos de datos | Alta |
-| SCR-MVP-04 | Ejecución manual | Trigger desde admin | Alta |
-| SCR-MVP-05 | Log de ejecución | Registrar corridas y errores | Media |
-
-### 2. Base de Datos (MVP)
-
-| ID | Feature | Descripción | Prioridad |
-|----|---------|-------------|-----------|
-| DB-MVP-01 | Tabla propiedades | Estructura core con campos esenciales | Alta |
-| DB-MVP-02 | Tabla clientes | Información básica de clientes | Alta |
-| DB-MVP-03 | Tabla búsquedas | Solicitudes de búsqueda | Alta |
-| DB-MVP-04 | Tabla shortlist | Propiedades por búsqueda | Alta |
-| DB-MVP-05 | Índice geoespacial | Para queries de ubicación | Alta |
-
-### 3. Internal App (MVP)
-
-| ID | Feature | Descripción | Prioridad |
-|----|---------|-------------|-----------|
-| APP-MVP-01 | Login/Auth | Autenticación de usuarios | Alta |
-| APP-MVP-02 | Lista propiedades | Ver todas las propiedades | Alta |
-| APP-MVP-03 | Filtros básicos | Tipo, precio, superficie, zona | Alta |
-| APP-MVP-04 | Detalle propiedad | Ver toda la info de una propiedad | Alta |
-| APP-MVP-05 | Mapa básico | Ver propiedades en mapa | Alta |
-| APP-MVP-06 | Búsqueda por área | Dibujar zona en mapa | Media |
-| APP-MVP-07 | Lista clientes | CRUD de clientes | Alta |
-| APP-MVP-08 | Lista búsquedas | CRUD de búsquedas por cliente | Alta |
-| APP-MVP-09 | Shortlist | Agregar/quitar propiedades de búsqueda | Alta |
-| APP-MVP-10 | Export básico | Exportar shortlist a Excel | Media |
-
----
-
-## Arquitectura MVP
-
-```mermaid
-flowchart TB
-    subgraph External[Externo]
-        Portal1[Inmuebles24]
-        Portal2[Portal 2]
-    end
-    
-    subgraph Backend[Backend MVP]
-        Scraper[Scraper Script]
-        API[REST API]
-        DB[(PostgreSQL + PostGIS)]
-    end
-    
-    subgraph Frontend[Frontend MVP]
-        App[Internal App]
-    end
-    
-    Portal1 --> Scraper
-    Portal2 --> Scraper
-    Scraper --> DB
-    API --> DB
-    App --> API
+• Apify actor Inmuebles24 ✅       • Portal Web (Next.js)           • AI Brain de llamadas
+• ~60K propiedades en DB ✅        • EasyBroker (portal 2)          • Procesamiento CircleBack
+• n8n workflows ✅                 • INEGI + Google Places           • Matching propiedades IA
+• Trigger.dev + Claude AI ✅       • H3 index + AGEB                 • Recomendaciones proactivas
+• Internal App (Next.js)           • Market Intelligence             • NLP en búsquedas
+• Deduplicación activa             • Tenant Portal completo
+• Normalización completa
 ```
 
 ---
 
-## Plan de Sprints (Estimado)
+## Fase 1: Scrapers & Inventario
 
-### Sprint 1 (2 semanas)
+**Estado**: 🟢 En curso | **Owner**: Fabrizio
 
-| Tarea | Estimación | Notas |
-|-------|------------|-------|
-| Setup proyecto backend | 2 días | Framework, estructura |
-| Setup proyecto frontend | 2 días | Framework, estructura |
-| Modelo de datos core | 3 días | Migraciones, seeding |
-| API: Auth básico | 2 días | |
-| API: CRUD propiedades | 3 días | |
+### Objetivo
+Inventario completo y actualizado de propiedades comerciales en CDMX/EdoMex/Morelos/Puebla, accesible para el equipo vía Internal App.
 
-### Sprint 2 (2 semanas)
+### Entregables clave
+- Apify scraping Inmuebles24 + EasyBroker
+- ~60K+ propiedades normalizadas en Supabase
+- Deduplicación activa
+- AI extraction de `property_features` (Trigger.dev + Claude)
+- Internal App (Next.js): lista, mapa, filtros, shortlists
 
-| Tarea | Estimación | Notas |
-|-------|------------|-------|
-| Scraper Portal 1 | 4 días | Inmuebles24 |
-| Scraper Portal 2 | 3 días | Vivanuncios o similar |
-| API: CRUD clientes | 2 días | |
-| API: CRUD búsquedas | 2 días | |
-| API: Shortlists | 2 días | |
-
-### Sprint 3 (2 semanas)
-
-| Tarea | Estimación | Notas |
-|-------|------------|-------|
-| Frontend: Lista propiedades | 3 días | Con filtros |
-| Frontend: Detalle propiedad | 2 días | |
-| Frontend: Mapa básico | 3 días | Con markers |
-| Frontend: Búsqueda por área | 2 días | Draw polygon |
-| Frontend: Auth | 2 días | |
-
-### Sprint 4 (2 semanas)
-
-| Tarea | Estimación | Notas |
-|-------|------------|-------|
-| Frontend: Clientes | 2 días | |
-| Frontend: Búsquedas | 2 días | |
-| Frontend: Shortlists | 2 días | |
-| Integración completa | 2 días | |
-| Testing & bugfixes | 3 días | |
-| Deploy a staging | 1 día | |
+### Stack
+Apify → n8n → Supabase ← Trigger.dev (Claude API) ← Next.js
 
 ---
 
-## Criterios de Aceptación MVP
+## Fase 2: Portal Web + Data Ingestion
 
-### Funcionales
+**Estado**: 🔴 Por iniciar | **Prerequisito**: Fase 1 completa
 
-- [ ] Puedo ver todas las propiedades scrapeadas
-- [ ] Puedo filtrar por tipo, precio, superficie
-- [ ] Puedo ver propiedades en un mapa
-- [ ] Puedo buscar por área (dibujar en mapa)
-- [ ] Puedo crear un cliente
-- [ ] Puedo crear una búsqueda para un cliente
-- [ ] Puedo agregar propiedades a una shortlist
-- [ ] Puedo exportar shortlist a Excel
-- [ ] El scraper extrae datos de 2 portales
+### Objetivo
+Clientes de Beiqa (tenants) pueden ver sus shortlists directamente en un portal. El sistema tiene datos contextuales de zonas (INEGI, Google) enriqueciendo cada propiedad.
 
-### No funcionales
+### Entregables clave
+- **Tenant Portal** (Next.js): los clientes ven sus opciones, dan feedback, ven en mapa
+- **Data Ingestion**: Google Places (POIs cercanos), INEGI DENUE (datos socioeconómicos)
+- **H3 index**: cada listing tiene H3 index precalculado al ingresar (resolución 7 y 9)
+- **AGEB**: cada listing tiene AGEB de INEGI (spatial join con shapefiles)
+- **Cache de APIs**: tabla `cache_api_responses` para no repetir requests a Google/INEGI por zona
+- **Market Intelligence básico**: tendencia de precios por zona, precio promedio m2, heatmaps
 
-- [ ] Carga de lista de propiedades < 3 segundos
-- [ ] Mapa carga con < 5 segundos
-- [ ] Sistema disponible > 95% del tiempo
-- [ ] Datos de scraping actualizados (< 1 semana)
+### Stack adicional
+INEGI APIs + Google Places → n8n → Supabase (con H3 + AGEB)
 
----
-
-## Dependencias y Riesgos
-
-### Dependencias
-
-| Dependencia | Responsable | Estado |
-|-------------|-------------|--------|
-| Decisiones de Fase 0 completadas | PM | 🔴 |
-| Ambiente de desarrollo listo | DevOps | 🔴 |
-| Accesos a portales verificados | Dev | 🔴 |
-| Diseños UI básicos | PM/UX | 🔴 |
-
-### Riesgos
-
-| Riesgo | Prob | Impacto | Mitigación |
-|--------|------|---------|------------|
-| Portales cambian estructura | Media | Alto | Monitorear, tener fallback |
-| Performance de mapa con muchas props | Media | Medio | Clustering, pagination |
-| Alcance crece durante desarrollo | Alta | Medio | Ser estrictos con MVP scope |
+### Decisiones pendientes para Fase 2
+- Confirmar proveedor de mapas (Mapbox vs Leaflet+OSM vs Google Maps)
+- Diseño de Tenant Portal (Pamela)
+- Granularidad de H3 (resolución 7 para zonas grandes, 9 para búsquedas precisas)
 
 ---
 
-## Métricas de Éxito MVP
+## Fase 3: AI Brain + Procesamiento de Llamadas
 
-| Métrica | Target |
-|---------|--------|
-| Propiedades en sistema | > 5,000 |
-| Usuarios activos | > 5 (equipo Beiqa) |
-| Bugs críticos en producción | 0 |
-| Uptime | > 95% |
-| Satisfacción usuarios (1-5) | > 3.5 |
+**Estado**: 🔴 Por iniciar | **Prerequisito**: Fase 2 completa
 
----
+### Objetivo
+El sistema aprende de las llamadas del equipo con clientes y puede hacer matching inteligente de propiedades, anticipar necesidades y procesar comunicaciones automáticamente.
 
-## Post-MVP: Feedback Loop
+### Entregables clave
+- **CircleBack** integrado: transcripción automática de llamadas con clientes
+- **Procesamiento de transcripts**: Trigger.dev extrae criterios de búsqueda de transcripts
+- **Property Matching AI**: dado un cliente, el sistema sugiere propiedades con score de match
+- **Recomendaciones proactivas**: cuando entra una propiedad nueva, el sistema la matchea contra búsquedas activas
+- **NLP en búsquedas**: el equipo puede describir lo que busca en lenguaje natural
 
-Al terminar MVP:
-
-1. Deploy a producción (uso interno)
-2. Usar por 2-4 semanas
-3. Recolectar feedback del equipo
-4. Priorizar mejoras
-5. Planificar Fase 2
+### Stack adicional
+CircleBack → Trigger.dev (Claude API) → Supabase → n8n (notificaciones match)
 
 ---
 
-## Notas
+## Qué NO está en el roadmap
 
-- MVP debe ser usable pero no perfecto
-- Preferir funcionalidad sobre pulido
-- Documentar deuda técnica para después
-- Mantener comunicación con usuarios durante desarrollo
+Decisiones arquitectónicas confirmadas como "no necesario ahora":
+
+| Item | Razón |
+|------|-------|
+| Separar DB operativa / analítica | Prematuro: 4 usuarios, 60K listings |
+| Redis cache | No necesario: volumen actual |
+| GraphQL API | Supabase REST es suficiente |
+| FastAPI / Express custom | Supabase REST cubre el caso de uso |
+| Data Lake | Una sola DB centralizada es correcto para el volumen actual |
+| AWS S3 / GCP Cloud Storage | Supabase Storage incluido |
+
+---
+
+*Documento actualizado: 2026-02-24*
+*Reemplaza el plan original de "4 sprints, 6-8 semanas" de discovery phase*

@@ -8,13 +8,13 @@
 
 | Módulo | Descripción | Fase | Estado |
 |--------|-------------|------|--------|
-| [Scraper](./Scraper/) | Extracción automatizada de propiedades de portales | Fase 1 — MVP | 🟡 En diseño |
-| [Internal App](./Internal-App/) | Aplicación web para el equipo Beiqa | Fase 1 — MVP | 🟡 En diseño |
-| [Data Ingestion](./Data-Ingestion/) | Integración de fuentes externas (INEGI, APIs, catastro) | Fase 2 | 🔴 Por iniciar |
-| [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Fase 2+ | 🔴 Por iniciar |
-| [Geospatial](./Geospatial/) | Análisis geoespacial, mapas, búsqueda por zona | Fase 2+ | 🔴 Por iniciar |
-| [AI Brain](./AI-Brain/) | Matching inteligente propiedad-cliente, NLP, recomendaciones | Fase 3+ | 🔴 Por iniciar |
-| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes corporativos | Fase 4+ | 🔴 Por iniciar |
+| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Apify + n8n) | Fase 1 | 🟢 En desarrollo |
+| [Internal App](./Internal-App/) | Aplicación web para el equipo Beiqa (Next.js — Pamela) | Fase 1 | 🟡 Diseño activo |
+| [Data Ingestion](./Data-Ingestion/) | Integración de fuentes externas (INEGI, Google, catastro) | Fase 2 | 🔴 Por iniciar |
+| [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Fase 2 | 🔴 Por iniciar |
+| [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Fase 2 | 🔴 Por iniciar |
+| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes corporativos | Fase 2 | 🔴 Por iniciar |
+| [AI Brain](./AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Fase 3 | 🔴 Por iniciar |
 
 > **Nota**: La Base de Datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](../02-Architecture/Database/) como infraestructura compartida.
 
@@ -22,33 +22,28 @@
 
 ## Mapeo a Fases del Proyecto
 
-### Fase 1 — MVP (6-8 semanas)
-
-| Módulo | Alcance MVP |
-|--------|-------------|
-| **Scraper** | 2-3 portales principales (EasyBroker, Inmuebles24), normalización, scheduler |
-| **Internal App** | CRUD de propiedades, búsqueda con filtros, mapa básico, gestión de clientes, shortlists |
-| **Database** *(Arquitectura)* | Modelo de datos core, PostgreSQL + PostGIS, API CRUD |
-
-### Fase 2+ — Post-MVP
+### Fase 1 — Scrapers & Inventario (En curso)
 
 | Módulo | Alcance |
 |--------|---------|
-| **Data Ingestion** | Conectores INEGI, Google Maps, catastro, proveedores comerciales |
-| **Market Intelligence** | Tendencias de precio, vacancy rates, reportes automatizados |
-| **Geospatial** | Análisis avanzado por zona, POIs, visualización de capas |
+| **Scraper** | Apify actor Inmuebles24 ✅, normalización n8n, deduplicación, EasyBroker |
+| **Internal App** | Next.js — lista propiedades, mapa, filtros, shortlists (Pamela) |
+| **Database** *(Arquitectura)* | Supabase activo ✅, 14 migrations ✅, ~60K propiedades ✅ |
 
-### Fase 3+ — Avanzado
-
-| Módulo | Alcance |
-|--------|---------|
-| **AI Brain** | Matching propiedad-cliente, NLP, deduplicación con IA, recomendaciones |
-
-### Fase 4+ — Portal de Clientes
+### Fase 2 — Portal Web + Data Ingestion
 
 | Módulo | Alcance |
 |--------|---------|
-| **Tenant Portal** | Vista de propiedades, comparador, feedback, comunicación |
+| **Tenant Portal** | Portal para clientes: shortlists, feedback, mapa de opciones |
+| **Data Ingestion** | INEGI DENUE, Google Places, AGEB shapefiles, H3 index |
+| **Market Intelligence** | Tendencias de precio, precio promedio m2, heatmaps por zona |
+| **Geospatial** | H3 + AGEB + cache de APIs externas |
+
+### Fase 3 — AI Brain
+
+| Módulo | Alcance |
+|--------|---------|
+| **AI Brain** | Procesamiento de llamadas (CircleBack), property matching, NLP en búsquedas |
 
 ---
 

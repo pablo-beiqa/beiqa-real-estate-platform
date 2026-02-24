@@ -1,343 +1,239 @@
-# Arquitectura del Sistema - BEIQA Platform
+# Arquitectura del Sistema — BEIQA Platform
 
-## Objetivo
-
-Documentar la arquitectura de alto nivel de la plataforma BEIQA.
-
-**Estado**: 🟡 En diseño (borrador)
+> **Estado**: ✅ Stack decidido e implementado | **Actualizado**: 2026-02-24
+>
+> Para el detalle de cada decisión técnica: [Stack-Decidido.md](./Stack-Decidido.md)
+> Para el mapa de integraciones y flujos: [Integraciones.md](./Integraciones.md)
 
 ---
 
-## Diagrama de Arquitectura
+## Diagrama de arquitectura (stack real)
 
 ```mermaid
 flowchart TB
-    subgraph External[Fuentes Externas]
-        Portals[Portales Inmobiliarios]
-        PublicAPIs[APIs Públicas<br/>INEGI, datos.gob.mx]
-        PrivateAPIs[APIs Privadas<br/>Google Maps, Comerciales]
-        GeoFiles[Archivos Geo<br/>KML, Shapefiles]
-        HubSpot[HubSpot CRM]
-        CommChannels[Canales<br/>Email, WhatsApp]
+    subgraph Portales[Portales Inmobiliarios]
+        I24[Inmuebles24]
+        EB[EasyBroker\nFase 1 pendiente]
     end
-    
-    subgraph Ingestion[Capa de Ingestión]
-        Scraper[Scraper Service]
-        DataIngester[Data Ingestion Service]
-        GeoLoader[Geo Data Loader]
-        CRMSync[CRM Sync Service]
+
+    subgraph Scraping[Scraping]
+        Apify[Apify\nactor contratado]
     end
-    
-    subgraph Core[Core Services]
-        DB[(PostgreSQL<br/>PostGIS)]
-        FileStorage[(Object Storage<br/>S3/R2)]
-        Cache[(Redis Cache)]
+
+    subgraph Orquestacion[Orquestación — n8n Cloud]
+        Cron[Cron semanal]
+        WebhookIn[Webhook entrada\nApify]
+        SlackTrigger[Slack trigger\nmanual]
+        HubspotSync[Sync HubSpot]
+        Notif[Notificaciones\nSlack]
     end
-    
-    subgraph Processing[Procesamiento]
-        MarketIntel[Market Intelligence<br/>Engine]
-        GeoAnalysis[Geospatial<br/>Analysis Engine]
-        AIBrain[AI Brain<br/>GenTik]
-        Matching[Property<br/>Matching]
+
+    subgraph DB[Base de Datos — Supabase]
+        PG[(PostgreSQL 15\n+ PostGIS)]
+        Auth[Supabase Auth]
+        Storage[Supabase Storage]
+        REST[REST API\nautomática]
     end
-    
-    subgraph API[API Layer]
-        RestAPI[REST API]
-        GraphQLAPI[GraphQL API]
+
+    subgraph Jobs[Jobs pesados — Trigger.dev]
+        BatchAI[Batch AI\nextraction]
+        FeaturesJob[property_features\nprocessing]
     end
-    
-    subgraph Frontend[Interfaces]
-        InternalApp[Internal App<br/>Web]
-        TenantPortal[Tenant Portal<br/>Web]
+
+    subgraph AI[AI / NLP]
+        Claude[Claude API\nvía Rube]
     end
-    
-    Portals --> Scraper
-    PublicAPIs --> DataIngester
-    PrivateAPIs --> DataIngester
-    GeoFiles --> GeoLoader
-    HubSpot <--> CRMSync
-    CommChannels --> AIBrain
-    
-    Scraper --> DB
-    DataIngester --> DB
-    GeoLoader --> DB
-    CRMSync --> DB
-    
-    DB --> MarketIntel
-    DB --> GeoAnalysis
-    DB --> AIBrain
-    DB --> Matching
-    Cache --> MarketIntel
-    Cache --> GeoAnalysis
-    
-    MarketIntel --> RestAPI
-    GeoAnalysis --> RestAPI
-    AIBrain --> RestAPI
-    Matching --> RestAPI
-    DB --> RestAPI
-    DB --> GraphQLAPI
-    
-    RestAPI --> InternalApp
-    RestAPI --> TenantPortal
-    GraphQLAPI --> InternalApp
+
+    subgraph CRM[CRM + Enriquecimiento]
+        HubSpot[HubSpot]
+        Clay[Clay]
+    end
+
+    subgraph Frontend[Interfaces — Next.js]
+        InternalApp[Internal App\nFabrizio + Jerónimo]
+        TenantPortal[Tenant Portal\nFase 2]
+    end
+
+    I24 --> Apify
+    EB --> Apify
+    Apify -->|webhook| WebhookIn
+    WebhookIn -->|upsert listings| PG
+    Cron --> Apify
+    SlackTrigger --> Apify
+    PG --> HubspotSync --> HubSpot
+    HubSpot --> Clay --> HubSpot
+    WebhookIn --> Notif
+    PG -->|trigger job| BatchAI
+    BatchAI --> Claude --> FeaturesJob --> PG
+    REST --> InternalApp
+    REST --> TenantPortal
+    Auth --> InternalApp
+    Auth --> TenantPortal
 ```
 
 ---
 
-## Componentes Principales
+## Componentes del sistema
 
-### 1. Capa de Ingestión
+### Capa de scraping
 
-#### Scraper Service
-- **Responsabilidad**: Extracción de propiedades de portales
-- **Tecnología**: Python (Scrapy o Playwright)
-- **Frecuencia**: Diaria/semanal
-- **Output**: Propiedades normalizadas a BD
-
-#### Data Ingestion Service
-- **Responsabilidad**: Consumo de APIs externas estructuradas
-- **Tecnología**: Python o Node.js
-- **Fuentes**: INEGI, Google APIs, proveedores comerciales
-- **Output**: Datos normalizados a BD
-
-#### Geo Data Loader
-- **Responsabilidad**: Carga de archivos geoespaciales
-- **Tecnología**: Python (geopandas, fiona)
-- **Formatos**: KML, Shapefiles, GeoJSON
-- **Output**: Geometrías a PostGIS
-
-#### CRM Sync Service
-- **Responsabilidad**: Sincronización bidireccional con HubSpot
-- **Tecnología**: Node.js con HubSpot SDK
-- **Output**: Clientes y deals sincronizados
+#### Apify
+- **Responsabilidad**: Extracción de propiedades de portales inmobiliarios
+- **Implementación**: Actor contratado por portal (Inmuebles24 activo, EasyBroker pendiente)
+- **Ventaja**: Maneja rate limiting, proxies, anti-bot internamente
+- **Output**: JSON con datos del listing → webhook a n8n
 
 ---
 
-### 2. Core Services
+### Capa de orquestación (n8n Cloud)
 
-#### Base de Datos Central
-- **Tecnología**: PostgreSQL 15+ con PostGIS
-- **Contenido**: 
-  - Propiedades
-  - Clientes
-  - Búsquedas
-  - Comunicaciones
-  - Geometrías
-  - Indicadores de mercado
+n8n es el orquestador central para todo lo que es integración visual y scheduling.
 
-#### Object Storage
-- **Tecnología**: AWS S3, GCP Cloud Storage, o Cloudflare R2
-- **Contenido**:
-  - Imágenes de propiedades
-  - Documentos
-  - Reportes generados
-  - Archivos geoespaciales originales
-
-#### Cache Layer
-- **Tecnología**: Redis
-- **Uso**:
-  - Resultados de queries frecuentes
-  - Sesiones de usuario
-  - Rate limiting
+- **Cron semanal**: dispara Apify automáticamente
+- **Webhook de Apify**: recibe datos del scraping, hace upsert en Supabase
+- **Slack trigger**: Jerónimo u otros pueden disparar scraping manual desde Slack
+- **Sync HubSpot**: cuando entra un broker nuevo, lo crea/actualiza en HubSpot
+- **Notificaciones**: alertas a Slack cuando hay errores o ejecuciones completas
+- **Disparar Trigger.dev**: cuando hay listings sin `property_features`, inicia el job
 
 ---
 
-### 3. Procesamiento
+### Base de datos (Supabase)
 
-#### Market Intelligence Engine
-- **Responsabilidad**: Cálculos de inteligencia de mercado
-- **Funciones**:
-  - Cálculo de precios promedio por zona/tipo
-  - Tendencias de precios
-  - Tasas de vacancia
-  - Análisis de oferta/demanda
-- **Output**: KPIs y métricas almacenadas
+- **Motor**: PostgreSQL 15 + PostGIS (extensión habilitada)
+- **Auth**: Supabase Auth (JWT, sin Auth0)
+- **Storage**: Supabase Storage (imágenes, documentos)
+- **API**: REST automática generada desde el schema
+- **RLS**: Row Level Security configurado
+- **14 migrations** activas al 24 feb 2026
+- **~60,000 propiedades** en `inmuebles24_listings`
 
-#### Geospatial Analysis Engine
-- **Responsabilidad**: Análisis espaciales
-- **Funciones**:
-  - Búsqueda por radio/polígono
-  - Análisis de proximidad (POIs)
-  - Cálculo de distancias
-  - Overlay de capas
-- **Tecnología**: PostGIS queries, Python (shapely)
-
-#### AI Brain (GenTik)
-- **Responsabilidad**: Procesamiento inteligente
-- **Funciones**:
-  - Matching propiedad-cliente
-  - Interpretación de solicitudes NLP
-  - Resumen de comunicaciones
-  - Recomendaciones proactivas
-- **Tecnología**: OpenAI API, LangChain
-
-#### Property Matching
-- **Responsabilidad**: Encontrar propiedades para búsquedas
-- **Algoritmo**: Score basado en criterios + AI
-- **Output**: Propiedades rankeadas por match
+Ver schema: [Database/Schema-Real.md](./Database/Schema-Real.md)
 
 ---
 
-### 4. API Layer
+### Jobs pesados (Trigger.dev)
 
-#### REST API
-- **Tecnología**: FastAPI (Python) o Express (Node.js)
-- **Endpoints**:
-  - CRUD de propiedades, clientes, búsquedas
-  - Búsquedas avanzadas
-  - Triggers de scraping
-  - Reports
+Trigger.dev maneja todo lo que requiere código TypeScript complejo o procesamiento en batch.
 
-#### GraphQL API (Opcional)
-- **Tecnología**: Apollo Server o Strawberry
-- **Uso**: Queries flexibles para frontend
-- **Ventaja**: Menos overfetching
+- **Batch AI extraction**: toma listings sin `property_features`, los procesa con Claude API en lotes
+- **property_features processing**: extrae características estructuradas de las descripciones de propiedades
+- **Futuro**: procesamiento de transcripts de llamadas (CircleBack → Trigger.dev → Supabase)
+
+**Regla**: Si el flujo necesita TypeScript real + AI en batch → Trigger.dev. Si es integración visual → n8n.
 
 ---
 
-### 5. Interfaces
+### AI / NLP (Claude API)
 
-#### Internal App (Web)
-- **Usuarios**: Equipo interno de Beiqa
-- **Tecnología**: React/Next.js + TypeScript
-- **Funciones**:
-  - Dashboard de propiedades
-  - Gestión de clientes
-  - Mapas interactivos
-  - Reportes de inteligencia
-  - Administración de scraper
-
-#### Tenant Portal (Web)
-- **Usuarios**: Clientes de Beiqa
-- **Tecnología**: React/Next.js + TypeScript
-- **Funciones**:
-  - Ver propiedades shortlisted
-  - Mapa de opciones
-  - Comparativos
-  - Reportes personalizados
-  - Feedback y comunicación
+- **Proveedor**: Anthropic Claude API, accedida vía Rube (proxy ~3x más barato)
+- **Uso actual**: Extracción de features de descripciones de propiedades
+- **Uso futuro**: Matching de propiedades, NLP en búsquedas, procesamiento de transcripts
+- **Razón sobre OpenAI**: mejor calidad en español, costo ~3x menor
 
 ---
 
-## Decisiones de Arquitectura Pendientes (ADRs)
+### CRM y Data Enrichment
 
-| ID | Decisión | Opciones | Estado |
-|----|----------|----------|--------|
-| ADR-001 | Lenguaje backend principal | Python vs Node.js | 🔴 Por decidir |
-| ADR-002 | Framework web | FastAPI vs Express vs NestJS | 🔴 Por decidir |
-| ADR-003 | Framework frontend | Next.js vs Remix | 🔴 Por decidir |
-| ADR-004 | Cloud provider | AWS vs GCP vs Azure | 🔴 Por decidir |
-| ADR-005 | Hosting DB | Managed vs Self-hosted | 🔴 Por decidir |
-| ADR-006 | CI/CD | GitHub Actions vs GitLab CI | 🔴 Por decidir |
+- **HubSpot**: CRM para clientes (tenants), deals y pipeline comercial. Source of truth para comunicaciones.
+- **Clay**: enriquece datos de brokers y empresas (LinkedIn, web, teléfono). Los datos enriquecidos van a HubSpot.
+- **Sincronización**: Supabase → HubSpot (one-way para propiedades/brokers). HubSpot → Supabase (deal status, minimal).
 
 ---
 
-## Flujos de Datos Principales
+### Frontend (Next.js)
 
-### Flujo 1: Scraping de Propiedades
+- **Internal App**: Para el equipo de Beiqa (Fabrizio, Jerónimo). Lista de propiedades, mapa, filtros, shortlists.
+- **Tenant Portal**: Para clientes de Beiqa. Shortlists, feedback, mapa de opciones. (Fase 2)
+- **Owner**: Pamela (frontend developer asignada)
+- **Auth**: Supabase Auth (JWT)
+
+---
+
+## Flujos de datos principales
+
+### Flujo 1: Scraping automático semanal
 
 ```mermaid
 sequenceDiagram
-    participant Cron as Scheduler
-    participant Scraper as Scraper Service
-    participant Portal as Portal Web
-    participant Normalizer as Normalizer
-    participant DB as PostgreSQL
-    participant Geocoder as Geocoding API
-    
-    Cron->>Scraper: Trigger scheduled job
-    loop Para cada portal
-        Scraper->>Portal: HTTP Request
-        Portal-->>Scraper: HTML Response
-        Scraper->>Normalizer: Raw data
-        Normalizer-->>Scraper: Normalized properties
-    end
-    loop Para propiedades sin coords
-        Scraper->>Geocoder: Address
-        Geocoder-->>Scraper: Coordinates
-    end
-    Scraper->>DB: INSERT/UPDATE properties
-    Scraper->>DB: Log execution
+    participant n8n as n8n Cron
+    participant Apify
+    participant Portal as Inmuebles24
+    participant Supabase
+    participant Slack
+
+    n8n->>Apify: Trigger run
+    Apify->>Portal: Scraping (con proxies + rate limiting)
+    Portal-->>Apify: HTML → JSON listings
+    Apify-->>n8n: Webhook (run completado)
+    n8n->>Supabase: Upsert listings (inmuebles24_listings)
+    Note over Supabase: trigger populate_geo\ngenera geo_point
+    n8n->>Slack: Notificación completado
 ```
 
-### Flujo 2: Búsqueda de Cliente
+### Flujo 2: Batch AI extraction
 
 ```mermaid
 sequenceDiagram
-    participant User as Usuario Beiqa
-    participant App as Internal App
-    participant API as REST API
-    participant Matching as Matching Engine
-    participant AI as AI Brain
-    participant DB as PostgreSQL
-    
-    User->>App: Crea búsqueda para cliente
-    App->>API: POST /search-requests
-    API->>DB: INSERT search_request
-    API->>Matching: Find matching properties
-    Matching->>DB: Query properties with criteria
-    DB-->>Matching: Candidate properties
-    Matching->>AI: Rank by fit
-    AI-->>Matching: Scored properties
-    Matching->>DB: INSERT search_properties
-    Matching-->>API: Top matches
-    API-->>App: Search created with matches
-    App-->>User: Display results
+    participant n8n
+    participant Trigger as Trigger.dev
+    participant Supabase
+    participant Claude as Claude API
+
+    n8n->>Trigger: Trigger job (listings sin features)
+    Trigger->>Supabase: Query: listings WHERE property_features IS NULL
+    Supabase-->>Trigger: Batch de listings
+    loop Por cada listing
+        Trigger->>Claude: Procesar descripción
+        Claude-->>Trigger: property_features estructuradas
+    end
+    Trigger->>Supabase: UPDATE property_features
 ```
 
-### Flujo 3: Portal de Tenant
+### Flujo 3: Sync HubSpot
 
 ```mermaid
 sequenceDiagram
-    participant Tenant as Cliente Tenant
-    participant Portal as Tenant Portal
-    participant API as REST API
-    participant DB as PostgreSQL
-    
-    Tenant->>Portal: Login
-    Portal->>API: GET /my-searches
-    API->>DB: Query search_requests for client
-    DB-->>API: Active searches
-    API-->>Portal: Searches with properties
-    Portal-->>Tenant: Dashboard con opciones
-    
-    Tenant->>Portal: Ver propiedad
-    Portal->>API: GET /properties/{id}
-    API->>DB: Property details
-    DB-->>API: Property + images + market data
-    API-->>Portal: Full property data
-    Portal-->>Tenant: Property detail view
-    
-    Tenant->>Portal: Dar feedback
-    Portal->>API: PUT /search-properties/{id}
-    API->>DB: UPDATE status + feedback
-    API-->>Portal: Success
+    participant Apify
+    participant n8n
+    participant Supabase
+    participant HubSpot
+
+    Apify-->>n8n: Webhook (brokers nuevos en scraping)
+    n8n->>Supabase: Verificar si broker existe
+    Supabase-->>n8n: No existe
+    n8n->>HubSpot: Crear contacto (broker)
+    HubSpot-->>n8n: hubspot_contact_id
+    n8n->>Supabase: UPDATE brokers SET hubspot_contact_id
 ```
 
 ---
 
-## Consideraciones de Seguridad
+## Decisiones de arquitectura diferidas
 
-### Autenticación
-- Internal App: Auth0 o similar (SSO)
-- Tenant Portal: Magic link o password
-- APIs: JWT tokens
-
-### Autorización
-- RBAC para usuarios internos
-- Tenant solo ve sus búsquedas/propiedades
-
-### Datos sensibles
-- No almacenar datos personales de terceros (contactos de listings)
-- Encriptar datos de clientes en reposo
-- HTTPS en todos los endpoints
+| Decisión | Cuándo reconsiderar |
+|---------|-------------------|
+| Separar DB operativa / analítica (read replica) | Cuando jobs de Trigger.dev compitan con búsquedas operativas |
+| Redis cache | Cuando el volumen justifique cache |
+| CI/CD (GitHub Actions) | Cuando Next.js esté en desarrollo activo |
+| CircleBack para procesamiento de llamadas | Fase 3 |
 
 ---
 
-## Próximos Pasos
+## Lo que NO existe (y no se necesita)
 
-1. [ ] Tomar decisiones de ADRs pendientes
-2. [ ] Diseñar API contracts detallados
-3. [ ] Crear diagrama de deployment
-4. [ ] Definir estrategia de testing
-5. [ ] Estimar infraestructura necesaria
+| Componente original | Realidad |
+|--------------------|---------|
+| Python / Scrapy | Reemplazado por Apify |
+| FastAPI / Express | Reemplazado por Supabase REST automático |
+| GraphQL API | No necesario con Supabase REST |
+| Redis cache | No necesario con el volumen actual |
+| Auth0 / Clerk | Reemplazado por Supabase Auth |
+| AWS S3 / Cloudflare R2 | Reemplazado por Supabase Storage |
+| Sentry / Datadog | Reemplazado por Slack + n8n logs + `error_logs` table |
+| LangChain / OpenAI | Reemplazado por Claude API directo vía Rube |
+
+---
+
+*Documento actualizado: 2026-02-24*
+*El diagrama original de discovery (con Redis, GraphQL, FastAPI) está archivado*

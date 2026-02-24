@@ -1,17 +1,33 @@
 # Estimación de Presupuesto Total
 
-**Fase**: R-3 (Validación y Factibilidad)
-**Estado**: 🔴 Por completar con números reales (requiere hallazgos de R-1 y R-2)
-**Depende de**: Architecture Validation, Tech Stack Decision, GIS Strategy, AI Strategy
+---
+
+## ✅ Costos Reales (Febrero 2026)
+
+> El proyecto está en desarrollo activo con un equipo interno. Los costos reales son una fracción de las estimaciones originales de outsource.
+
+| Herramienta | Costo mensual | Notas |
+|-----------|--------------|-------|
+| Apify (scraping) | ~$20/mes | Actor contratado para Inmuebles24 |
+| Supabase (DB + Auth + Storage) | $0-25/mes | Free tier → Pro plan |
+| n8n Cloud (orquestación) | Incluido en plan | Workflows, cron, integraciones |
+| Trigger.dev (jobs pesados) | Free tier | Batch AI extraction |
+| Claude API vía Rube | Por tokens (~mínimo) | Procesamiento de descripciones |
+| HubSpot CRM | Plan existente | Sync vía n8n |
+| **Total herramientas** | **~$30-50/mes** | |
+
+**Desarrollo**: Interno (Fabrizio + Pamela). Sin costo de outsource.
 
 ---
 
-## Contexto
+## Estimación Original (Discovery Phase — Referencia Histórica)
 
-- **Presupuesto disponible**: $50,000 - $100,000 USD
-- **Cubre**: Desarrollo + primer año de operaciones
-- **Timeline**: Resultados en 1-2 meses
-- **Equipo**: Por contratar -- modelo híbrido (outsource + in-house)
+*Las estimaciones originales asumían outsource y un equipo por contratar. Se mantienen como referencia histórica del proceso de descubrimiento.*
+
+**Fase**: R-3 (Validación y Factibilidad)
+**Estado original**: Análisis de viabilidad (completado)
+**Presupuesto disponible**: $50,000 - $100,000 USD
+**Equipo original estimado**: Modelo híbrido (outsource + in-house)
 
 ---
 
