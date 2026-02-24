@@ -2,8 +2,8 @@
 
 > Plataforma tecnológica interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos de Beiqa.
 
-**Fase actual**: 🟢 Discovery / Investigación  
-**Última actualización**: 2026-02-06
+**Fase actual**: 🟢 Discovery / Investigación
+**Última actualización**: 2026-02-24
 
 ---
 
@@ -18,26 +18,27 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 **Objetivo principal**: Diferenciar a Beiqa de brokers tradicionales mediante tecnología y datos superiores.
 
-> 📖 **[Leer más sobre la visión y objetivos →](./00-Overview/Vision-and-Goals.md)**
+> 📖 **[Leer más sobre la visión y objetivos →](./00-Project/Vision-and-Goals.md)**
 
 ---
 
 ## 🚀 Quick Links
 
 ### Para entender el proyecto
-- [Visión y Objetivos](./00-Overview/Vision-and-Goals.md) - ¿Qué queremos lograr?
-- [Contexto de Negocio](./01-Discovery/Business-Context.md) - ¿Por qué existe este proyecto?
-- [Resumen Ejecutivo](./09-Communication/Stakeholder-Presentations/Executive-Summary.md) - Overview para stakeholders
+- [Visión y Objetivos](./00-Project/Vision-and-Goals.md) - ¿Qué queremos lograr?
+- [Contexto de Negocio](./00-Project/Business-Context.md) - ¿Por qué existe este proyecto?
+- [Resumen Ejecutivo](./05-Communication/Executive-Summary.md) - Overview para stakeholders
 
 ### Para el equipo técnico
-- [Arquitectura del Sistema](./04-Architecture/System-Architecture.md) - Diseño técnico
-- [Modelo de Datos](./03-Requirements/Data-Requirements/Data-Model.md) - Estructura de datos
-- [Catálogo de Fuentes de Datos](./02-Research/Data-Sources-Research/Source-Catalog.md) - Fuentes disponibles
+- [Arquitectura del Sistema](./02-Architecture/System-Architecture.md) - Diseño técnico
+- [Modelo de Datos](./02-Architecture/Database/Data-Model.md) - Estructura de datos
+- [Decisiones Técnicas (ADRs)](./02-Architecture/ADRs/) - Decisiones arquitectónicas
 
 ### Para planificación
-- [Fase 0: Investigación](./06-Roadmap/Phase-0-Investigation.md) - Estado actual
-- [Fase 1: MVP](./06-Roadmap/Phase-1-MVP.md) - Próximos pasos
-- [Estimación de Presupuesto](./02-Research/Cost-Estimates/Total-Budget.md) - Costos proyectados
+- [Mapa de Módulos](./01-Modules/) - Todos los módulos con dependencias y fases
+- [Fase 0: Investigación](./03-Roadmap/Phase-0-Investigation.md) - Estado actual
+- [Fase 1: MVP](./03-Roadmap/Phase-1-MVP.md) - Próximos pasos
+- [Presupuesto](./04-Validation/Total-Budget.md) - Costos proyectados
 
 ---
 
@@ -50,55 +51,50 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 #### Progreso de Fase 0
 - ✅ Definición de módulos y estructura de documentación
 - ✅ Identificación de pain points y requerimientos iniciales
+- ✅ Reestructuración a modelo module-centric
 - 🔄 Investigación de fuentes de datos (en curso)
 - ⏳ Pruebas de concepto técnicas
 - ⏳ Decisiones arquitectónicas (ADRs)
 
-#### Próximos Hitos
-- **Completar Fase 0**: ~2-4 semanas
-- **Iniciar Fase 1 (MVP)**: Post validación técnica y de negocio
-
-> 📋 **[Ver detalles completos de Fase 0 →](./06-Roadmap/Phase-0-Investigation.md)**
+> 📋 **[Ver detalles completos de Fase 0 →](./03-Roadmap/Phase-0-Investigation.md)**
 
 ---
 
 ## 🧩 Módulos de la Plataforma
 
-| #   | Módulo                                               | Descripción                     | Estado                                | Prioridad MVP |
-| --- | ---------------------------------------------------- | ------------------------------- | ------------------------------------- | ------------- |
-| 1   | [Scraper](./03-Requirements/Functional-Requirements/01-Scraper.md) | Extracción automatizada de propiedades de portales | 📝 Especificando | ✅ Incluido |
-| 2   | Data Ingestion                                       | Integración de fuentes externas (INEGI, APIs) | 📋 Por especificar | ⏸️ Post-MVP |
-| 3   | Base de Datos                                        | Almacenamiento centralizado con capacidades geoespaciales | 📝 Diseñando | ✅ Incluido |
-| 4   | Market Intelligence                                  | Análisis y reportes de mercado automatizados | 📋 Por especificar | ⏸️ Post-MVP |
-| 5   | Geospatial                                           | Análisis geoespacial y visualización en mapas | 📋 Por especificar | ⏸️ Post-MVP |
-| 6   | AI Brain                                             | Matching inteligente y automatización | 📋 Por especificar | ⏸️ Post-MVP |
-| 7   | Tenant Portal                                        | Portal web para clientes (shortlists, feedback) | 📋 Por especificar | ⏸️ Post-MVP |
+| Módulo | Descripción | Fase | Estado |
+|--------|-------------|------|--------|
+| [Scraper](./01-Modules/Scraper/) | Extracción automatizada de propiedades de portales | Fase 1 — MVP | 🟡 En diseño |
+| [Internal App](./01-Modules/Internal-App/) | Aplicación web para el equipo Beiqa | Fase 1 — MVP | 🟡 En diseño |
+| [Data Ingestion](./01-Modules/Data-Ingestion/) | Integración de fuentes externas (INEGI, APIs) | Fase 2 | 🔴 Por iniciar |
+| [Market Intelligence](./01-Modules/Market-Intelligence/) | Análisis y reportes de mercado automatizados | Fase 2+ | 🔴 Por iniciar |
+| [Geospatial](./01-Modules/Geospatial/) | Análisis geoespacial y visualización en mapas | Fase 2+ | 🔴 Por iniciar |
+| [AI Brain](./01-Modules/AI-Brain/) | Matching inteligente y automatización | Fase 3+ | 🔴 Por iniciar |
+| [Tenant Portal](./01-Modules/Tenant-Portal/) | Portal web para clientes (shortlists, feedback) | Fase 4+ | 🔴 Por iniciar |
 
-**Leyenda de estados**: 🟢 Activo | 🟡 En diseño | 🔴 Por iniciar | ✅ Completado
+> **Base de Datos** vive en [Arquitectura](./02-Architecture/Database/) como infraestructura compartida.
+
+> 📋 **[Ver mapa completo de módulos con dependencias →](./01-Modules/)**
 
 ---
 
 ## 📚 Documentos Clave
 
-> Documentos críticos para entender el proyecto o tomar decisiones importantes. Solo se incluyen documentos completos o en estado avanzado.
-
 ### 🎯 Estratégicos
-- [Visión y Objetivos](./00-Overview/Vision-and-Goals.md) - Visión del producto y objetivos medibles
-- [Pain Points](./01-Discovery/Pain-Points.md) - Problemas que resuelve la plataforma
-- [User Personas](./05-User-Experience/User-Personas.md) - Usuarios y sus necesidades
+- [Visión y Objetivos](./00-Project/Vision-and-Goals.md) - Visión del producto y objetivos medibles
+- [Pain Points](./00-Project/Pain-Points.md) - Problemas que resuelve la plataforma
+- [User Personas](./00-Project/User-Personas.md) - Usuarios y sus necesidades
 
 ### 🏗️ Diseño Técnico
-- [Arquitectura del Sistema](./04-Architecture/System-Architecture.md) - Diseño de alto nivel
-- [Modelo de Datos](./03-Requirements/Data-Requirements/Data-Model.md) - Estructura de datos
+- [Arquitectura del Sistema](./02-Architecture/System-Architecture.md) - Diseño de alto nivel
+- [Modelo de Datos](./02-Architecture/Database/Data-Model.md) - Estructura de datos
 
 ### 🔍 Investigación Crítica (En curso)
-- [Comparativo de Portales](./02-Research/Scraper-Research/Portal-Comparison.md) - Factibilidad de scraping
-- [Opciones de Base de Datos](./02-Research/Technology-Research/Database-Options.md) - Evaluación técnica
+- [Comparativo de Portales](./01-Modules/Scraper/Research/Portal-Comparison.md) - Factibilidad de scraping
+- [Opciones de Base de Datos](./02-Architecture/Database/Database-Options.md) - Evaluación técnica
 
 ### ✅ Decisiones Tomadas
-- [ADR-001: Base de Datos](./07-Decisions/ADR-001-Database-Choice.md) - Decisión arquitectónica
-
-> 💡 **Nota**: Documentos marcados con 🔴 (por investigar) no se incluyen aquí hasta tener resultados.
+- [ADR-001: Base de Datos](./02-Architecture/ADRs/ADR-001-Database-Choice.md) - PostgreSQL + PostGIS
 
 ---
 
@@ -106,28 +102,26 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 ```
 📁 beiqa-real-estate-platform/
-├── 📁 00-Overview/          # Visión, stakeholders, métricas, glosario
-├── 📁 01-Discovery/         # Contexto de negocio, pain points, proceso actual
-├── 📁 02-Research/          # Investigación técnica y de fuentes
-│   ├── 📁 Scraper-Research/
-│   ├── 📁 Data-Sources-Research/
-│   ├── 📁 Technology-Research/
-│   └── 📁 Cost-Estimates/
-├── 📁 03-Requirements/      # Requerimientos funcionales y de datos
-│   ├── 📁 Functional-Requirements/
-│   └── 📁 Data-Requirements/
-├── 📁 04-Architecture/      # Arquitectura del sistema
-├── 📁 05-User-Experience/   # Personas, wireframes
-├── 📁 06-Roadmap/           # Fases del proyecto (Fase 0, MVP, etc.)
-├── 📁 07-Decisions/         # ADRs (Architecture Decision Records)
-├── 📁 08-Data-Sources/      # Documentación detallada de fuentes específicas
-│   ├── 📁 Government/
-│   └── 📁 Commercial/
-└── 📁 09-Communication/     # Presentaciones y materiales para stakeholders
-    └── 📁 Stakeholder-Presentations/
+├── 📁 00-Project/          # Visión, contexto, stakeholders, métricas, discovery
+├── 📁 01-Modules/          # Módulos funcionales (auto-contenidos)
+│   ├── 📁 Scraper/         # Extracción de datos de portales
+│   ├── 📁 Data-Ingestion/  # Integración de fuentes externas
+│   ├── 📁 Market-Intelligence/  # Análisis de mercado
+│   ├── 📁 Geospatial/      # Mapas y análisis geoespacial
+│   ├── 📁 AI-Brain/        # IA, matching, NLP
+│   ├── 📁 Internal-App/    # App web del equipo
+│   └── 📁 Tenant-Portal/   # Portal para clientes
+├── 📁 02-Architecture/     # Infraestructura: DB, ADRs, tech stack
+├── 📁 03-Roadmap/          # Fases del proyecto con mapeo a módulos
+├── 📁 04-Validation/       # Presupuesto, feasibility, GO/NO-GO
+└── 📁 05-Communication/    # Materiales para stakeholders
 ```
 
-> 💡 **Tip**: Usa los Quick Links arriba para navegar rápidamente, o explora la estructura completa para documentos específicos.
+Cada módulo contiene:
+- `README.md` — Descripción, objetivos, métricas, entregables, dependencias, riesgos
+- `Product-Questions.md` — Cuestionario de discovery
+- `Requirements.md` — Capacidades con priorización Must/Should/Could
+- `Research/` — Investigación técnica específica
 
 ---
 
@@ -139,7 +133,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | Tech Lead | [Por definir] | |
 | Business Stakeholder | [Por definir] | |
 
-> 📝 **Nota**: Esta sección se actualizará cuando se definan los roles. Ver [Stakeholders](./00-Overview/Stakeholders.md) para roles y responsabilidades.
+> 📝 **Nota**: Ver [Stakeholders](./00-Project/Stakeholders.md) para roles y responsabilidades.
 
 ---
 
@@ -154,13 +148,13 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | 🔴 | Por iniciar / Bloqueado |
 | ✅ | Completado |
 
-### Tags recomendados
+### Prioridades de Requerimientos
 
-- `#research` - Documentos de investigación
-- `#decision` - Decisiones tomadas
-- `#requirement` - Requerimientos
-- `#blocker` - Elementos bloqueados
-- `#todo` - Pendientes
+| Tag | Significado |
+|-----|-------------|
+| **MUST** | Imprescindible para que funcione |
+| **SHOULD** | Importante pero no bloqueante |
+| **COULD** | Deseable si hay tiempo/recursos |
 
 ---
 
@@ -168,11 +162,12 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 | Fecha | Cambio |
 |-------|--------|
-| 2026-02-06 | Expansión masiva de cuestionarios de producto: de 118 a 463 preguntas en 9 módulos. Nomenclatura clara Beiqa vs La Plataforma |
-| 2026-02-05 | Reestructuración del README: mejor orientación a stakeholders, tech stack summary, documentos clave refinados |
+| 2026-02-24 | Reestructuración completa a modelo module-centric: 6 carpetas, 7 módulos auto-contenidos, DB a arquitectura |
+| 2026-02-06 | Expansión masiva de cuestionarios de producto: de 118 a 463 preguntas en 9 módulos |
+| 2026-02-05 | Reestructuración del README: mejor orientación a stakeholders |
 | 2026-02-04 | Creación de estructura inicial de documentación |
 | 2026-02-04 | Definición de módulos y arquitectura de alto nivel |
 
 ---
 
-*Última actualización: 2026-02-06*
+*Última actualización: 2026-02-24*
