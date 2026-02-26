@@ -1,6 +1,6 @@
 # Requerimientos: Scraper
 
-**Estado**: 🟡 En diseño
+**Estado**: 🟡 En desarrollo parcial
 
 > **Prioridades**: **MUST** = Imprescindible | **SHOULD** = Importante pero no bloqueante | **COULD** = Deseable si hay tiempo
 
@@ -8,87 +8,143 @@
 
 ## Capacidades
 
-### Extracción de Datos
+### Extraccion de Datos
 
-- **MUST** Extraer listings de múltiples portales inmobiliarios configurables
-  - [ ] Soporta al menos 3 portales diferentes
-  - [ ] Cada portal es configurable de forma independiente
-  - [ ] Permite agregar nuevos portales sin cambiar código core
-- **MUST** Extraer campos obligatorios de cada listing: título, precio (+ moneda), tipo de operación (renta/venta), dirección, coordenadas (si disponible), superficie (m²), tipo de inmueble, descripción, URL original, ID original, fecha de scraping
-- **SHOULD** Extraer campos opcionales: imágenes, contacto del broker (nombre, teléfono, email), características/amenidades, fecha de publicación
+- **MUST** Extraer listings de 4 portales inmobiliarios
+  - [x] Inmuebles24 (via Apify — en produccion)
+  - [ ] Pincali / pincali.com (via TriggerDev)
+  - [ ] CBRE Mexico (via TriggerDev)
+  - [ ] Colliers Mexico (via TriggerDev)
+- **MUST** Extraer campos obligatorios de cada listing: titulo, precio (+ moneda), tipo de operacion (renta/venta), direccion, coordenadas (si disponible), superficie (m²), tipo de inmueble, descripcion, URL original, ID original, fecha de scraping
+- **MUST** Extraer telefono del anunciante y guardarlo directamente en el registro de la propiedad
+- **SHOULD** Extraer campos opcionales: imagenes, caracteristicas/amenidades, fecha de publicacion
 
-### Filtros de Búsqueda
+### Extraccion de Datos del Anunciante
+
+- **MUST** Extraer datos del anunciante diferenciado por tipo de portal:
+  - **Inmuebles24 / Pincali** (portales multi-broker):
+    - [ ] Nombre de la empresa/inmobiliaria anunciante
+    - [ ] Telefono (se guarda en la propiedad + se crea Company en HubSpot)
+    - [ ] **NO se crean Contacts individuales** — solo Company
+  - **CBRE / Colliers** (portales corporativos):
+    - [ ] Nombre del agente/contacto individual
+    - [ ] Telefono y datos de contacto (se guarda en propiedad + Contact en HubSpot)
+    - [ ] Asociar Contact a Company fija (CBRE o Colliers)
+
+### Parsing de Descripcion con LLM
+
+- **MUST** Extraer campos estructurados desde texto libre de la descripcion usando LLM costo-eficiente (Haiku o GPT-4o-mini)
+  - [ ] Superficie en m² (cuando no esta en campos estructurados)
+  - [ ] Altura de techo
+  - [ ] Seguridad (vigilancia, CCTV, etc.)
+  - [ ] Antiguedad del inmueble
+  - [ ] Amenidades y caracteristicas especiales
+  - [ ] Tipo de anunciante (persona fisica vs empresa)
+- **SHOULD** Evaluar costo/calidad del modelo LLM y optimizar prompt
+
+### Filtros de Busqueda
 
 - **MUST** Filtrar por tipo de inmueble (industrial, comercial, oficinas)
-  - [ ] Tipo de operación (renta, venta)
-  - [ ] Zona geográfica (estado, ciudad, colonia)
+  - [ ] Tipo de operacion (renta, venta)
+  - [ ] Zona geografica (estado, ciudad, colonia)
   - [ ] Rango de precio
   - [ ] Rango de superficie
 
-### Normalización de Datos
+### Normalizacion Basica (en pipeline)
 
-- **MUST** Normalizar datos de diferentes portales a formato unificado
-  - [ ] Direcciones a formato estándar
+- **MUST** Normalizar datos dentro del pipeline antes de guardar
   - [ ] Precios a moneda base (MXN)
   - [ ] Superficies a metros cuadrados
-  - [ ] Tipos de inmueble a catálogo interno
+  - [ ] Tipos de inmueble a catalogo interno
   - [ ] Coordenadas a WGS84
 
-### Detección de Cambios
+> **Nota**: La normalizacion profunda, deduplicacion cross-portal y geocodificacion batch son responsabilidad del modulo [Data / Normalization](../Data/Normalization/).
 
-- **MUST** Detectar propiedades nuevas, modificadas y eliminadas entre ejecuciones
-  - [ ] Identifica propiedades nuevas (no existían en la corrida anterior)
-  - [ ] Identifica propiedades modificadas (datos diferentes)
-  - [ ] Identifica propiedades que desaparecieron (posiblemente vendidas/rentadas)
-  - [ ] Registra historial de cambios
+### Geocodificacion (en pipeline)
 
-### Ejecución y Programación
+- **MUST** Geocodificar propiedades sin coordenadas dentro del pipeline de TriggerDev
+  - [ ] Integrar Google Geocoding API
+  - [ ] Cache de resultados para evitar llamadas duplicadas
+  - [ ] Marcar nivel de confianza del geocoding
+- **SHOULD** Asignar H3 hexagono y AGEB a cada propiedad geocodificada
 
-- **SHOULD** Ejecutarse automáticamente según programación configurable
-  - [ ] Permite configurar frecuencia (diaria, semanal, etc.)
-  - [ ] Permite configurar hora de ejecución
-  - [ ] Permite ejecución manual bajo demanda
-  - [ ] Registra log de cada ejecución
+### Deteccion de Anomalias
 
-### Deduplicación
+- **MUST** Validar datos antes de guardar y detectar anomalias
+  - [ ] Coordenadas fuera de rango de Mexico
+  - [ ] Precios fuera de rangos logicos por tipo de propiedad
+  - [ ] Superficie inconsistente (valor imposible o muy diferente a descripcion)
+  - [ ] Datos del anunciante inconsistentes (persona vs empresa)
+- **MUST** Flaggear anomalias para revision humana
+- **SHOULD** Enviar alerta a Slack cuando se detectan anomalias criticas
 
-- **SHOULD** Detectar y unificar propiedades duplicadas entre portales
-  - [ ] Detecta misma propiedad publicada en múltiples portales
-  - [ ] Unifica registros preservando la mejor información de cada fuente
-  - [ ] Mantiene referencia a todas las fuentes originales
+### Deteccion de Cambios
 
-### Geocodificación
+- **MUST** Detectar propiedades nuevas, modificadas y no encontradas entre ejecuciones
+  - [ ] Identifica propiedades nuevas
+  - [ ] Identifica propiedades con datos modificados
+  - [ ] Identifica propiedades que desaparecieron — marcar como no disponible de inmediato
 
-- **SHOULD** Geocodificar propiedades sin coordenadas
-  - [ ] Geocodifica direcciones que no tienen lat/long
-  - [ ] Marca nivel de confianza del geocoding
-  - [ ] Permite corrección manual de coordenadas incorrectas
+### Escritura Dual (HubSpot + Supabase)
+
+- **MUST** Escribir propiedades a Supabase y HubSpot
+  - [ ] Verificar existencia en ambos destinos antes de crear
+  - [ ] Crear propiedad nueva en ambos con asociaciones
+  - [ ] Actualizar propiedad existente en ambos si hay cambios
+  - [ ] Marcar como no disponible en ambos si no se encontro
+- **MUST** Escribir inmobiliaria/broker segun tipo de portal
+  - [ ] I24/Pincali: crear/asociar Company en HubSpot
+  - [ ] CBRE/Colliers: crear/asociar Contact + Company en HubSpot
+- **SHOULD** Definir orden de escritura y manejo de fallos parciales
+
+### Imagenes
+
+- **MUST** Descargar imagenes de cada propiedad
+  - [ ] Upload a Supabase Storage
+  - [ ] Asociar URLs de storage a la propiedad en Supabase
+- **SHOULD** Mantener referencia a URL original como fallback
+
+### Ejecucion y Programacion
+
+- **MUST** Ejecutarse automaticamente via TriggerDev cron
+  - [ ] CBRE: cron semanal
+  - [ ] Colliers: cron semanal
+  - [ ] Pincali: cron mensual
+  - [ ] Inmuebles24 (Apify): cron mensual
+- **SHOULD** Permitir ejecucion manual bajo demanda desde TriggerDev
+- **MUST** Registrar log de cada ejecucion en el repo (EXECUTION-LOG.md)
+
+### Notificaciones
+
+- **MUST** Enviar notificaciones a Slack (canal existente) en caso de:
+  - [ ] Error critico que detiene la ejecucion
+  - [ ] Anomalias que requieren revision humana
+  - [ ] Portal inaccesible o cambio de estructura detectado
+- **SHOULD** Enviar resumen de ejecucion al finalizar (propiedades nuevas, actualizadas, errores)
 
 ### Resiliencia y Rate Limiting
 
-- **SHOULD** Manejar errores sin detener la ejecución completa
-  - [ ] Si falla un portal, continúa con los demás
-  - [ ] Si falla un listing, continúa con los demás
+- **MUST** Manejar errores sin detener la ejecucion completa
+  - [ ] Si falla un listing, continua con los demas
   - [ ] Registra errores con detalle suficiente para debug
-- **SHOULD** Respetar límites de velocidad de los portales
+- **MUST** TriggerDev maneja retries con backoff exponencial
+- **MUST** Pausar ejecucion y solicitar intervencion humana cuando hay cambios de estructura
+- **SHOULD** Respetar limites de velocidad de los portales
   - [ ] Delay configurable entre requests
-  - [ ] Respeto de robots.txt (configurable)
-  - [ ] Límite máximo de requests por minuto/hora
   - [ ] Backoff exponencial ante errores 429
-- **COULD** Notificar errores críticos (portal completo inaccesible)
 
 ### Rendimiento
 
-- **SHOULD** Procesar al menos 10,000 listings por ejecución
-- **SHOULD** Completar ejecución en máximo 4 horas
-- **SHOULD** Poder re-ejecutarse sin generar duplicados si falla a mitad
-- **COULD** Ejecutarse en horarios de bajo tráfico (noche)
+- **SHOULD** Procesar portales grandes (30-40k en Pincali/I24) en lotes manejables
+- **SHOULD** Completar portales pequenos (CBRE/Colliers, cientos) en menos de 30 minutos
+- **MUST** Poder re-ejecutarse sin generar duplicados si falla a mitad
 
 ---
 
 ## Preguntas Abiertas
 
-1. ¿Qué tan estrictos debemos ser con robots.txt?
-2. ¿Qué hacer con propiedades que desaparecen? ¿Marcar como vendidas?
-3. ¿Almacenamos las imágenes o solo las URLs?
-4. ¿Qué pasa si el portal cambia su estructura HTML?
+1. ~~¿Almacenamos las imagenes o solo las URLs?~~ → **Decidido**: descargar y almacenar en Supabase Storage
+2. ~~¿Que hacer con propiedades que desaparecen?~~ → **Decidido**: marcar como no disponible de inmediato
+3. ¿Que pasa si el portal cambia su estructura HTML? → TriggerDev pausa y notifica a Slack para intervencion humana
+4. ¿Orden de dual-write (Supabase primero o HubSpot primero)? → Por definir
+5. ¿Que Google API usar para geocodificacion? → Por investigar (Geocoding API vs Places API vs alternativas)
