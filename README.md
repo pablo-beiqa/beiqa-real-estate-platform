@@ -156,6 +156,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| 2026-02-26 | Agregado CLAUDE.md con instrucciones para Claude Code (rol, convenciones, reglas, archivos de referencia) |
 | 2026-02-24 | Actualización completa para reflejar estado real: stack decidido, schema real, fases actuales, equipo |
 | 2026-02-24 | Reestructuración a modelo module-centric por Pablo: 6 carpetas, 7 módulos auto-contenidos |
 | 2026-02-06 | Expansión de cuestionarios de producto: 463 preguntas en 9 módulos |
