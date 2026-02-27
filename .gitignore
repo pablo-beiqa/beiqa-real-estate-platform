@@ -1,0 +1,48 @@
+# ============================================
+# AI Tools — configuración local de cada herramienta
+# Cada herramienta crea su carpeta de config,
+# no son parte del proyecto
+# ============================================
+.adal/
+.agent/
+.agents/
+.augment/
+.claude/
+.codebuddy/
+.commandcode/
+.continue/
+.crush/
+.cursor/
+.factory/
+.goose/
+.iflow/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/
+
+# Skills (herramientas de AI agents, no artefactos del proyecto)
+skills/
+skills-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
