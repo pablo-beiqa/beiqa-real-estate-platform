@@ -1,6 +1,8 @@
-# ADR Template
+# ADR Template (DEPRECADO)
 
-Use este template para documentar decisiones arquitectónicas.
+> **DEPRECADO**: Este template fue reemplazado por [ADR-Template-MADR.md](ADR-Template-MADR.md) (completo) y [ADR-Template-Simple.md](ADR-Template-Simple.md) (simple). Usar los nuevos templates basados en MADR 4.0.
+
+Template original para referencia histórica:
 
 ---
 
