@@ -76,10 +76,10 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | Módulo | Descripción | Fase | Estado |
 |--------|-------------|------|--------|
 | [Scraper](./01-Modules/Scraper/) | Extracción automatizada de 4 portales (Apify, Firecrawl, Browserbase) | Fase 1 | 🟢 En desarrollo |
-| [Internal App](./01-Modules/Internal-App/) | Aplicación web para el equipo Beiqa (Next.js) | Fase 2-3 | 🟡 En diseño |
-| [Data](./01-Modules/Data/) | Normalización, deduplicación, integración de fuentes externas | Fase 1-2 | 🟡 Parcial |
+| [Internal App](./01-Modules/Internal-App/) | Aplicación web para el equipo Beiqa (Next.js) | Fase 3 | 🔴 Por iniciar |
+| [Data](./01-Modules/Data/) | Normalización, deduplicación, integración de fuentes externas | Fase 1-2 | 🟡 Diseño/investigación |
 | [Market Intelligence](./01-Modules/Market-Intelligence/) | Análisis y reportes de mercado automatizados | Fase 2 | 🔴 Por iniciar |
-| [Geospatial](./01-Modules/Geospatial/) | Análisis geoespacial, H3 index, AGEB | Fase 2 | 🔴 Por iniciar |
+| [Geospatial](./01-Modules/Geospatial/) | Análisis geoespacial, H3 index, AGEB | Fase 2 | 🟡 Diseño/investigación |
 | [Tenant Portal](./01-Modules/Tenant-Portal/) | Portal web para clientes (shortlists, feedback) | Fase 2 | 🔴 Por iniciar |
 | [AI Brain](./01-Modules/AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Fase 3 | 🔴 Por iniciar |
 
@@ -166,7 +166,8 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
-| **2026-02-27** | **19 ADRs documentados** — Documentación completa de todas las decisiones de arquitectura del proyecto en formato MADR 4.0: 12 aceptadas (Supabase, scraping multi-portal, Trigger.dev, Firecrawl, Browserbase, Rube, HubSpot, monitoreo, H3, AGEB, Google Maps, multi-portal data), 6 propuestas (OpenRouter, Backboard, frontend Next.js, deduplicación, GIS, CI/CD) y 1 deprecada (n8n) |
+| **2026-02-27** | **Actualizar fases de módulos** — Internal App movida a Fase 3 (🔴 Por iniciar), Geospatial y Data cambiados a 🟡 Diseño/investigación |
+| 2026-02-27 | **19 ADRs documentados** — Documentación completa de todas las decisiones de arquitectura del proyecto en formato MADR 4.0: 12 aceptadas (Supabase, scraping multi-portal, Trigger.dev, Firecrawl, Browserbase, Rube, HubSpot, monitoreo, H3, AGEB, Google Maps, multi-portal data), 6 propuestas (OpenRouter, Backboard, frontend Next.js, deduplicación, GIS, CI/CD) y 1 deprecada (n8n) |
 | 2026-02-27 | **Templates MADR 4.0 y Simple** — Dos templates adaptados al proyecto en español con campo de costo mensual, plan de implementación y checklist de verificación. Índice maestro de ADRs con estado, costo y decisores |
 | 2026-02-27 | **Stack-Decidido.md convertido a dashboard** — Tabla de decisiones con costos y links directos a cada ADR. Eliminado n8n como activo, agregados Firecrawl ($99/mo), Browserbase ($20/mo), Rube como UI actual |
 | 2026-02-27 | **System-Architecture.md actualizado** — Diagrama mermaid con stack real: 4 portales de scraping (I24/Pincali/CBRE/Colliers), Trigger.dev como orquestador central, Rube como interfaz, flujos actualizados. Eliminados n8n y EasyBroker |
