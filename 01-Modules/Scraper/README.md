@@ -17,7 +17,7 @@ El pipeline incluye: extraccion de datos del portal, normalizacion basica de cam
 ## Estado Actual
 
 ### En produccion
-- **Inmuebles24** via Apify: ~60K propiedades en Supabase al 24 feb 2026
+- **Inmuebles24** via Apify: ~30K propiedades en Supabase al 24 feb 2026
 - **n8n Cloud**: orquestacion actual (webhook Apify → n8n → Supabase), cron semanal + trigger manual desde Slack
 - **Clay** como orquestador de enriquecimiento: parseo de descripciones con LLM, geocodificacion via Google API, normalizacion de campos, escritura a HubSpot
 - **Deduplicacion**: tabla `possible_duplicates` + RPC en progreso
