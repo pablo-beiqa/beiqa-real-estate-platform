@@ -122,9 +122,10 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 
 ### Fase 1 — Actual
 - ✅ Inmuebles24 via Apify + n8n + Clay en produccion
-- ✅ ~60K propiedades en Supabase
+- ✅ ~30K propiedades en Hubspot
 - ✅ Enriquecimiento y geocodificacion via Clay
 - ✅ Escritura a HubSpot
+- 🟡 ~30K propiedades en Supabase
 - 🟡 Deduplicacion activa (`possible_duplicates` + RPC)
 - 🟡 AI extraction (Trigger.dev + Claude) para `property_features`
 
@@ -154,7 +155,7 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 
 | Metrica | Target | Estado actual |
 |---------|--------|--------------|
-| Propiedades en base de datos | >60,000 listados activos | ✅ ~60K al 24 feb |
+| Propiedades en base de datos | >30,000 listados activos | ✅ ~63K al 24 feb |
 | Portales soportados | 4 portales en produccion | 🟡 1 activo (Inmuebles24) |
 | Tasa de exito de ejecucion | >=95% sin error critico | ✅ Monitoreado via Slack + error_logs |
 | Consistencia dual-write | 100% propiedades en ambos destinos | 🔴 Por implementar |
