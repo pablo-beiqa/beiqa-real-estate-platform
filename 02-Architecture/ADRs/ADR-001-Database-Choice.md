@@ -1,4 +1,7 @@
-# ADR-001: Elección de Base de Datos
+# ADR-001: Elección de Base de Datos (ARCHIVO HISTÓRICO)
+
+> **REEMPLAZADO**: Este archivo fue reemplazado por [ADR-001-Supabase-Plataforma.md](ADR-001-Supabase-Plataforma.md) que usa formato MADR 4.0 y cubre Supabase como plataforma completa (DB + Auth + Storage + API).
+> Se mantiene como referencia histórica del ADR original.
 
 **Fecha**: 2026-02-04
 **Estado**: ✅ Aceptado — Febrero 2026
