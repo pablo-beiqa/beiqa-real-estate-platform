@@ -129,6 +129,94 @@ Ver [01-Modules/README.md](01-Modules/README.md) para el diagrama de dependencia
 3. **NUNCA contradecir Stack Decidido** — las decisiones en [Stack-Decidido.md](02-Architecture/Stack-Decidido.md) están tomadas. No proponer tecnologías descartadas.
 4. **NUNCA modificar la estructura de carpetas** (00- a 05-) sin permiso explícito del equipo.
 5. **Source of truth**: Supabase para propiedades/listings/brokers. HubSpot para clientes/deals. Respetar esta separación.
+6. **Después de cada corrección, actualizar `tasks/lessons.md`** — cuando el usuario corrija un error o ajuste un comportamiento, Claude propone una lección para agregar al archivo. Esto previene que el mismo error se repita.
+
+---
+
+## Workflow de tareas
+
+Claude sigue un proceso estructurado para cualquier tarea de **3 o más pasos**. Las tareas simples (preguntas, ediciones puntuales) no requieren este proceso.
+
+### Modo plan (obligatorio antes de ejecutar)
+
+1. **Escribir el plan en `tasks/todo.md`** con ítems checkeables antes de tocar cualquier archivo
+2. Incluir: contexto, pasos concretos, criterio de verificación, y el **GitHub Issue** correspondiente (`#número`)
+3. Confirmar el plan con el usuario si hay ambigüedad
+
+### Ejecución
+
+1. Ejecutar paso por paso, marcando ítems completados en `tasks/todo.md`
+2. Escribir un **resumen de alto nivel** en cada paso (qué se hizo, no el detalle técnico completo)
+3. Si surgen problemas inesperados, actualizar el plan antes de continuar
+
+### Verificación (obligatoria antes de marcar como completado)
+
+1. **Nunca** marcar una tarea como completada sin verificar que funciona
+2. En documentación: revisar links, consistencia con otros archivos, formato correcto
+3. En código (cuando aplique): ejecutar tests, verificar build, probar manualmente
+4. Agregar sección de revisión a `tasks/todo.md`
+
+### Sincronización con GitHub Issues
+
+- **Backlog centralizado** en [beiqa-real-estate-platform issues](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues). Labels diferencian destino (`scraper`, `data`, `triggerdev`, `frontend`, `docs`)
+- Al completar una tarea, **comentar y/o cerrar** el issue vía `gh` CLI
+- **Multi-repo**: Si la tarea se ejecuta en `beiqa-product` o `beiqa-frontend`, usar `gh --repo pablo-beiqa/beiqa-real-estate-platform` para sincronizar
+- Al inicio de sesión, consultar backlog con `gh issue list` si es relevante para la tarea
+
+### Después de correcciones
+
+Cuando el usuario corrija un error, Claude:
+1. Aplica la corrección
+2. Propone una lección para `tasks/lessons.md`
+3. El usuario aprueba o ajusta
+4. Claude agrega la lección al archivo
+
+---
+
+## Principios de trabajo
+
+Estos principios aplican a **todo** lo que Claude produce en este repositorio, sea documentación o código:
+
+### Simplicidad primero
+- Impacto mínimo: solo tocar lo necesario, nunca introducir complejidad innecesaria
+- Preferir editar archivos existentes antes de crear nuevos
+- Si algo se puede resolver en 1 archivo, no crear 3
+
+### Estándar senior
+- No parches temporales: buscar la causa raíz, no workarounds
+- Cada entregable debe ser de calidad de producción
+- Cuestionar si una tarea realmente necesita hacerse antes de ejecutarla
+
+### Solo lo necesario
+- No cambiar archivos fuera del scope de la tarea
+- No "mejorar" cosas que nadie pidió
+- Dejar el repositorio mejor de como lo encontraste, pero sin desviarte
+
+---
+
+## Delegación y autonomía
+
+Claude puede resolver ciertos tipos de problemas de forma **autónoma** (sin preguntar paso a paso), siempre respetando las reglas estrictas:
+
+### Tipos de tarea autónoma
+
+| Tipo | Qué puede hacer Claude solo | Cuándo preguntar |
+|------|----------------------------|------------------|
+| **Consultas SQL** | Ejecutar queries de lectura contra Supabase vía CLI o MCP | Queries de escritura (INSERT/UPDATE/DELETE) |
+| **Investigación** | Buscar información, comparar opciones, sintetizar fuentes | Cuando la decisión implica costo o compromiso a largo plazo |
+| **Corrección de docs** | Arreglar errores, inconsistencias, links rotos, typos | Cuando el cambio modifica el significado o la estructura |
+| **Fixing de bugs** | Diagnosticar y corregir errores en código (cuando haya repos de código) | Cuando el fix implica cambio de arquitectura |
+| **CI/CD** | Corregir tests o pipelines que fallan (cuando se implemente CI/CD) | Cuando el fix requiere cambiar la estrategia de testing |
+| **GitHub Issues** | Comentar progreso, cerrar al completar | Crear issues nuevos, reasignar |
+
+### Subagentes y paralelismo
+
+Cuando una tarea involucre múltiples investigaciones independientes, Claude puede:
+- Usar subagentes para explorar en paralelo (research, análisis de opciones)
+- Consolidar resultados en una recomendación única
+- Presentar la recomendación al usuario para decisión final
+
+> **Nota**: Los ítems de SQL, bug fixing y CI/CD son aspiracionales — se activarán cuando existan repos de código y pipelines. Por ahora aplican principalmente investigación y corrección de docs.
 
 ---
 
@@ -143,3 +231,5 @@ Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 - [Vision-and-Goals.md](00-Project/Vision-and-Goals.md) — visión y métricas objetivo
 - [Business-Context.md](00-Project/Business-Context.md) — contexto de negocio
 - [Fase-Real-1-Scrapers.md](03-Roadmap/Fase-Real-1-Scrapers.md) — fase actual en curso
+- [tasks/todo.md](tasks/todo.md) — scratchpad de sesión y sync con GitHub Issues
+- [tasks/lessons.md](tasks/lessons.md) — lecciones aprendidas (loop de auto-mejora)

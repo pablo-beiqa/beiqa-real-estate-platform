@@ -3,7 +3,7 @@
 > Plataforma tecnológica interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos de Beiqa.
 
 **Fase actual**: 🟢 Desarrollo Activo — Fase 1: Scrapers & Inventario
-**Última actualización**: 2026-02-27
+**Última actualización**: 2026-02-28
 
 ---
 
@@ -166,6 +166,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| **2026-02-28** | **Workflow Boris Cherny implementado** — Nuevas secciones en CLAUDE.md: Workflow de tareas (modo plan + sync GitHub Issues multi-repo), Principios de trabajo (simplicidad, estándar senior, solo lo necesario), Delegación y autonomía (tabla de autonomía + subagentes). Regla #6 de auto-mejora. Creados `tasks/lessons.md` (loop de auto-mejora) y `tasks/todo.md` (scratchpad de sesión sincronizado con GitHub Issues) |
 | **2026-02-27** | **Actualizar fases de módulos** — Internal App movida a Fase 3 (🔴 Por iniciar), Geospatial y Data cambiados a 🟡 Diseño/investigación |
 | 2026-02-27 | **19 ADRs documentados** — Documentación completa de todas las decisiones de arquitectura del proyecto en formato MADR 4.0: 12 aceptadas (Supabase, scraping multi-portal, Trigger.dev, Firecrawl, Browserbase, Rube, HubSpot, monitoreo, H3, AGEB, Google Maps, multi-portal data), 6 propuestas (OpenRouter, Backboard, frontend Next.js, deduplicación, GIS, CI/CD) y 1 deprecada (n8n) |
 | 2026-02-27 | **Templates MADR 4.0 y Simple** — Dos templates adaptados al proyecto en español con campo de costo mensual, plan de implementación y checklist de verificación. Índice maestro de ADRs con estado, costo y decisores |
@@ -184,4 +185,4 @@ beiqa-real-estate-platform/
 
 ---
 
-*Última actualización: 2026-02-27*
+*Última actualización: 2026-02-28*
