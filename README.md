@@ -3,7 +3,7 @@
 > Plataforma tecnológica interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos de Beiqa.
 
 **Fase actual**: 🟢 Desarrollo Activo — Fase 1: Scrapers & Inventario
-**Última actualización**: 2026-02-28
+**Última actualización**: 2026-03-02
 
 ---
 
@@ -39,7 +39,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 - [Mapa de Módulos](./01-Modules/) — Todos los módulos con dependencias y fases
 - [Fase 1: Scrapers & Inventario](./03-Roadmap/Fase-Real-1-Scrapers.md) — En curso ahora
 - [Roadmap completo](./03-Roadmap/Phase-1-MVP.md) — Las 3 fases del proyecto
-- [Presupuesto y Costos Reales](./04-Validation/Total-Budget.md) — Costos de herramientas (pendiente actualizar)
+- [Presupuesto Operativo](./04-Validation/Total-Budget.md) — Costos reales verificados ($747–896/mes)
 
 ---
 
@@ -166,6 +166,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| **2026-03-02** | **Presupuesto operativo reescrito con datos reales** — Total-Budget.md reemplazado completamente: de $30–50/mes estimados a $747–896/mes verificados. Incluye costos fijos vs variables, costo por portal, costo por propiedad (nueva $0.003–0.009 vs update $0.002–0.006), proyecciones 6–12 meses ($775–1,200/mes), puntos de inflexión y exclusiones. Stack-Decidido.md actualizado con costos reales: Apify $300, Trigger.dev $50, Atlas.co $178–267, OpenRouter $15–30, Rube+Claude $75–100 |
 | **2026-02-28** | **Workflow Boris Cherny implementado** — Nuevas secciones en CLAUDE.md: Workflow de tareas (modo plan + sync GitHub Issues multi-repo), Principios de trabajo (simplicidad, estándar senior, solo lo necesario), Delegación y autonomía (tabla de autonomía + subagentes). Regla #6 de auto-mejora. Creados `tasks/lessons.md` (loop de auto-mejora) y `tasks/todo.md` (scratchpad de sesión sincronizado con GitHub Issues) |
 | **2026-02-27** | **Actualizar fases de módulos** — Internal App movida a Fase 3 (🔴 Por iniciar), Geospatial y Data cambiados a 🟡 Diseño/investigación |
 | 2026-02-27 | **19 ADRs documentados** — Documentación completa de todas las decisiones de arquitectura del proyecto en formato MADR 4.0: 12 aceptadas (Supabase, scraping multi-portal, Trigger.dev, Firecrawl, Browserbase, Rube, HubSpot, monitoreo, H3, AGEB, Google Maps, multi-portal data), 6 propuestas (OpenRouter, Backboard, frontend Next.js, deduplicación, GIS, CI/CD) y 1 deprecada (n8n) |
@@ -185,4 +186,4 @@ beiqa-real-estate-platform/
 
 ---
 
-*Última actualización: 2026-02-28*
+*Última actualización: 2026-03-02*
