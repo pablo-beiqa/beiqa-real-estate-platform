@@ -1,24 +1,77 @@
 # Tenant Portal
 
-**Fase del proyecto**: Fase 4+ — Post-MVP
-**Estado**: 🔴 Por iniciar
-**Owner**: Por definir
+**Fase del proyecto**: Fase 2 — Portal Web + Data
+**Estado**: 🟡 En diseño (Phase 0 completado en beiqa-frontend)
+**Owner**: Pamela (Frontend)
+
+**Repositorio de codigo**: [beiqa-frontend](https://github.com/pablo-beiqa/beiqa-frontend)
 
 ---
 
 ## Descripcion
 
-El Tenant Portal es la aplicacion web orientada a los clientes corporativos de BEIQA — las empresas que buscan espacios comerciales o industriales en renta o compra. A traves de este portal, los clientes pueden revisar las propiedades recomendadas por su asesor de BEIQA, comparar opciones lado a lado, proporcionar feedback estructurado sobre cada propiedad (me interesa, no me interesa, necesito mas informacion) y mantener un registro de la comunicacion con su asesor a lo largo del proceso de busqueda.
+El Tenant Portal es la aplicacion web orientada a los **clientes corporativos** de BEIQA — las empresas que buscan espacios comerciales o industriales en renta o compra. A traves de este portal, los clientes pueden:
 
-Actualmente la interaccion con clientes se realiza a traves de correos electronicos con PDFs adjuntos, presentaciones de PowerPoint y llamadas telefonicas. Este proceso dificulta el seguimiento, genera versiones desactualizadas de informacion y no captura de forma estructurada las preferencias del cliente. El Tenant Portal profesionaliza esta interaccion, permite al cliente revisar opciones a su propio ritmo, genera feedback que el equipo de BEIQA puede usar para refinar las busquedas, y posiciona a BEIQA como una empresa con tecnologia diferenciada frente a competidores que aun operan con metodos tradicionales.
+1. **Revisar su scoring** completo (criterios, pesos, zonas, especificaciones tecnicas, condiciones comerciales)
+2. **Ver propiedades recomendadas** (shortlist) con score por criterio de su scoring
+3. **Dar feedback estructurado** sobre cada propiedad (Si/No/Quiza + razon + comentario)
+4. **Visualizar en mapa** la ubicacion de propiedades y datos contextuales de zona
+
+Actualmente la interaccion con clientes se realiza a traves de correos electronicos con PDFs adjuntos, presentaciones de PowerPoint y llamadas telefonicas. El Tenant Portal profesionaliza esta interaccion, captura feedback estructurado para refinar busquedas, y posiciona a BEIQA como empresa con tecnologia diferenciada.
+
+> **Nota**: El scoring dashboard (generado desde llamadas via Circleback) es parte del Tenant Portal, NO de la Internal App. La Internal App es la herramienta interna del equipo Beiqa para gestion de operaciones, data y GIS.
+
+---
+
+## Estado Actual
+
+### En produccion (beiqa-frontend — Phase 0)
+
+| Componente | Estado | Detalle |
+|-----------|--------|---------|
+| **Framework** | ✅ | Next.js 15 + App Router + TypeScript strict |
+| **Styling** | ✅ | Tailwind CSS + shadcn/ui (Card, Badge, Table) |
+| **Supabase client** | ✅ | SSR + Browser clients configurados (`@supabase/ssr`) |
+| **HubSpot client** | ✅ | API wrapper para deals y contactos |
+| **Scoring Dashboard** | ✅ | 3 paginas: home con stats, lista de scorings, detalle con 5 secciones |
+| **ScoringDocument schema** | ✅ | TypeScript completo (147 lineas) con todos los tipos |
+| **Claude agent** | ✅ | score-discovery: Circleback transcript → JSON scoring → dashboard |
+
+### Por desarrollar (Fase 2 — Sprint actual)
+
+| Componente | Estado | Prioridad |
+|-----------|--------|-----------|
+| Autenticacion magic link + password | 🔴 | MUST |
+| Shortlist con scores por criterio | 🔴 | MUST |
+| Feedback estructurado | 🔴 | MUST |
+| Mapa de propiedades (Atlas.co) | 🔴 | SHOULD |
+| Notificaciones (email/Slack) | 🔴 | SHOULD |
+
+---
+
+## Journey del Cliente
+
+```
+1. Reunion inicial → Entender necesidades del cliente
+2. Scoring → Construir criterios, pesos, zonas, specs, condiciones comerciales
+3. Cliente revisa scoring → Aprueba/comenta en el portal
+4. Busqueda → Filtrar propiedades que matchean scoring
+5. Shortlist → Presentar propiedades con score por criterio
+6. Feedback → Cliente evalua: Si/No/Quiza + razon + comentario
+7. Iteracion → Refinar busqueda basada en feedback
+8. Visitas → Agendar tours a propiedades seleccionadas
+```
+
+**Hoy**: Pasos 1-3 digitalizados en el portal (scoring dashboard). Pasos 4-8 son manuales (email, PowerPoint, llamadas).
+**Objetivo Fase 2**: Digitalizar pasos 4-7 en el portal.
 
 ---
 
 ## Objetivos
 
-1. Mejorar la experiencia del cliente corporativo proporcionando un portal profesional donde pueda revisar y evaluar propiedades recomendadas de forma autonoma, apuntando a un NPS de cliente superior a 50.
-2. Capturar feedback estructurado de clientes sobre cada propiedad (criterios de aceptacion/rechazo) para alimentar el motor de recomendaciones y acelerar el proceso de busqueda.
-3. Reducir el ciclo de presentacion-feedback de 5-7 dias (via email) a menos de 48 horas mediante acceso inmediato a recomendaciones y herramientas de evaluacion en linea.
+1. **Capturar feedback estructurado** de clientes sobre propiedades (Si/No/Quiza + razon) para acelerar el ciclo de presentacion-feedback de 5-7 dias a menos de 48 horas.
+2. **Profesionalizar la experiencia del cliente** con un portal donde pueda revisar scoring, propiedades y dar feedback de forma autonoma, apuntando a NPS > 50.
+3. **Reducir trabajo manual** del equipo al eliminar presentaciones en PowerPoint y centralizar la comunicacion en el portal.
 
 ---
 
@@ -26,11 +79,12 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 
 | Metrica | Target | Como se mide |
 |---------|--------|--------------|
-| Engagement de clientes | >=70% de clientes activos acceden al portal al menos 1 vez por semana | (Clientes con sesion en ultimos 7 dias) / (clientes con busqueda activa) |
-| Tasa de respuesta de feedback | >=80% de propiedades compartidas reciben feedback del cliente dentro de 48 horas | (Propiedades con feedback) / (propiedades compartidas) filtrado por tiempo |
-| NPS de cliente | >50 | Encuesta NPS enviada al finalizar cada proceso de busqueda |
-| Tiempo de ciclo presentacion-feedback | <48 horas (vs 5-7 dias baseline) | Mediana de tiempo entre compartir shortlist y recibir feedback completo |
-| Adopcion por clientes | >=60% de nuevos clientes usan el portal durante su proceso de busqueda | (Clientes que usan portal) / (total clientes nuevos) por trimestre |
+| Tasa de feedback | >=80% de propiedades compartidas reciben feedback dentro de 48h | (Propiedades con feedback) / (propiedades compartidas) |
+| Tiempo de ciclo | <48 horas entre compartir shortlist y recibir feedback | Mediana de tiempo (timestamp feedback - timestamp compartido) |
+| NPS de cliente | >50 | Encuesta NPS al finalizar cada proceso de busqueda |
+| Adopcion | >=60% de nuevos clientes usan el portal | (Clientes en portal) / (total clientes nuevos) por trimestre |
+
+> **Escala actual**: 5-15 clientes corporativos activos simultaneamente. Metricas calibradas para este volumen.
 
 ---
 
@@ -38,23 +92,23 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 
 | Entregable | Descripcion | Estado |
 |-----------|-------------|--------|
-| Visor de propiedades | Interfaz donde el cliente ve propiedades recomendadas con fotos, atributos, mapa y datos de zona en formato profesional | 🔴 |
-| Herramienta de comparacion | Tabla comparativa lado a lado de 2-5 propiedades con atributos clave, mapa comparativo y resumen de pros/contras | 🔴 |
-| Sistema de feedback | Mecanismo para que el cliente evalue cada propiedad (interes, rechazo, condicional), con campos para comentarios y criterios especificos | 🔴 |
-| Log de comunicacion | Historial de interacciones entre el cliente y su asesor de BEIQA (mensajes, documentos compartidos, decisiones) | 🔴 |
-| Autenticacion y acceso seguro | Sistema de login seguro para clientes con enlaces de acceso por proyecto, sin necesidad de registro complejo | 🔴 |
+| Scoring Dashboard | Dashboard donde el cliente ve su scoring completo: criterios, pesos, zonas, specs, condiciones, escala de resultado | ✅ Phase 0 |
+| Autenticacion de clientes | Magic link (primario) + password (fallback) via Supabase Auth. Aislamiento estricto por cliente (RLS). | 🔴 |
+| Shortlist con scores | Lista de propiedades recomendadas con score por criterio del scoring. Datos de propiedad: tipo, precio, m2, ubicacion, fotos. | 🔴 |
+| Feedback estructurado | Si/No/Quiza por propiedad + razon predefinida (precio, ubicacion, tamano, etc.) + comentario libre. | 🔴 |
+| Mapa de propiedades | Mapa interactivo con ubicaciones de propiedades del shortlist. Proveedor: Atlas.co (API + embed). | 🔴 |
 
 ---
 
 ## Dependencias
 
 ### Necesita (upstream)
-- **Base de datos** → Datos de propiedades, shortlists y perfiles de cliente
-- **Internal App (API)** → Comparte la API del backend para acceder a propiedades, shortlists y gestion de feedback
-- **AI Brain** → Recomendaciones personalizadas y propiedades sugeridas basadas en perfil y feedback del cliente
+- **Supabase** → Base de datos (propiedades, shortlists, feedback) + Auth (magic link, RLS) + Storage
+- **Scraper** → Datos de propiedades en Supabase (~60K+ listings)
+- **HubSpot** → Datos de scoring via pipeline de Circleback
 
 ### Depende de este (downstream)
-- Ninguno — el Tenant Portal es el punto final de la cadena de valor de la plataforma
+- **Market Intelligence** → Consumira datos de feedback para refinar recomendaciones
 
 ---
 
@@ -62,16 +116,32 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 
 | # | Riesgo | Impacto | Probabilidad | Mitigacion |
 |---|--------|---------|--------------|------------|
-| 1 | Baja adopcion por parte de clientes que prefieran el proceso tradicional (email/telefono) | Alto | Media | Hacer el portal tan simple como revisar un email, onboarding guiado, no eliminar canales tradicionales sino complementarlos |
-| 2 | Requisitos de seguridad y privacidad para datos de clientes corporativos | Alto | Media | Autenticacion robusta, datos encriptados, permisos granulares, cumplimiento con LFPDPPP (ley de proteccion de datos mexicana) |
-| 3 | Inflacion de alcance: clientes piden features que convierten el portal en un CRM completo | Medio | Alta | Definir alcance claro del portal vs la app interna, roadmap publico, priorizar features con impacto medible |
-| 4 | Mantenimiento de dos aplicaciones frontend (Internal App + Tenant Portal) con equipo pequeno | Medio | Media | Compartir componentes UI (design system), misma API backend, mono-repo o libreria de componentes compartidos |
-| 5 | Expectativas de clientes que excedan las capacidades del portal en version inicial | Medio | Media | Comunicar claramente que es una v1, recopilar feedback para iterar, mostrar roadmap de mejoras planificadas |
+| 1 | Baja adopcion por clientes que prefieran email/telefono | Alto | Media | Portal tan simple como revisar un email, no eliminar canales tradicionales sino complementarlos |
+| 2 | Datos parciales de propiedades (faltan fotos, precios, m2 en algunos listings) | Medio | Alta | Manejo graceful de campos vacios, indicadores visuales claros, priorizar propiedades con data completa |
+| 3 | Mobile + desktop con importancia igual desde dia 1 | Medio | Media | Responsive-first con shadcn/ui + Tailwind, testing en ambos dispositivos |
+| 4 | Seguridad y privacidad de datos corporativos | Alto | Media | RLS en Supabase, auth robusto, aislamiento estricto por cliente, LFPDPPP compliance |
+| 5 | Scope creep: clientes piden features que convierten el portal en CRM | Medio | Alta | Alcance claro (scoring + shortlist + feedback), roadmap publico, priorizar con MoSCoW |
+
+---
+
+## Stack Tecnico
+
+| Componente | Tecnologia | Estado |
+|-----------|-----------|--------|
+| Framework | Next.js 15 (App Router) | ✅ Implementado |
+| Lenguaje | TypeScript (strict mode) | ✅ Implementado |
+| Styling | Tailwind CSS + shadcn/ui | ✅ Implementado |
+| Base de datos / Auth | Supabase (PostgreSQL + PostGIS + Auth + Storage) | ✅ Configurado |
+| CRM | HubSpot (deals, contactos) | ✅ Configurado |
+| Mapas | Atlas.co (API + embed) | 🔴 Por implementar |
+| Notificaciones | Email + Slack | 🔴 Por implementar |
+| Deploy | Vercel | 🟡 Por configurar |
 
 ---
 
 ## Documentos del Modulo
 
-- [Product Questions](./Product-Questions.md) — Cuestionario de discovery
-- [Requirements](./Requirements.md) — Capacidades y criterios de aceptacion
+- [Product Questions](./Product-Questions.md) — Cuestionario de discovery con respuestas
+- [Requirements](./Requirements.md) — Capacidades MUST / SHOULD / COULD
 - [Research/](./Research/) — Investigacion tecnica
+  - [Auth-Strategy.md](./Research/Auth-Strategy.md) — Estrategia de autenticacion

@@ -26,7 +26,7 @@ Portales inmobiliarios
                                           Claude API (vía Rube)
                                                 ↓
                                           Rube + Claude Desktop  ← UI actual (Fase 1)
-                                          Next.js                ← UI futura (Fase 2+)
+                                          Next.js 15 (beiqa-frontend) ← Tenant Portal (Fase 2)
 ```
 
 ---
@@ -48,7 +48,7 @@ Portales inmobiliarios
 | **Geocodificación** | Google Maps Platform (Geocoding + Places API) | [ADR-011](ADRs/ADR-011-Google-Maps-Platform.md) | ✅ Activo | ~$0 (crédito $200) |
 | **Data architecture** | Staging tables por portal + golden record `properties` | [ADR-012](ADRs/ADR-012-Multi-Portal-Data.md) | ✅ Decidido | $0 |
 | **AI / NLP** | Claude API (vía Rube) | [ADR-004](ADRs/ADR-004-Rube-MCP-Bridge.md) | ✅ Activo | Por tokens |
-| **Frontend** | Next.js (detalles por definir) | [ADR-015](ADRs/ADR-015-Frontend-Next-js.md) | 🟡 Fase 2-3 | — |
+| **Frontend** | Next.js 15 + App Router + TypeScript + Tailwind + shadcn/ui | [ADR-015](ADRs/ADR-015-Frontend-Next-js.md) | 🟡 Phase 0 completo | $0 (Vercel free) |
 
 ---
 
@@ -59,7 +59,7 @@ Portales inmobiliarios
 | **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | Con frontend propio |
 | **AI Memory** | Backboard.io (persistent memory + RAG) | [ADR-014](ADRs/ADR-014-Backboard.md) | Con módulo AI Brain |
 | **Deduplicación** | Scoring + LLM-assisted (híbrido) | [ADR-016](ADRs/ADR-016-Deduplicacion.md) | Con ≥2 portales en staging |
-| **Mapas GIS** | Leaflet / Mapbox / Google Maps JS | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | Con frontend activo |
+| **Mapas GIS** | Atlas.co (API + embed) — preferido | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | Con Tenant Portal activo |
 | **CI/CD** | GitHub Actions + Vercel | [ADR-018](ADRs/ADR-018-CI-CD.md) | Con frontend activo |
 
 ---
@@ -108,4 +108,4 @@ Portales inmobiliarios
 
 ---
 
-*Documento actualizado: 2026-02-27 | Reemplaza versión anterior que incluía n8n como activo*
+*Documento actualizado: 2026-03-02 | Frontend actualizado con decisiones reales de beiqa-frontend*

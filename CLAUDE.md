@@ -94,7 +94,7 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 | [Data](01-Modules/Data/) | 1-2 | 🟡 Parcial | Fabrizio |
 | [Market Intelligence](01-Modules/Market-Intelligence/) | 2 | 🔴 Por iniciar | — |
 | [Geospatial](01-Modules/Geospatial/) | 2 | 🔴 Por iniciar | — |
-| [Tenant Portal](01-Modules/Tenant-Portal/) | 2 | 🔴 Por iniciar | Pamela |
+| [Tenant Portal](01-Modules/Tenant-Portal/) | 2 | 🟡 En diseño | Pamela |
 | [AI Brain](01-Modules/AI-Brain/) | 3 | 🔴 Por iniciar | — |
 
 La base de datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](02-Architecture/Database/) como infraestructura compartida.

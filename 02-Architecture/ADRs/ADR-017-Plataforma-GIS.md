@@ -44,9 +44,20 @@ Esta decisión es independiente de Google Maps Platform ([ADR-011](ADR-011-Googl
 * Pros: integración nativa con H3, excelente para grandes datasets, heatmaps
 * Contras: curva de aprendizaje alta, requiere Mapbox o Google como base
 
+### Atlas.co (API + Embed) — Preferido
+* Plataforma de mapas con API y capacidad de embed
+* Pros: API + embed simplifica integración en Next.js, diseñado para datos geoespaciales
+* Contras: pricing pendiente de evaluación, menor ecosistema que Mapbox/Leaflet
+* Nota: preferencia del equipo basada en capacidades de API + embed (decisión de entrevista 2026-03-02)
+
 ## Decisión
 
-**Pendiente.** Se evaluará cuando Pamela inicie el desarrollo del componente de mapas (Fase 2). La decisión depende del volumen de datos a renderizar y del presupuesto disponible para tiles.
+**Inclinación: Atlas.co.** Preferido por el equipo basado en API + embed capabilities. Pendiente evaluación técnica de pricing, rendimiento con miles de markers, y compatibilidad con capas H3/AGEB. Se validará cuando Pamela inicie el componente de mapas en Fase 2.
+
+Estrategia progresiva:
+1. **Fase básica**: Markers de propiedades del shortlist
+2. **Fase contexto**: Capas de POIs, transporte, datos socioeconómicos
+3. **Fase análisis**: Heatmaps de precio/m2, densidad de oferta
 
 ## Información Adicional
 

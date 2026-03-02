@@ -22,7 +22,9 @@
 
 ### Documentación
 
-_Aún no hay lecciones en esta categoría._
+#### 2026-03-02 — El scoring dashboard es Tenant Portal, no Internal App
+**Contexto**: El módulo Tenant Portal estaba documentado como "Fase 4+ Post-MVP" y sin owner. En realidad, el scoring dashboard implementado en beiqa-frontend ES el Tenant Portal (client-facing), no la Internal App (team-facing). La Internal App (gestión de operaciones, data, GIS) aún no existe como repo.
+**Regla**: Antes de documentar un módulo, verificar en qué repo vive la implementación y a quién está orientado (equipo interno vs cliente). La distinción Internal App vs Tenant Portal es fundamentalmente sobre la **audiencia**: equipo Beiqa vs clientes corporativos.
 
 ### Arquitectura y stack
 
@@ -38,4 +40,4 @@ _Aún no hay lecciones en esta categoría._
 
 ---
 
-*Última actualización: 2026-02-28*
+*Última actualización: 2026-03-02*

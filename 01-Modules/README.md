@@ -13,7 +13,7 @@
 | [Data Ingestion](./Data-Ingestion/) | Integración de fuentes externas (INEGI, Google, catastro) | Fase 2 | 🔴 Por iniciar |
 | [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Fase 2 | 🔴 Por iniciar |
 | [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Fase 2 | 🔴 Por iniciar |
-| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes corporativos | Fase 2 | 🔴 Por iniciar |
+| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes: scoring, shortlists, feedback | Fase 2 | 🟡 En diseño |
 | [AI Brain](./AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Fase 3 | 🔴 Por iniciar |
 
 > **Nota**: La Base de Datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](../02-Architecture/Database/) como infraestructura compartida.
@@ -61,21 +61,20 @@ flowchart TD
         DI[Data Ingestion]
         MI[Market Intelligence]
         GEO[Geospatial]
+        TP[Tenant Portal]
     end
 
     subgraph ADV["Fase 3+ — Avanzado"]
         AI[AI Brain]
     end
 
-    subgraph PORTAL["Fase 4+ — Portal"]
-        TP[Tenant Portal]
-    end
-
     SCR --> DB
     DI --> DB
     DB --> APP
     DB --> GEO
+    DB --> TP
     SCR --> MI
+    SCR --> TP
     DI --> MI
     DI --> GEO
     GEO --> MI
@@ -84,8 +83,6 @@ flowchart TD
     SCR --> AI
     DB --> AI
     AI --> APP
-    AI --> TP
-    APP --> TP
     MI --> APP
     GEO --> APP
 ```
@@ -116,4 +113,4 @@ Módulo/
 
 ---
 
-*Última actualización: 2026-02-24*
+*Última actualización: 2026-03-02*

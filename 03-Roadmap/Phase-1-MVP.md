@@ -54,20 +54,24 @@ Apify → n8n → Supabase ← Trigger.dev (Claude API) ← Next.js
 Clientes de Beiqa (tenants) pueden ver sus shortlists directamente en un portal. El sistema tiene datos contextuales de zonas (INEGI, Google) enriqueciendo cada propiedad.
 
 ### Entregables clave
-- **Tenant Portal** (Next.js): los clientes ven sus opciones, dan feedback, ven en mapa
+- **Tenant Portal** (Next.js 15): Auth de clientes (magic link + password), shortlists con scores por criterio, feedback estructurado, mapa de propiedades (Atlas.co). **Phase 0 completado** en [beiqa-frontend](https://github.com/pablo-beiqa/beiqa-frontend): scoring dashboard, 3 páginas, ScoringDocument schema, Supabase + HubSpot clients.
 - **Data Ingestion**: Google Places (POIs cercanos), INEGI DENUE (datos socioeconómicos)
 - **H3 index**: cada listing tiene H3 index precalculado al ingresar (resolución 7 y 9)
 - **AGEB**: cada listing tiene AGEB de INEGI (spatial join con shapefiles)
 - **Cache de APIs**: tabla `cache_api_responses` para no repetir requests a Google/INEGI por zona
 - **Market Intelligence básico**: tendencia de precios por zona, precio promedio m2, heatmaps
 
-### Stack adicional
-INEGI APIs + Google Places → n8n → Supabase (con H3 + AGEB)
+### Stack confirmado (Tenant Portal)
+Next.js 15 + App Router + TypeScript + Tailwind + shadcn/ui → Supabase (DB + Auth + Storage)
+
+### Stack adicional (Data)
+INEGI APIs + Google Places → Trigger.dev → Supabase (con H3 + AGEB)
 
 ### Decisiones pendientes para Fase 2
-- Confirmar proveedor de mapas (Mapbox vs Leaflet+OSM vs Google Maps)
-- Diseño de Tenant Portal (Pamela)
+- Diseño de shortlist y feedback UX (Pamela)
 - Granularidad de H3 (resolución 7 para zonas grandes, 9 para búsquedas precisas)
+- Schema de tablas `shortlists` y `feedback` en Supabase
+- Atlas.co: evaluación técnica de pricing e integración
 
 ---
 
@@ -105,5 +109,5 @@ Decisiones arquitectónicas confirmadas como "no necesario ahora":
 
 ---
 
-*Documento actualizado: 2026-02-24*
+*Documento actualizado: 2026-03-02*
 *Reemplaza el plan original de "4 sprints, 6-8 semanas" de discovery phase*
