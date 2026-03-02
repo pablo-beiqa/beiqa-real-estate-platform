@@ -1,6 +1,6 @@
 # Stack Tecnológico — Dashboard de Decisiones
 
-> **Fecha**: Febrero 2026 | **Actualizado**: 2026-02-27
+> **Fecha**: Febrero 2026 | **Actualizado**: 2026-03-02
 >
 > Cada decisión tiene un ADR (Architecture Decision Record) con justificación completa.
 > Ver [ADRs/README.md](ADRs/README.md) para el índice completo.
@@ -35,19 +35,19 @@ Portales inmobiliarios
 
 | Componente | Decisión | ADR | Estado | Costo/mes |
 |-----------|---------|-----|--------|-----------|
-| **Plataforma DB** | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | [ADR-001](ADRs/ADR-001-Supabase-Plataforma.md) | ✅ Producción | $0-25 |
-| **Scraping (I24)** | Apify (actor contratado) | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) | ✅ Activo | ~$20 |
-| **Scraping (motor)** | Firecrawl (HTTP engine, LLM extraction, stealth proxy) | [ADR-007](ADRs/ADR-007-Firecrawl.md) | ✅ Activo | $99 |
-| **Scraping (browser)** | Browserbase (cloud browser sessions) | [ADR-008](ADRs/ADR-008-Browserbase.md) | ✅ Activo | $20 |
-| **Automatización** | Trigger.dev (scrapers, sync, limpieza, cron, AI batch) | [ADR-003](ADRs/ADR-003-Trigger-dev.md) | ✅ Activo | Free tier |
-| **UI actual** | Rube + Claude Desktop (MCP bridge) | [ADR-004](ADRs/ADR-004-Rube-MCP-Bridge.md) | ✅ Activo (transitorio) | Incluido en plan |
-| **CRM** | HubSpot (clientes, deals, pipeline comercial) | [ADR-005](ADRs/ADR-005-HubSpot-CRM.md) | ✅ Activo | Plan existente |
+| **Plataforma DB** | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | [ADR-001](ADRs/ADR-001-Supabase-Plataforma.md) | ✅ Producción | $25 |
+| **Scraping (I24)** | Apify (actor contratado) | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) | ✅ Activo | $300 ($150 × 2 corridas/mes) |
+| **Scraping (motor)** | Firecrawl (HTTP engine, LLM extraction, stealth proxy) | [ADR-007](ADRs/ADR-007-Firecrawl.md) | ✅ Activo | ~$103 ($1,800 MXN) |
+| **Scraping (browser)** | Browserbase (cloud browser sessions) | [ADR-008](ADRs/ADR-008-Browserbase.md) | ✅ Activo | $0–20 (TBD) |
+| **Automatización** | Trigger.dev (scrapers, sync, limpieza, cron, AI batch) | [ADR-003](ADRs/ADR-003-Trigger-dev.md) | ✅ Activo | $50 |
+| **AI Processing** | OpenRouter (GPT-4o-mini para extracción de campos) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | ✅ Activo | $15–30 |
+| **UI actual** | Rube + Claude Desktop (MCP bridge) | [ADR-004](ADRs/ADR-004-Rube-MCP-Bridge.md) | ✅ Activo (transitorio) | $75–100 (Rube $25 + Claude $25 × 2–3) |
+| **CRM** | HubSpot (clientes, deals, pipeline comercial) | [ADR-005](ADRs/ADR-005-HubSpot-CRM.md) | ✅ Activo | No atribuido (costo general Beiqa) |
 | **Monitoreo** | Slack + tabla `error_logs` | [ADR-006](ADRs/ADR-006-Monitoreo.md) | ✅ Activo | $0 |
 | **Geoespacial (H3)** | h3-js — indexación hexagonal capas 5-11 | [ADR-009](ADRs/ADR-009-H3-Indexing.md) | 🟡 En pruebas | $0 |
 | **Geoespacial (AGEB)** | Polígonos INEGI para análisis territorial | [ADR-010](ADRs/ADR-010-AGEB-INEGI.md) | 🔴 Decidido, por implementar | $0 |
 | **Geocodificación** | Google Maps Platform (Geocoding + Places API) | [ADR-011](ADRs/ADR-011-Google-Maps-Platform.md) | ✅ Activo | ~$0 (crédito $200) |
 | **Data architecture** | Staging tables por portal + golden record `properties` | [ADR-012](ADRs/ADR-012-Multi-Portal-Data.md) | ✅ Decidido | $0 |
-| **AI / NLP** | Claude API (vía Rube) | [ADR-004](ADRs/ADR-004-Rube-MCP-Bridge.md) | ✅ Activo | Por tokens |
 | **Frontend** | Next.js 15 + App Router + TypeScript + Tailwind + shadcn/ui | [ADR-015](ADRs/ADR-015-Frontend-Next-js.md) | 🟡 Phase 0 completo | $0 (Vercel free) |
 
 ---
@@ -56,10 +56,10 @@ Portales inmobiliarios
 
 | Componente | Opciones | ADR | Cuándo decidir |
 |-----------|---------|-----|---------------|
-| **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | Con frontend propio |
+| **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | ✅ Activo (scraping pipeline) |
 | **AI Memory** | Backboard.io (persistent memory + RAG) | [ADR-014](ADRs/ADR-014-Backboard.md) | Con módulo AI Brain |
 | **Deduplicación** | Scoring + LLM-assisted (híbrido) | [ADR-016](ADRs/ADR-016-Deduplicacion.md) | Con ≥2 portales en staging |
-| **Mapas GIS** | Atlas.co (API + embed) — preferido | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | Con Tenant Portal activo |
+| **Mapas GIS** | Atlas.co (API + embed) — $89/usuario | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | ✅ Activo (2–3 usuarios, $178–267/mes) |
 | **CI/CD** | GitHub Actions + Vercel | [ADR-018](ADRs/ADR-018-CI-CD.md) | Con frontend activo |
 
 ---
@@ -108,4 +108,4 @@ Portales inmobiliarios
 
 ---
 
-*Documento actualizado: 2026-03-02 | Frontend actualizado con decisiones reales de beiqa-frontend*
+*Documento actualizado: 2026-03-02 | Costos actualizados con datos reales verificados. Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*

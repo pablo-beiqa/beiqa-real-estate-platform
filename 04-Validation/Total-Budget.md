@@ -1,216 +1,197 @@
-# Estimación de Presupuesto Total
+# Presupuesto Operativo — Plataforma Beiqa
+
+> **Fecha**: Marzo 2026 | **Moneda**: USD (TC: 17.5 MXN/USD)
+>
+> Este documento refleja los costos reales verificados de operar la plataforma. Solo incluye servicios e infraestructura — no incluye salarios del equipo, HubSpot (costo general de Beiqa), ni Clay (herramienta comercial independiente).
 
 ---
 
-## ✅ Costos Reales (Febrero 2026)
+## Resumen ejecutivo
 
-> El proyecto está en desarrollo activo con un equipo interno. Los costos reales son una fracción de las estimaciones originales de outsource.
+| Métrica | Valor |
+|---------|-------|
+| **Costo mensual actual** | **$747 – $896 USD** |
+| Costos fijos | $329 – $443 |
+| Costos variables | $418 – $453 |
+| Proyección 6 meses | $775 – $940 |
+| Proyección 12 meses | $855 – $1,200 |
 
-| Herramienta | Costo mensual | Notas |
-|-----------|--------------|-------|
-| Apify (scraping) | ~$20/mes | Actor contratado para Inmuebles24 |
-| Supabase (DB + Auth + Storage) | $0-25/mes | Free tier → Pro plan |
-| n8n Cloud (orquestación) | Incluido en plan | Workflows, cron, integraciones |
-| Trigger.dev (jobs pesados) | Free tier | Batch AI extraction |
-| Claude API vía Rube | Por tokens (~mínimo) | Procesamiento de descripciones |
-| HubSpot CRM | Plan existente | Sync vía n8n |
-| **Total herramientas** | **~$30-50/mes** | |
+**Distribución por categoría:**
 
-**Desarrollo**: Interno (Fabrizio + Pamela). Sin costo de outsource.
-
----
-
-## Estimación Original (Discovery Phase — Referencia Histórica)
-
-*Las estimaciones originales asumían outsource y un equipo por contratar. Se mantienen como referencia histórica del proceso de descubrimiento.*
-
-**Fase**: R-3 (Validación y Factibilidad)
-**Estado original**: Análisis de viabilidad (completado)
-**Presupuesto disponible**: $50,000 - $100,000 USD
-**Equipo original estimado**: Modelo híbrido (outsource + in-house)
+| Categoría | USD/mes | % del total |
+|-----------|---------|-------------|
+| Extracción (scraping) | $403 – $423 | 47 – 54% |
+| GIS / Mapas | $178 – $267 | 20 – 30% |
+| AI Workspace (Rube + Claude Desktop) | $75 – $100 | 10 – 11% |
+| Orquestación (Trigger.dev) | $50 | 6 – 7% |
+| AI Processing (OpenRouter) | $15 – $30 | 2 – 3% |
+| Infraestructura (Supabase + dominio) | $26 | 3% |
 
 ---
 
-## 1. Costos de APIs y Servicios (Mensual)
+## 1. Costos fijos mensuales (~$329 – $443)
 
-| Servicio | Uso Estimado | Precio | Costo/Mes | Notas |
-|----------|-------------|--------|-----------|-------|
-| **Google Maps Platform** | | | | |
-| - Maps JavaScript API | ~500 cargas | $7/1000 | ~$3.50 | Cubierto por crédito |
-| - Geocoding API | ~500 requests | $5/1000 | ~$2.50 | Cubierto por crédito |
-| - Places API | ~500 requests | $17/1000 | ~$8.50 | Cubierto por crédito |
-| - Routes API | ~100 requests | $5/1000 | ~$0.50 | Cubierto por crédito |
-| - Crédito gratuito | | | -$200 | Cubre todo lo anterior |
-| **Subtotal Google** | | | **$0** | Dentro del crédito |
-| | | | | |
-| **INEGI / Gobierno** | Ilimitado | Gratis | **$0** | |
-| | | | | |
-| **LLM (deduplicación MVP)** | ~200 pares/mes | ~400 tokens/par | **< $1** | GPT-4o-mini o Haiku |
-| | | | | |
-| **Proveedores comerciales** | N/A para MVP | N/A | **$0** | Diferido a post-MVP |
-| | | | | |
-| **TOTAL APIs MVP** | | | **~$1/mes** | |
+Estos costos no cambian con el volumen de propiedades extraídas.
+
+| Servicio | USD/mes | Función | Usuarios/detalle |
+|----------|---------|---------|------------------|
+| Atlas.co | $178 – $267 | Mapas, GIS, análisis geoespacial con AI | 2–3 usuarios × $89 |
+| Claude Desktop | $50 – $75 | AI workspace para consultas del equipo | 2–3 usuarios × $25 |
+| Trigger.dev | $50 | Orquestación de scrapers, cron, batch AI, sync | Plan pagado |
+| Rube | $25 | MCP bridge para conectar Claude Desktop con Supabase | 1 suscripción |
+| Supabase Pro | $25 | PostgreSQL + PostGIS + Auth + Storage + REST API | 1 proyecto |
+| Dominio | ~$1.25 | beiqa.com | $15/año |
 
 ---
 
-## 2. Costos de Infraestructura (Mensual)
+## 2. Costos variables mensuales (~$418 – $453)
 
-### Escenario A: Stack Simple (Supabase + Vercel/Railway)
+Estos costos escalan con el volumen de extracciones y procesamiento.
 
-| Recurso | Especificación | Provider | Costo/Mes |
-|---------|---------------|----------|-----------|
-| Base de datos | PostgreSQL + PostGIS, 8 GB | Supabase Pro | $25 |
-| Auth | Incluido en Supabase | Supabase | $0 |
-| Object storage | Incluido o Cloudflare R2 | Supabase/R2 | $0-5 |
-| App backend | 1 servicio | Railway/Render | $10-25 |
-| App frontend | Static/SSR | Vercel Free | $0 |
-| Dominio | .com | Cualquiera | ~$1 |
-| SSL | Let's Encrypt | Gratis | $0 |
-| Monitoring | Sentry Free + Uptime Robot | Free tiers | $0 |
-| **TOTAL Escenario A** | | | **$36-56/mes** |
-
-### Escenario B: Stack Cloud (AWS/GCP)
-
-| Recurso | Especificación | Provider | Costo/Mes |
-|---------|---------------|----------|-----------|
-| Base de datos | RDS PostgreSQL t3.small + PostGIS | AWS | $40-60 |
-| App server | EC2 t3.small o Cloud Run | AWS/GCP | $20-40 |
-| Object storage | S3/R2 (< 10 GB) | AWS/R2 | $1-5 |
-| CDN | CloudFront/Cloudflare | AWS/CF | $0-5 |
-| Dominio | .com | Route53 | ~$1 |
-| SSL | ACM / Let's Encrypt | Gratis | $0 |
-| Monitoring | CloudWatch basic | AWS | $0-5 |
-| **TOTAL Escenario B** | | | **$62-116/mes** |
-
-### Escenario C: Stack Serverless (Neon + Vercel)
-
-| Recurso | Especificación | Provider | Costo/Mes |
-|---------|---------------|----------|-----------|
-| Base de datos | PostgreSQL + PostGIS, serverless | Neon Launch | $19 |
-| App backend | Serverless functions | Vercel Pro | $20 |
-| Object storage | Cloudflare R2 | R2 | $0-5 |
-| Dominio + CDN | Incluido | Vercel/CF | $0-1 |
-| **TOTAL Escenario C** | | | **$39-45/mes** |
+| Servicio | USD/mes | Driver de costo | Detalle |
+|----------|---------|-----------------|---------|
+| Apify (I24) | $300 | $150/corrida × 2 corridas/mes | 25–30K propiedades por corrida, frecuencia quincenal |
+| Firecrawl | ~$103 | Plan fijo $1,800 MXN | Cubre Pincali + CBRE + Colliers. 100K páginas/mes |
+| OpenRouter (GPT-4o-mini) | $15 – $30 | ~12K propiedades nuevas/mes | AI extraction de campos, 1 llamada/propiedad nueva |
+| Google Maps Platform | $0 | Dentro de crédito $200/mes | Geocoding + Places API, ~500–1,000 requests/mes |
+| Browserbase | $0 – $20 | Sesiones browser para edge cases | ⚠️ Pendiente verificar con Fabrizio |
 
 ---
 
-## 3. Costos de Desarrollo (One-time)
+## 3. Costo por portal (unit economics de extracción)
 
-### Opción: Equipo Outsource (LatAm)
+| Portal | Herramienta | Props/corrida | Frecuencia | Costo/mes | Costo/propiedad extraída |
+|--------|-------------|---------------|------------|-----------|--------------------------|
+| Inmuebles24 | Apify | 25–30K | Quincenal | $300 | ~$0.005 – $0.006 |
+| Pincali | Firecrawl | 20–30K | Quincenal | ~$103* | ~$0.002 – $0.003 |
+| CBRE | Firecrawl | 200–300 | Semanal | Incluido* | ~$0.08 – $0.13 |
+| Colliers | Firecrawl | 200–300 | Semanal | Incluido* | ~$0.08 – $0.13 |
 
-| Fase | Horas Estimadas | Costo/Hora | Total |
-|------|----------------|------------|-------|
-| Research & Design (ya en curso) | 40-80h | $40-60 | $1,600-$4,800 |
-| MVP Backend (API, DB, adquisición datos) | 200-300h | $40-60 | $8,000-$18,000 |
-| MVP Frontend (interfaz, mapas) | 150-250h | $40-60 | $6,000-$15,000 |
-| Deduplication engine | 40-80h | $50-70 | $2,000-$5,600 |
-| GIS / Mapas | 60-100h | $50-70 | $3,000-$7,000 |
-| Testing & QA | 40-80h | $30-50 | $1,200-$4,000 |
-| Deploy & DevOps | 20-40h | $40-60 | $800-$2,400 |
-| **TOTAL Outsource** | **550-930h** | | **$22,600-$56,800** |
+*Firecrawl $103 USD/mes ($1,800 MXN) cubre los 3 portales.
 
-### Opción: Equipo In-House (México)
-
-| Rol | Meses | Salario Mensual | Total |
-|-----|-------|----------------|-------|
-| Backend developer (senior) | 3-4 | $40,000-$60,000 MXN | $120K-$240K MXN |
-| Frontend developer (mid) | 2-3 | $30,000-$45,000 MXN | $60K-$135K MXN |
-| **TOTAL In-House** | | | ~$180K-$375K MXN ($9K-$19K USD) |
-
-### Opción: Híbrido (Recomendada)
-
-| Componente | Quién | Costo Estimado |
-|------------|-------|----------------|
-| Arquitectura + MVP backend | Outsource senior | $15,000-$25,000 |
-| Frontend + UX | Outsource mid | $8,000-$15,000 |
-| Supervisión + product management | In-house (Pablo) | $0 (tiempo propio) |
-| **TOTAL Híbrido** | | **$23,000-$40,000** |
+**Observación**: CBRE y Colliers tienen un costo por propiedad ~15–25x mayor que I24/Pincali debido al bajo volumen. Esto es normal — el valor por propiedad de brokers premium es proporcionalmente mayor.
 
 ---
 
-## 4. Costos Recurrentes (Mensual Post-Launch)
+## 4. Costo por propiedad procesada
 
-| Concepto | Escenario A | Escenario B | Escenario C |
-|----------|------------|------------|------------|
-| Infraestructura | $36-56 | $62-116 | $39-45 |
-| APIs | ~$1 | ~$1 | ~$1 |
-| Mantenimiento (dev) | $500-1,500 | $500-1,500 | $500-1,500 |
-| **TOTAL MENSUAL** | **$537-1,557** | **$563-1,617** | **$540-1,546** |
+El costo total de incorporar una propiedad a la plataforma depende de si es nueva o actualización.
 
----
+### Propiedad NUEVA (~10–20% por corrida)
 
-## 5. Resumen de Inversión
+| Paso | Costo | Notas |
+|------|-------|-------|
+| Extracción | $0.002 – $0.006 | Varía por portal (ver tabla anterior) |
+| AI processing (OpenRouter) | ~$0.001 – $0.003 | GPT-4o-mini, 1 llamada para extraer/normalizar campos |
+| Geocoding | $0 | Google Maps crédito o alternativa OSM (en evaluación) |
+| Domain lookup | ~$0 | Búsqueda de broker vía Google |
+| **Total propiedad nueva** | **~$0.003 – $0.009** | |
 
-### Inversión Inicial (Desarrollo)
+### Propiedad UPDATE (~80–90% por corrida)
 
-| Concepto | Mínimo | Máximo |
-|----------|--------|--------|
-| Desarrollo (híbrido) | $23,000 | $40,000 |
-| Setup infraestructura | $500 | $1,000 |
-| **TOTAL INICIAL** | **$23,500** | **$41,000** |
+| Paso | Costo | Notas |
+|------|-------|-------|
+| Extracción | $0.002 – $0.006 | Mismo costo que nueva |
+| AI processing | $0 | No se reprocesa con AI |
+| **Total update** | **~$0.002 – $0.006** | |
 
-### Costo Operativo Primer Año (12 meses)
-
-| Concepto | Mínimo | Máximo |
-|----------|--------|--------|
-| Infraestructura (Escenario A × 12) | $432 | $672 |
-| APIs (× 12) | $12 | $12 |
-| Mantenimiento (× 12) | $6,000 | $18,000 |
-| **TOTAL OPERATIVO AÑO 1** | **$6,444** | **$18,684** |
-
-### Inversión Total Año 1
-
-| Concepto | Mínimo | Máximo |
-|----------|--------|--------|
-| Desarrollo | $23,500 | $41,000 |
-| Operación año 1 | $6,444 | $18,684 |
-| Buffer imprevistos (20%) | $5,989 | $11,937 |
-| **TOTAL AÑO 1** | **$35,933** | **$71,621** |
-
-> ✅ **Dentro del presupuesto de $50K-$100K**
+**Nota sobre brokers conocidos (CBRE, Colliers)**: Al ser fuentes con datos estructurados, se omite parte del procesamiento AI — los campos ya vienen limpios.
 
 ---
 
-## 6. Variables que Afectan Costos
+## 5. Proyecciones 6–12 meses
 
-| Variable | Impacto | Cómo Mitigar |
-|----------|---------|-------------|
-| Scope creep (más features) | +$5K-$20K por módulo | Definir MVP estricto y cumplirlo |
-| Volumen de datos | Mayor storage/processing | Escalar gradualmente |
-| Uso de Google Maps | Pay per use | Evaluar alternativas gratuitas, cachear |
-| Features de AI post-MVP | Tokens LLM | Usar modelos mini/haiku, optimizar prompts |
-| Número de portales | Más mantenimiento de scrapers | Empezar con 1, expandir solo si necesario |
-| Team ramp-up | Tiempo de onboarding | Documentar bien, usar stack común |
+### Costos nuevos proyectados
+
+| Concepto | Cuándo | Costo inicial | Costo a 12 meses | Notas |
+|----------|--------|---------------|-------------------|-------|
+| Supabase Storage (imágenes) | Al implementar descarga | ~$2/mes | ~$5–10/mes | 5–10 fotos/propiedad, ~150–400GB acumulados |
+| Supabase Bandwidth (egress) | Con 50–200 usuarios | ~$5/mes | ~$20–50/mes | Usuarios viendo imágenes en la app |
+| Vercel Pro (frontend) | Fase 2 | $20/mes | $20/mes | Hosting Next.js, recomendado para el stack |
+| Email transaccional | Tenant Portal | $0–5/mes | $10–20/mes | Resend o SendGrid para notificaciones |
+| Portales adicionales (1–2) | 6–12 meses | $50–200/mes | $50–200/mes | Mix de portales grandes y pequeños |
+| Storage PDFs (CBRE/Colliers) | Al implementar descarga | ~$1/mes | ~$2–5/mes | ~500 props × 15MB promedio |
+
+### Escenario conservador — 6 meses
+
+| Categoría | USD/mes |
+|-----------|---------|
+| Costos actuales | $747 – $896 |
+| + Storage (imágenes + PDFs) | +$3 – $5 |
+| + Supabase Bandwidth | +$5 – $15 |
+| + Vercel Pro | +$20 |
+| + Email | +$0 – $5 |
+| **Total proyectado** | **~$775 – $940** |
+
+### Escenario de crecimiento — 12 meses
+
+| Categoría | USD/mes |
+|-----------|---------|
+| Costos actuales | $747 – $896 |
+| + Storage acumulado | +$7 – $15 |
+| + Supabase Bandwidth (50–200 users) | +$20 – $50 |
+| + Vercel Pro | +$20 |
+| + Email | +$10 – $20 |
+| + 1–2 portales adicionales | +$50 – $200 |
+| **Total proyectado** | **~$855 – $1,200** |
+
+### Costo operativo anualizado
+
+| Escenario | Mes actual | Anualizado |
+|-----------|-----------|------------|
+| Actual (hoy) | $747 – $896 | $8,964 – $10,752 |
+| 6 meses | $775 – $940 | $9,300 – $11,280 |
+| 12 meses | $855 – $1,200 | $10,260 – $14,400 |
 
 ---
 
-## 7. Recomendaciones de Ahorro
+## 6. Puntos de inflexión
 
-| Área | Recomendación | Ahorro Estimado |
-|------|--------------|-----------------|
-| Mapas | Leaflet + OSM para funciones básicas, Google solo para geocoding | $0-15/mes |
-| Hosting | Stack simple (Supabase + Vercel/Railway) | $30-60/mes vs cloud |
-| AI | GPT-4o-mini / Haiku en vez de GPT-4o | ~90% en tokens |
-| Frontend | Low-code (Retool) para MVP interno | $5,000-$10,000 en dev |
-| Portales | Solo EasyBroker para MVP | $5,000-$10,000 en dev de scrapers |
+Eventos que causan saltos en costo:
 
----
-
-## 8. Próximos Pasos
-
-1. [ ] Completar investigación de R-1 y R-2 para refinar estimaciones
-2. [ ] Obtener cotizaciones de equipos de desarrollo
-3. [ ] Elegir escenario de infraestructura
-4. [ ] Calcular costos específicos basados en decisiones de stack
-5. [ ] Presentar presupuesto a stakeholders para aprobación
-6. [ ] Definir presupuesto máximo y contingencia
+| Trigger | Qué pasa | Impacto estimado |
+|---------|----------|------------------|
+| >100GB en Supabase Storage | Cobro por excedente ($0.021/GB) | +$1–5/mes por cada 100GB |
+| >250GB bandwidth/mes | Cobro por excedente ($0.09/GB) | +$5–20/mes por cada 100GB |
+| >100K páginas Firecrawl | Necesitan upgrade de plan | +$50–100/mes |
+| Nuevo portal grande (>10K props) | Nuevo actor Apify o más créditos Firecrawl | +$100–200/mes |
+| Google Maps excede crédito $200 | Batch geocoding de muchos nuevos o usuarios en mapas | Cobros reales comienzan |
+| Trigger.dev excede plan actual | Más corridas, más tasks concurrentes | +$50–100/mes al siguiente tier |
+| >50 usuarios en Tenant Portal | Supabase Auth: 50K MAU incluidos en Pro | $0 adicional (amplio margen) |
 
 ---
 
-## Notas
+## 7. Exclusiones
 
-- Todos los costos son estimaciones preliminares basadas en precios públicos y rangos de mercado
-- Se requiere validación con cotizaciones reales de equipos de desarrollo
-- Los costos de infraestructura asumen uso en régimen MVP (bajo volumen)
-- Buffer de 20% recomendado para imprevistos
-- Los costos de mantenimiento asumen ~10-20 horas/mes de soporte técnico
+Costos que **no** se incluyen en este presupuesto:
+
+| Concepto | Razón de exclusión |
+|----------|-------------------|
+| Salarios (Fabrizio, Pamela) | Costo de nómina del equipo, no de la plataforma |
+| HubSpot CRM | Costo general de Beiqa, preexistente a la plataforma |
+| Clay | Herramienta comercial independiente de este proyecto |
+| Costo de oportunidad | Horas de mantenimiento vs. desarrollo — fuera del alcance |
+
+---
+
+## 8. Pendientes de verificar
+
+- [ ] **Browserbase**: Confirmar con Fabrizio si se usa activamente y cuánto cuesta (estimado $0–20)
+- [ ] **OpenRouter**: Obtener billing real del último mes (estimación actual: $15–30 basada en Pablo)
+- [ ] **Atlas.co**: Confirmar número exacto de usuarios (2 o 3 → rango $178–$267)
+- [ ] **Google Maps**: Revisar consumo real del crédito en Google Cloud Console
+- [ ] **Geocoding**: Decisión pendiente — Google Maps Platform vs. OpenStreetMap/Nominatim para I24/Pincali
+
+---
+
+## Nota sobre el presupuesto anterior
+
+Este documento reemplaza completamente la versión anterior que contenía:
+- Estimaciones de outsource ($23K–$56K) que ya no aplican — el desarrollo es interno
+- Costo de herramientas a $30–50/mes — subestimación de ~15x respecto a la realidad ($747–$896)
+- n8n Cloud — deprecado y migrado a Trigger.dev ([ADR-019](../02-Architecture/ADRs/ADR-019-n8n-Deprecado.md))
+- Escenarios de infraestructura hipotéticos (AWS, Neon) — se eligió Supabase
+
+---
+
+*Última actualización: 2026-03-02*
