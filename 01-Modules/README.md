@@ -6,44 +6,47 @@
 
 ## Mapa de Módulos
 
-| Módulo | Descripción | Fase | Estado |
-|--------|-------------|------|--------|
-| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Apify + n8n) | Fase 1 | 🟢 En desarrollo |
-| [Internal App](./Internal-App/) | Aplicación web para el equipo Beiqa (Next.js — Pamela) | Fase 1 | 🟡 Diseño activo |
-| [Data Ingestion](./Data-Ingestion/) | Integración de fuentes externas (INEGI, Google, catastro) | Fase 2 | 🔴 Por iniciar |
-| [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Fase 2 | 🔴 Por iniciar |
-| [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Fase 2 | 🔴 Por iniciar |
-| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes: scoring, shortlists, feedback | Fase 2 | 🟡 En diseño |
-| [AI Brain](./AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Fase 3 | 🔴 Por iniciar |
+| Módulo | Descripción | Sprint | Estado |
+|--------|-------------|--------|--------|
+| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Apify + TriggerDev + Firecrawl) | Sprint 1+ | 🟢 En desarrollo |
+| [Internal App](./Internal-App/) | Aplicación web para el equipo Beiqa (Next.js — Pamela) | Sprint 2+ | 🟡 Diseño activo |
+| [Data](./Data/) | Normalización (Mastra agents), integración de fuentes externas (INEGI, Google, catastro) | Sprint 1+ | 🟢 En desarrollo |
+| [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Sprint 3+ | 🔴 Por iniciar |
+| [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Sprint 2+ | 🟡 En pruebas |
+| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes: scoring, shortlists, feedback | Sprint 3+ | 🟡 En diseño |
+| [AI Brain](./AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Sprint 1+ | 🟢 En desarrollo |
 
 > **Nota**: La Base de Datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](../02-Architecture/Database/) como infraestructura compartida.
 
+> **Mastra como capa transversal**: [Mastra](../02-Architecture/Agent-Architecture.md) es el framework de orquestación de agentes AI que opera como capa transversal a todos los módulos. Los agentes de Mastra (Data Normalization Agent, Address Enrichment Agent, GIS Analysis Agent, etc.) proporcionan capacidades de enriquecimiento, normalización e inteligencia que cruzan las fronteras de los módulos individuales.
+
 ---
 
-## Mapeo a Fases del Proyecto
+## Mapeo a Sprints del Proyecto
 
-### Fase 1 — Scrapers & Inventario (En curso)
+### Sprint 1+ — Scrapers, Inventario & AI Brain (En curso)
 
 | Módulo | Alcance |
 |--------|---------|
-| **Scraper** | Apify actor Inmuebles24 ✅, normalización n8n, deduplicación, EasyBroker |
+| **Scraper** | Apify actor Inmuebles24 ✅, TriggerDev como plataforma primaria, Firecrawl + Browserbase para portales custom |
 | **Internal App** | Next.js — lista propiedades, mapa, filtros, shortlists (Pamela) |
-| **Database** *(Arquitectura)* | Supabase activo ✅, 14 migrations ✅, ~60K propiedades ✅ |
+| **Data** | Normalización vía Mastra agents, golden record (properties) |
+| **AI Brain** | Agentes Mastra en implementación (enrichment, normalization, matching) |
+| **Database** *(Arquitectura)* | Supabase activo ✅, 14 migrations ✅, ~30K propiedades ✅ |
 
-### Fase 2 — Portal Web + Data Ingestion
+### Sprint 2+ — Portal Web + Geospatial
 
 | Módulo | Alcance |
 |--------|---------|
 | **Tenant Portal** | Portal para clientes: shortlists, feedback, mapa de opciones |
-| **Data Ingestion** | INEGI DENUE, Google Places, AGEB shapefiles, H3 index |
-| **Market Intelligence** | Tendencias de precio, precio promedio m2, heatmaps por zona |
-| **Geospatial** | H3 + AGEB + cache de APIs externas |
+| **Geospatial** | H3 + AGEB + Atlas.co visualización + GIS Analysis Agent (Mastra) |
 
-### Fase 3 — AI Brain
+### Sprint 3+ — Data Ingestion + Market Intelligence
 
 | Módulo | Alcance |
 |--------|---------|
-| **AI Brain** | Procesamiento de llamadas (CircleBack), property matching, NLP en búsquedas |
+| **Data (Ingestion)** | INEGI DENUE, Google Places, AGEB shapefiles, indicadores económicos |
+| **Market Intelligence** | Tendencias de precio, precio promedio m2, heatmaps por zona |
 
 ---
 
@@ -51,32 +54,46 @@
 
 ```mermaid
 flowchart TD
-    subgraph MVP["Fase 1 — MVP"]
+    subgraph MASTRA["Mastra — Capa Transversal de AI"]
+        direction LR
+        MA_NORM[Data Normalization Agent]
+        MA_ADDR[Address Enrichment Agent]
+        MA_GIS[GIS Analysis Agent]
+        MA_MATCH[Matching Agent]
+    end
+
+    subgraph S1["Sprint 1+ — Core"]
         SCR[Scraper]
         DB[(Database<br/>Arquitectura)]
         APP[Internal App]
+        AI[AI Brain]
     end
 
-    subgraph POST["Fase 2+ — Post-MVP"]
-        DI[Data Ingestion]
-        MI[Market Intelligence]
+    subgraph S2["Sprint 2+ — Expansión"]
+        DATA[Data]
         GEO[Geospatial]
         TP[Tenant Portal]
     end
 
-    subgraph ADV["Fase 3+ — Avanzado"]
-        AI[AI Brain]
+    subgraph S3["Sprint 3+ — Inteligencia"]
+        MI[Market Intelligence]
     end
 
+    MASTRA -.->|enriquecimiento| SCR
+    MASTRA -.->|normalización| DATA
+    MASTRA -.->|análisis geo| GEO
+    MASTRA -.->|matching| AI
+    MASTRA -.->|inteligencia| MI
+
     SCR --> DB
-    DI --> DB
+    DATA --> DB
     DB --> APP
     DB --> GEO
     DB --> TP
     SCR --> MI
     SCR --> TP
-    DI --> MI
-    DI --> GEO
+    DATA --> MI
+    DATA --> GEO
     GEO --> MI
     MI --> AI
     GEO --> AI
@@ -113,4 +130,4 @@ Módulo/
 
 ---
 
-*Última actualización: 2026-03-02*
+*Última actualización: 2026-03-05*

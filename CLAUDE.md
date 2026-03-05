@@ -62,8 +62,9 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 
 | Componente | Tecnología | Estado |
 |-----------|-----------|--------|
-| Base de datos | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | ✅ Producción |
+| Base de datos | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | ✅ Producción (~30K props I24) |
 | Scraping (I24) | Apify (actor contratado) | ✅ Activo |
+| Scraping (FinSA) | Repo separado (Supabase + PDFs) | ✅ Activo |
 | Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo |
 | Scraping (browser) | Browserbase (cloud browser sessions) | ✅ Activo |
 | Automatización | Trigger.dev (scrapers, sync, limpieza, cron, AI batch) | ✅ Activo |
@@ -89,15 +90,15 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 
 ## Módulos y estado actual
 
-| Módulo | Fase | Estado | Owner |
-|--------|------|--------|-------|
-| [Scraper](01-Modules/Scraper/) | 1 | 🟢 En desarrollo | Fabrizio |
-| [Internal App](01-Modules/Internal-App/) | 2-3 | 🟡 En diseño | Pamela |
-| [Data](01-Modules/Data/) | 1-2 | 🟡 Parcial | Fabrizio |
-| [Market Intelligence](01-Modules/Market-Intelligence/) | 2 | 🔴 Por iniciar | — |
-| [Geospatial](01-Modules/Geospatial/) | 2 | 🔴 Por iniciar | — |
-| [Tenant Portal](01-Modules/Tenant-Portal/) | 2 | 🟡 En diseño | Pamela |
-| [AI Brain](01-Modules/AI-Brain/) | Actual | 🟢 En desarrollo | Pablo, Fabrizio |
+| Módulo | Sprint | Estado | Owner |
+|--------|--------|--------|-------|
+| [Scraper](01-Modules/Scraper/) | 1+ | 🟢 En desarrollo | Fabrizio |
+| [Data](01-Modules/Data/) | 1-2 | 🟢 En desarrollo | Pablo, Fabrizio |
+| [AI Brain](01-Modules/AI-Brain/) | 1+ | 🟢 En desarrollo | Pablo, Fabrizio |
+| [Geospatial](01-Modules/Geospatial/) | 3+ | 🟡 En pruebas | — |
+| [Tenant Portal](01-Modules/Tenant-Portal/) | 1+ | 🟡 En desarrollo | Pablo (código), Pamela (diseño) |
+| [Internal App](01-Modules/Internal-App/) | 5+ | 🟡 En diseño | Fabrizio, Pamela (diseño) |
+| [Market Intelligence](01-Modules/Market-Intelligence/) | 4+ | 🔴 Por iniciar | Pablo |
 
 La base de datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](02-Architecture/Database/) como infraestructura compartida.
 
@@ -233,6 +234,6 @@ Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 - [Schema-Real.md](02-Architecture/Database/Schema-Real.md) — schema implementado (14 migrations)
 - [Vision-and-Goals.md](00-Project/Vision-and-Goals.md) — visión y métricas objetivo
 - [Business-Context.md](00-Project/Business-Context.md) — contexto de negocio
-- [Fase-Real-1-Scrapers.md](03-Roadmap/Fase-Real-1-Scrapers.md) — fase actual en curso
+- [Roadmap.md](03-Roadmap/Roadmap.md) — sprints cross-cutting, milestones, deliverables
 - [tasks/todo.md](tasks/todo.md) — scratchpad de sesión y sync con GitHub Issues
 - [tasks/lessons.md](tasks/lessons.md) — lecciones aprendidas (loop de auto-mejora)

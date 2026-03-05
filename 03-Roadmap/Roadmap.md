@@ -2,10 +2,11 @@
 
 > **Actualizado**: 2026-03-05 | **Metodología**: Scrum (sprints de 2 semanas)
 >
-> Cada milestone tiene OKRs y KPIs. Cada sprint tiene deliverables y acceptance criteria.
-> Los sprints son **cross-track**: scraper, agentes AI, y frontend avanzan juntos.
+> Sprints **cross-cutting**: Scraper, AI/Mastra y Frontend avanzan en paralelo cada sprint.
+> Solo Sprint 1-2 se planean en detalle. Sprint 3+ = backlog priorizado.
 >
-> Archivos anteriores: [archive/](archive/) (Fase-Real-1-Scrapers.md, Phase-1-MVP.md)
+> **Backlog centralizado**: [GitHub Issues](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues)
+> Archivos anteriores: [archive/](archive/)
 
 ---
 
@@ -13,166 +14,199 @@
 
 | Componente | Estado | Detalle |
 |-----------|--------|---------|
-| Supabase | ✅ Producción | 14 migrations, PostGIS, RLS, ~60K propiedades |
+| Supabase | ✅ Producción | 14 migrations, PostGIS, RLS, ~30K propiedades I24 |
 | Scraper I24 (Apify) | ✅ Activo | Actor contratado, corridas bimensuales |
-| Scrapers custom (Trigger.dev) | 🟡 En desarrollo | Pincali, CBRE, Colliers en desarrollo (Fabrizio) |
-| Frontend (Next.js 15) | 🟡 Phase 0 | Estructura base, sin funcionalidad completa |
-| AI (batch extraction) | 🟡 Parcial | OpenRouter + Trigger.dev, migrando a Mastra |
-| GIS (H3) | 🟡 En pruebas | h3-js validado, sin deployment en producción |
+| Scraper FinSA | ✅ Activo | Repo separado, Supabase + PDFs funcionando |
+| Scrapers custom (Trigger.dev) | 🟡 En desarrollo | CBRE, Colliers, Pincali: código listo, sin persistencia a Supabase |
+| Frontend (Next.js 15) | 🟡 Phase 0 | Scoring dashboard funcional, scorings en filesystem |
+| Mastra (AI Agents) | 🔴 Por implementar | ADRs aprobados (020, 021), arquitectura diseñada, repo NO existe |
+| Golden record | 🔴 Por implementar | Schema diseñado, sin tablas creadas |
+| GIS (H3) | 🟡 En pruebas | h3-js validado, sin deployment |
 | GIS (Atlas.co) | ✅ Activo | 2-3 usuarios |
 | HubSpot sync | 🟡 En migración | De n8n a Trigger.dev |
-| Mastra (AI Agents) | 🔴 Por implementar | ADRs aprobados, arquitectura diseñada |
-| Golden record (`properties`) | 🔴 Por implementar | Schema diseñado, sin tablas creadas |
+
+### Landscape de portales
+
+| Portal | Estado | PDFs | Prioridad |
+|--------|--------|------|-----------|
+| Inmuebles24 | ✅ Producción (Apify) | No | — |
+| FinSA | ✅ Producción | Sí | — |
+| CBRE | Código listo, sin persistence | Posible | Sprint 1 |
+| Colliers | Código listo, sin persistence | Sí | Sprint 2 |
+| Pincali | Código listo, sin persistence | No | Sprint 2 |
+| Cushman | Planeado | TBD | Sprint 3+ |
+| Proximity Parks | Planeado | TBD | Sprint 3+ |
+| PDFs developers | Manual → GDrive → Agent → Supabase | Sí | Sprint 3+ |
+
+### Capacidad del equipo
+
+| Persona | Rol | Split Sprint 1 | Split Sprint 2 |
+|---------|-----|-----------------|-----------------|
+| **Pablo** | CEO / PO + Dev | 60% AI/Mastra, 20% Frontend, 20% Planning | 55% AI/Mastra, 25% Frontend, 20% Planning |
+| **Fabrizio** | Tech Lead | 70% Scraper/Infra, 30% DB/Migrations | 60% Scraper/Infra, 40% DB/Migrations |
+| **Pamela** | Design | Figma designs (shortlist, feedback, dashboard) | Figma designs |
 
 ---
 
-## Milestone 1: Datos Limpios
+## Milestones
 
-> **Timeline estimado**: Sprints 1-2 (4 semanas)
-> **OKR**: Propiedades con direcciones correctas y datos normalizados en un golden record unificado
-
-| KPI | Target |
-|-----|--------|
-| Address accuracy (muestra 100 propiedades) | >80% |
-| Propiedades en golden record | >50% del inventario (30K+) |
-| Enrichment pipeline funcional | End-to-end (staging → golden record) |
-
-### Sprint 1: Infraestructura Mastra + Address Enrichment v1
-
-**Objetivo**: Establecer la infraestructura de Mastra y validar el Address Enrichment Agent con un lote de prueba.
-
-| Deliverable | Owner | Acceptance Criteria |
-|------------|-------|--------------------|
-| Repo `beiqa-agents` inicializado con Mastra | Pablo | `mastra dev` arranca sin errores. Estructura de agentes definida. |
-| Supabase migrations (golden record tables) | Fabrizio | Tablas `properties`, `property_sources`, `agent_runs`, `enrichment_queue` creadas. RLS configurado. |
-| Address Enrichment Agent v1 | Pablo | Procesa una propiedad: dirección corregida + confidence score. Google Geocoding integrado. |
-| Coordinate Validator tool | Fabrizio | Valida coordenadas dentro de zona geográfica esperada (PostGIS). |
-| Cache de API responses | Pablo | Tabla `cache_api_responses` con TTL 30 días para Google APIs. |
-| Cost tracking | Pablo | Cada ejecución de agente registra costo estimado en `agent_runs`. |
-
-**Exit criteria**: Agent procesa 1 propiedad → produce dirección corregida + confidence score. Migrations clean. Runs logged.
+| # | Nombre | Sprints | Due Date | Valor de negocio |
+|---|--------|---------|----------|------------------|
+| M1 | **Datos Confiables** | 1-2 | Mar 29 | Scrapers en Supabase. Golden record structure. Primer agente AI. Auth en portal. |
+| M2 | **Búsqueda Inteligente** | 3-4 | Abr 26 | Scoring AI. Dedup cross-portal. Shortlists para clientes. |
+| M3 | **Experiencia del Cliente** | 5-6 | May 24 | Portal live. Feedback de clientes. Pipeline E2E automatizado. |
+| M4 | **Operación Estable** | 7-8 | Jun 21 | Sistema estable. CI/CD. Evals. Documentación operativa. |
 
 ---
 
-### Sprint 2: Backfill inicial + Data Normalization v1
+## Sprint 1 (Mar 2-15) — ACTIVO
 
-**Objetivo**: Comenzar backfill de propiedades y establecer el pipeline de normalización staging → golden record.
+### OKRs
 
-| Deliverable | Owner | Acceptance Criteria |
-|------------|-------|--------------------|
-| Backfill workflow (batches de 500) | Pablo | Procesa 10,000 propiedades de inmuebles24_listings con enrichment. |
-| Description address extractor (LLM tool) | Pablo | LLM extrae dirección/landmarks de descripción. Accuracy medida. |
-| Data Normalization Agent v1 | Pablo | Mapea inmuebles24 → golden record. Campos: dirección, precio, superficie, tipo, operación. |
-| Trigger.dev → Mastra HTTP integration | Fabrizio | POST de Trigger.dev a Mastra API funcional después de cada scrape. |
-| Enrichment queue processing | Pablo | `enrichment_queue` se vacía progresivamente. Status tracking funcional. |
+| Objetivo | Key Result |
+|----------|------------|
+| O1: Infraestructura AI agents | KR1: `beiqa-agents` repo con `mastra dev` funcionando |
+| O1 | KR2: Address Enrichment Agent procesa 1 propiedad I24 E2E |
+| O2: Scrapers persisten en Supabase | KR3: Staging table CBRE + scraper escribe datos |
+| O2 | KR4: Golden record tables creadas (structure) |
+| O3: Auth funcional en portal | KR5: Login magic link funcional |
 
-**Exit criteria**: 10K propiedades enriquecidas con confidence score. Normalization mapea staging → golden record. Trigger.dev triggers Mastra post-scrape.
+### Definition of Done
+- Todos los KRs verificados con evidencia (screenshot, query, log)
+- Issues cerrados o con justificación
+- Sin bugs bloqueantes
+- Código commiteado y pusheado
 
----
+### Deliverables por track
 
-## Milestone 2: Inteligencia Core
+#### Track: AI / Mastra (Pablo)
 
-> **Timeline estimado**: Sprints 3-4 (4 semanas, después de Milestone 1)
-> **OKR**: Deduplicación cross-portal, scoring migrado a Mastra, market intelligence básico
+| Deliverable | Issue | AC |
+|------------|-------|----|
+| Inicializar repo beiqa-agents | [#86](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/86) | `mastra dev` arranca. Estructura agents/tools/workflows. README + .env.example. |
+| Address Enrichment Agent v1 | [#87](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/87) | 1 prop I24 → dirección corregida + confidence (0-100). Google Geocoding como tool. |
+| Evaluación modelos LLM | [#88](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/88) | ≥2 modelos en 10 props. Tabla costo/calidad/velocidad. Decisión documentada. |
+| Coordinate Validator tool | [#89](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/89) | Valida coords en CDMX/EdoMex/Morelos/Puebla. PostGIS. |
+| Cost tracking | [#90](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/90) | Cada run registra modelo, tokens, costo, duración en agent_runs. |
 
-| KPI | Target |
-|-----|--------|
-| Backfill completado | 100% de propiedades enriquecidas (60K) |
-| Deduplicación precision | >85% (verificación manual de 50 pares) |
-| Scoring equivalente al frontend | Validación por Pablo |
-| H3 + AGEB coverage | >90% de propiedades geocodificadas |
+#### Track: Scraper / Infra (Fabrizio)
 
-### Sprint 3: Backfill completo + Dedup v1
+| Deliverable | Issue | AC |
+|------------|-------|----|
+| Golden record migrations (5 tablas) | [#104](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/104) | properties, property_sources, agent_runs, enrichment_queue, cache_api_responses. RLS. |
+| Campos comunes golden record | [#105](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/105) | Schema unificado para 8+ portales. Confidence + needs_review. |
+| Staging table CBRE | [#108](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/108) | cbre_listings creada. Schema alineado a CbreProperty. |
+| Módulo Supabase write | [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) | Upsert a staging tables. Testeada con CBRE. ON CONFLICT. |
+| CBRE: persist + test | [#21](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/21) + [#24](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/24) | Datos en cbre_listings. ≥80% campos. Cron Tue 6am. Slack. |
+| Módulo Slack | [#18](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/18) | Notificación success/error. Portal, #props, duración, errores. |
+| Módulo imágenes → Storage | [#19](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/19) | CBRE images en Supabase Storage. URL en staging. |
+| Detección anomalías | [#20](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/20) | Logs: campos vacíos, coords fuera de rango, precios inválidos. |
 
-**Objetivo**: Completar el backfill de 60K propiedades y lanzar deduplicación cross-portal.
+#### Track: Frontend / TP (Pablo)
 
-| Deliverable | Owner | Acceptance Criteria |
-|------------|-------|--------------------|
-| Backfill completo (60K propiedades) | Pablo | 100% de inmuebles24_listings procesadas. Confidence scores asignados. |
-| H3 + AGEB tools en GIS Agent | Fabrizio | H3 res 5/7/9/11 calculados para propiedades geocodificadas. AGEB asignado via PostGIS. |
-| AGEB shapefiles cargados en PostGIS | Fabrizio | Tabla de AGEBs funcional. Spatial join operativo. |
-| Deduplication Agent v1 | Pablo | Detecta duplicados cross-portal con scoring + LLM para ambiguos. |
+| Deliverable | Issue | AC |
+|------------|-------|----|
+| Supabase Auth | [#47](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/47) | @supabase/ssr configurado. Redirect URLs. Smoke test. |
+| Login (magic link + password) | [#50](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/50) | Card + logo. Magic link + password fallback. Responsive. |
+| Middleware protección rutas | [#51](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/51) | middleware.ts valida getUser(). Session refresh. Redirect /login. |
 
-**Exit criteria**: 60K enriquecidas. >90% H3 coverage. >85% dedup precision (50 pares verificados).
-
----
-
-### Sprint 4: Scoring migration + Market Intelligence v1
-
-**Objetivo**: Migrar scoring del frontend a Mastra y generar los primeros reportes de market intelligence.
-
-| Deliverable | Owner | Acceptance Criteria |
-|------------|-------|--------------------|
-| Scoring/Matching Agent | Pablo | Genera shortlists equivalentes al frontend actual. API endpoint funcional. |
-| Market Intelligence Agent v1 | Pablo | Genera reportes de precio/m² por zona (H3 res 7). |
-| GIS Agent v1 | Fabrizio | Zone quality scores para zonas principales. |
-| Frontend calls Mastra API para scoring | Fabrizio | `beiqa-frontend` consume scoring API de Mastra en lugar de lógica local. |
-| scoring_reports + scoring_results tables | Fabrizio | Tablas creadas, RLS configurado, datos de scoring persistidos. |
-
-**Exit criteria**: Scoring quality validado por Pablo. 5+ zone reports generados. Frontend integrado con Mastra scoring API.
+### Sprint 1 Review (Mar 15)
+**Demo**: Address Enrichment procesando 1 propiedad E2E. CBRE datos en Supabase con cron. Login magic link. Golden record tables.
 
 ---
 
-## Milestone 3: Integración y Producción
+## Sprint 2 (Mar 16-29)
 
-> **Timeline estimado**: Sprints 5-6 (4 semanas, después de Milestone 2)
-> **OKR**: Pipeline end-to-end funcional, frontend consume golden record, sistema monitoreado
+### OKRs
 
-| KPI | Target |
-|-----|--------|
-| Latencia enrichment (nuevas propiedades) | <60 minutos de scrape a golden record |
-| Scoring response time | <30 segundos |
-| Costo mensual total | Dentro de presupuesto |
-| Uptime del pipeline | >95% |
+| Objetivo | Key Result |
+|----------|------------|
+| O1: Backfill masivo | KR1: ≥10K propiedades I24 enriquecidas |
+| O2: Pipeline staging→golden record | KR2: Data Normalization mapea I24→properties |
+| O3: ≥2 scrapers en Supabase | KR3: Colliers y/o Pincali datos en staging |
+| O4: Scoring de Supabase | KR4: Scoring pages refactorizadas, DB |
 
-### Sprint 5: Pipeline end-to-end + Frontend integration
+### Definition of Done
+- Backfill ≥10K con progreso trackeable
+- ≥2 scrapers con datos en Supabase
+- Scoring lee de Supabase (no filesystem)
+- Vercel deploy funcional
 
-| Deliverable | Owner | Acceptance Criteria |
-|------------|-------|--------------------|
-| Pipeline completo (scrape → enrich → normalize → dedup → golden record) | Pablo + Fabrizio | Propiedad nueva aparece en golden record <60 min después de scrape. |
-| Orchestrator workflow | Pablo | Coordina Address Enrichment → Normalization → Dedup → GIS en secuencia. |
-| Frontend lee golden record | Fabrizio | Internal App muestra propiedades del golden record (no staging). |
-| Slack alerts para agentes | Pablo | Errores de agentes → Slack. Resumen diario de procesamiento. |
-| Cost monitoring dashboard | Pablo | Costos por agente visibles. Alertas al 80% del budget. |
+### Deliverables por track
 
----
+#### Track: AI / Mastra (Pablo)
 
-### Sprint 6: Polish, evals, documentación
+| Deliverable | Issue | AC |
+|------------|-------|----|
+| Backfill workflow (batches 500) | [#91](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/91) | ≥10K I24 procesadas. Rate limits. Progreso en enrichment_queue. |
+| Description address extractor | [#92](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/92) | LLM extrae dirección de descripción. Accuracy en 50 props. |
+| Data Normalization Agent v1 | [#93](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/93) | I24→golden record. ≥95% campos mapeados. |
+| Enrichment queue processing | [#95](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/95) | pending→processing→done/error. Errores no bloquean. |
+| Trigger.dev→Mastra HTTP | [#94](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/94) | POST funcional con payload real. |
 
-| Deliverable | Owner | Acceptance Criteria |
-|------------|-------|--------------------|
-| Evaluation scorers para todos los agentes | Pablo | Cada agente tiene eval automatizado (ver [Agent-Architecture.md](../02-Architecture/Agent-Architecture.md)). |
-| Error handling robusto | Pablo + Fabrizio | Agentes manejan edge cases sin crashes. Dead letter queue para errores persistentes. |
-| Performance optimization | Fabrizio | Batch processing optimizado. Queries eficientes en golden record. |
-| Documentación actualizada | Pablo | ADRs, módulos, y roadmap reflejan el estado real. |
-| Operations runbook para Jerónimo | Pablo | Guía de operación: cómo monitorear, qué hacer si falla, cómo re-ejecutar. |
+#### Track: Scraper / Infra (Fabrizio)
 
-**Exit criteria**: Quality metrics met (address >80%, dedup >85%, scoring >75%). Sistema procesa 10K nuevas/semana. Docs actualizados. Runbook aprobado por Jerónimo.
+| Deliverable | Issue | AC |
+|------------|-------|----|
+| Staging table Colliers | [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | colliers_listings. Schema alineado. RLS. |
+| Staging table Pincali | [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | pincali_listings. Schema alineado. RLS. |
+| Colliers: persist + test | [#22](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/22) + [#25](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/25) | Datos en staging. Cron Mon 6am. PDFs en Storage. |
+| Pincali: persist + test | [#23](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/23) + [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | ~30K props en staging. Batch insert. Cron Mon 7am. |
+| Check de existencia | [#15](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/15) | Update si existe. Marcar unavailable si desaparece. |
+| Columnas enrichment en I24 | [#106](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/106) | enrichment_status, confidence, address_corrected, golden_record_id. |
 
----
+#### Track: Frontend / TP (Pablo)
 
-## Más allá de Milestone 3
+| Deliverable | Issue | AC |
+|------------|-------|----|
+| Tabla scorings + RLS | [#48](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/48) | scorings: tenant_id, scoring_data JSONB, status. RLS. |
+| Vincular auth con tenant | [#52](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/52) | auth_user_id en tenants. RLS via auth.uid(). |
+| Refactorizar scoring pages | [#56](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/56) | Dashboard/lista/detalle leen de Supabase. |
+| Deploy Vercel | [#55](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/55) | beiqa-frontend en Vercel. Env vars. Auto-deploy main. |
+| shadcn/ui components | [#49](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/49) | ~13 componentes instalados. |
 
-| Área | Descripción | Cuándo |
-|------|------------|--------|
-| Tenant Portal con scoring | Clientes ven y dan feedback a shortlists | Post-Milestone 2 |
-| Multi-modelo optimization | Evaluar y optimizar modelo por agente/tarea | Continuo |
-| ArcGIS MCP integration | GIS Agent consume ArcGIS para análisis avanzado | Post-Milestone 3 |
-| Nuevos portales | Cushman & Wakefield, JLL | Cuando scrapers estén estables |
-| AI Memory (RAG) | Mastra memory para contexto acumulado de clientes | Post-Milestone 3 |
-
----
-
-## Relación con GitHub Issues
-
-| Issue | Milestone | Notas |
-|-------|-----------|-------|
-| #40 Mejorar roadmap de versiones | — | Resuelto por este documento |
-| #44 Actualizar Arquitectura/ADRs/Stack-Decidido.md | — | Resuelto (actualizado 2026-03-05) |
-| #35 Desarrollar módulo AI para extracción | M1 | Redefinido bajo Mastra (Address Enrichment + Normalization) |
-| #12-#30 Issues de scraper/Trigger.dev | M1-M2 | Siguen activos, ejecutados por Fabrizio |
-| #47-#78 Issues de Tenant Portal (TP-*) | M2-M3 | Avanzan en paralelo con agentes |
+### Sprint 2 Review (Mar 29)
+**Demo**: Backfill ≥10K. Normalization I24→golden record. Colliers/Pincali en Supabase. Scoring de DB. Vercel deploy.
 
 ---
 
-*Documento creado: 2026-03-05 | Reemplaza: [archive/Fase-Real-1-Scrapers.md](archive/Fase-Real-1-Scrapers.md), [archive/Phase-1-MVP.md](archive/Phase-1-MVP.md)*
+## Backlog Sprint 3+ (priorizado, no detallado)
+
+### Sprint 3 (Mar 30 - Abr 12): Backfill Completo + Dedup + Shortlists
+- Completar backfill I24 (~30K) — backlog MA
+- Dedup Agent v1 ([#96](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/96))
+- H3 indexer + AGEB ([#113](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/113), [#114](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/114))
+- Normalization schemas custom portales ([#101](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/101))
+- Shortlist tables + UI ([#57](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/57)-[#60](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/60))
+- Human-in-the-loop review ([#107](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/107))
+- Cushman scraper ([#36](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/36))
+- Proximity Parks ([#111](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/111))
+
+### Sprint 4 (Abr 13-26): Scoring AI + Market Intel
+- Scoring/Matching Agent ([#97](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/97))
+- Market Intelligence Agent ([#98](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/98))
+- GIS Agent + ArcGIS MCP ([#115](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/115), [#116](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/116))
+- Frontend consume Mastra scoring ([#117](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/117))
+- Shortlist dashboard + mapa ([#62](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/62), [#64](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/64), [#67](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/67), [#69](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/69))
+
+### Sprint 5-6: Pipeline E2E + Portal Live
+- Orchestrator workflow ([#99](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/99))
+- Slack alerts agentes ([#100](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/100))
+- Error handling + DLQ ([#102](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/102))
+- Internal App lee golden record ([#118](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/118))
+- Notifications + approval + comparación ([#61](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/61), [#63](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/63), [#65](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/65), [#66](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/66))
+- Market intel en portal ([#68](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/68), [#70](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/70), [#71](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/71))
+- PDF developers pipeline ([#112](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/112))
+
+### Sprint 7-8: Evals + Operaciones + Launch
+- Evals todos agentes ([#103](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/103))
+- CI/CD ([#119](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/119), [#75](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/75))
+- Performance monitoring ([#120](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/120))
+- I24 migración Clay→TriggerDev ([#27](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/27), [#29](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/29), [#30](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/30))
+- Testing mobile + QA ([#72](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/72)-[#74](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/74))
+- HubSpot sync, PDF export, docs ([#76](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/76)-[#78](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/78))
+- Runbook + onboarding ([#121](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/121), [#122](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/122))
+
+---
+
+*Documento actualizado: 2026-03-05 | Reemplaza: [archive/Fase-Real-1-Scrapers.md](archive/Fase-Real-1-Scrapers.md), [archive/Phase-1-MVP.md](archive/Phase-1-MVP.md)*

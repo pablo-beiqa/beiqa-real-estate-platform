@@ -1,16 +1,22 @@
 # Internal App
 
-**Fase del proyecto**: Fase 1 — MVP
-**Estado**: 🟡 En diseno
-**Owner**: Por definir
+**Fase del proyecto**: Sprint 5+ (post-MVP de agentes y Tenant Portal)
+**Estado**: 🟡 En diseño
+**Owner**: Fabrizio (backend) + Pamela (diseño)
+
+> **Nota**: La Internal App es **app.beiqa.com** — la herramienta interna del equipo Beiqa para gestión de operaciones, data y GIS. NO es para clientes; los clientes usan el [Tenant Portal](../Tenant-Portal/).
+
+> **Scoring dashboard**: Existe un scoring dashboard funcional en `beiqa-frontend`, pero pertenece al Tenant Portal, no a la Internal App.
 
 ---
 
-## Descripcion
+## Descripción
 
-La Internal App es la aplicacion web principal que utiliza el equipo de BEIQA en su operacion diaria. Es la interfaz donde los asesores inmobiliarios buscan propiedades, aplican filtros avanzados (zona, superficie, precio, tipo de inmueble), visualizan resultados en mapa y lista, gestionan los requerimientos de sus clientes corporativos, y construyen shortlists de propiedades recomendadas. Tambien incluye dashboards basicos de operacion y la gestion del ciclo de vida de cada busqueda de cliente.
+La Internal App es la aplicación web principal que utiliza el equipo de BEIQA en su operación diaria (accesible en **app.beiqa.com**). Es la interfaz donde los asesores inmobiliarios buscan propiedades, aplican filtros avanzados (zona, superficie, precio, tipo de inmueble), visualizan resultados en mapa y lista, gestionan los requerimientos de sus clientes corporativos, y construyen shortlists de propiedades recomendadas. También incluye dashboards básicos de operación y la gestión del ciclo de vida de cada búsqueda de cliente.
 
-Actualmente el equipo trabaja con una combinacion de portales inmobiliarios, hojas de Excel compartidas, correos electronicos y archivos de Word para gestionar su operacion. Esta fragmentacion genera ineficiencias, duplicacion de trabajo, perdida de informacion y dificultad para colaborar entre asesores. La Internal App centraliza toda la operacion en una sola herramienta disenada especificamente para el flujo de trabajo de BEIQA: desde que un cliente expresa un requerimiento hasta que se le presenta un shortlist de opciones con toda la informacion necesaria para tomar una decision.
+La Internal App lee del **golden record** (tabla `properties` en Supabase) vía Supabase REST API. No tiene su propia base de datos — consume la misma fuente de verdad que alimentan los agentes AI (Address Enrichment, Normalization, Deduplication).
+
+Actualmente el equipo trabaja con una combinación de portales inmobiliarios, hojas de Excel compartidas, correos electrónicos y archivos de Word para gestionar su operación. Esta fragmentación genera ineficiencias, duplicación de trabajo, pérdida de información y dificultad para colaborar entre asesores. La Internal App centraliza toda la operación en una sola herramienta diseñada específicamente para el flujo de trabajo de BEIQA: desde que un cliente expresa un requerimiento hasta que se le presenta un shortlist de opciones con toda la información necesaria para tomar una decisión.
 
 ---
 
@@ -50,9 +56,10 @@ Actualmente el equipo trabaja con una combinacion de portales inmobiliarios, hoj
 ## Dependencias
 
 ### Necesita (upstream)
-- **Base de datos** → Esquema completo de propiedades, clientes, requerimientos, shortlists y usuarios
-- **Scraper** → Datos de propiedades actualizados que alimentan las busquedas y listados
-- **API layer (Arquitectura)** → Backend API REST/GraphQL que sirve datos a la aplicacion frontend
+- **Golden record (`properties`)** → Tabla unificada de propiedades en Supabase, poblada por agentes AI (Normalization, Deduplication)
+- **Supabase REST API** → API auto-generada que sirve datos del golden record al frontend
+- **Scraper** → Datos de propiedades actualizados que alimentan el golden record
+- **AI Brain** → Agentes que enriquecen, normalizan y deduplicar propiedades antes de que lleguen a la Internal App
 
 ### Depende de este (downstream)
 - **Tenant Portal** → Comparte la misma API y base de datos, hereda patrones de UI y componentes

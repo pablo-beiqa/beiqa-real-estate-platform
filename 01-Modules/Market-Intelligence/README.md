@@ -1,16 +1,23 @@
 # Market Intelligence
 
-**Fase del proyecto**: Fase 2+ — Post-MVP
+**Fase del proyecto**: Sprint 4+ (post agentes core)
 **Estado**: 🔴 Por iniciar
-**Owner**: Por definir
+**Owner**: Pablo
+
+> **Nota**: La arquitectura del Market Intelligence Agent ya está diseñada en [Agent-Architecture.md](../../02-Architecture/Agent-Architecture.md). La implementación comenzará cuando los agentes P0/P1 estén estables.
 
 ---
 
-## Descripcion
+## Descripción
 
-El modulo de Market Intelligence transforma los datos crudos de propiedades y fuentes externas en analisis de mercado accionables para el equipo de BEIQA. Genera reportes automatizados sobre tendencias de precios de renta y venta por zona y tipo de inmueble, tasas de vacancia estimadas, analisis de oferta y demanda, y alertas cuando se detectan movimientos significativos en el mercado. Es el modulo que convierte datos en inteligencia de negocio.
+El módulo de Market Intelligence transforma los datos del **golden record** (tabla `properties` en Supabase) y fuentes externas en análisis de mercado accionables para el equipo de BEIQA. Será impulsado por el **Market Intelligence Agent vía Mastra** (Sprint 4+), que genera automáticamente:
 
-Hoy el equipo de BEIQA elabora estos analisis de forma manual, consultando multiples fuentes y construyendo reportes en Excel que consumen horas de trabajo especializado. Este modulo automatiza la generacion de esos reportes con datos actualizados, permite identificar oportunidades de mercado antes que la competencia, y proporciona al equipo argumentos respaldados por datos para sus clientes corporativos. Los analisis generados alimentan tanto la operacion interna como los reportes que se presentan a clientes.
+- **Precio/m² por zona** — análisis de precios de renta y venta segmentados por zona y tipo de inmueble
+- **Análisis de tendencias** — evolución temporal de precios, vacancia y oferta por corredor
+- **Comparables** — propiedades similares en zona, tamaño y precio para fundamentar valuaciones
+- **Reportes narrativos** — documentos con gráficas, tablas y conclusiones generados automáticamente
+
+Hoy el equipo de BEIQA elabora estos análisis de forma manual, consultando múltiples fuentes y construyendo reportes en Excel que consumen horas de trabajo especializado. Este módulo automatiza la generación de esos reportes con datos actualizados, permite identificar oportunidades de mercado antes que la competencia, y proporciona al equipo argumentos respaldados por datos para sus clientes corporativos. Los análisis generados alimentan tanto la operación interna como los reportes que se presentan a clientes.
 
 ---
 
@@ -49,10 +56,11 @@ Hoy el equipo de BEIQA elabora estos analisis de forma manual, consultando multi
 ## Dependencias
 
 ### Necesita (upstream)
-- **Base de datos** → Datos historicos de propiedades con series de tiempo de precios y disponibilidad
-- **Scraper** → Flujo continuo de datos actualizados de listados para calcular metricas en tiempo casi-real
-- **Data Ingestion** → Datos demograficos y economicos por zona para contextualizar el analisis de mercado
-- **Geospatial** → Definicion de zonas, corredores y poligonos para agregar datos geograficamente
+- **Golden record (`properties`)** → Datos históricos de propiedades con series de tiempo de precios y disponibilidad, consumidos vía Supabase REST API
+- **AI Brain (Mastra)** → El Market Intelligence Agent es orquestado por Mastra como parte del AI Brain
+- **Scraper** → Flujo continuo de datos actualizados de listados que alimentan el golden record
+- **Data Ingestion** → Datos demográficos y económicos por zona para contextualizar el análisis de mercado
+- **Geospatial** → Definición de zonas, corredores y polígonos para agregar datos geográficamente
 
 ### Depende de este (downstream)
 - **Internal App** → Muestra reportes, dashboards y alertas al equipo de BEIQA

@@ -1,10 +1,10 @@
 # Tenant Portal
 
-**Fase del proyecto**: Fase 2 — Portal Web + Data
-**Estado**: 🟡 En diseño (Phase 0 completado en beiqa-frontend)
-**Owner**: Pamela (Frontend)
+**Fase del proyecto**: Sprint 1+ (en desarrollo activo)
+**Estado**: 🟡 En desarrollo (Phase 0 scoring dashboard funcional en beiqa-frontend)
+**Owner**: Pablo (código) + Pamela (diseño, no código)
 
-**Repositorio de codigo**: [beiqa-frontend](https://github.com/pablo-beiqa/beiqa-frontend)
+**Repositorio de código**: [beiqa-frontend](https://github.com/pablo-beiqa/beiqa-frontend)
 
 ---
 
@@ -37,15 +37,18 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 | **ScoringDocument schema** | ✅ | TypeScript completo (147 lineas) con todos los tipos |
 | **Claude agent** | ✅ | score-discovery: Circleback transcript → JSON scoring → dashboard |
 
-### Por desarrollar (Fase 2 — Sprint actual)
+### Por desarrollar (Sprints 1-4)
 
-| Componente | Estado | Prioridad |
-|-----------|--------|-----------|
-| Autenticacion magic link + password | 🔴 | MUST |
-| Shortlist con scores por criterio | 🔴 | MUST |
-| Feedback estructurado | 🔴 | MUST |
-| Mapa de propiedades (Atlas.co) | 🔴 | SHOULD |
-| Notificaciones (email/Slack) | 🔴 | SHOULD |
+| Sprint | Componente | Estado | Prioridad |
+|--------|-----------|--------|-----------|
+| Sprint 1 | Autenticación (Supabase Auth + magic link) | 🔴 | MUST |
+| Sprint 2 | Scoring desde Supabase (via Mastra Scoring Agent) | 🔴 | MUST |
+| Sprint 3-4 | Shortlists con scores por criterio | 🔴 | MUST |
+| Sprint 3-4 | Feedback estructurado | 🔴 | MUST |
+| Sprint 3-4 | Mapa de propiedades (Atlas.co) | 🔴 | SHOULD |
+| TBD | Notificaciones (email/Slack) | 🔴 | SHOULD |
+
+> **Scoring**: El scoring será generado por el **Mastra Scoring Agent** (no local en el frontend). El Tenant Portal consume el resultado via Supabase.
 
 ---
 
@@ -62,8 +65,8 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 8. Visitas → Agendar tours a propiedades seleccionadas
 ```
 
-**Hoy**: Pasos 1-3 digitalizados en el portal (scoring dashboard). Pasos 4-8 son manuales (email, PowerPoint, llamadas).
-**Objetivo Fase 2**: Digitalizar pasos 4-7 en el portal.
+**Hoy (Phase 0)**: Pasos 1-3 digitalizados en el portal (scoring dashboard funcional en `beiqa-frontend`). Pasos 4-8 son manuales (email, PowerPoint, llamadas).
+**Objetivo Sprints 1-4**: Sprint 1 = Auth. Sprint 2 = Scoring desde Supabase. Sprints 3-4 = Shortlists + Feedback (digitalizar pasos 4-7).
 
 ---
 
@@ -93,7 +96,7 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 | Entregable | Descripcion | Estado |
 |-----------|-------------|--------|
 | Scoring Dashboard | Dashboard donde el cliente ve su scoring completo: criterios, pesos, zonas, specs, condiciones, escala de resultado | ✅ Phase 0 |
-| Autenticacion de clientes | Magic link (primario) + password (fallback) via Supabase Auth. Aislamiento estricto por cliente (RLS). | 🔴 |
+| Autenticación de clientes | Supabase Auth con **magic link** (Sprint 1). Aislamiento estricto por cliente (RLS). | 🔴 |
 | Shortlist con scores | Lista de propiedades recomendadas con score por criterio del scoring. Datos de propiedad: tipo, precio, m2, ubicacion, fotos. | 🔴 |
 | Feedback estructurado | Si/No/Quiza por propiedad + razon predefinida (precio, ubicacion, tamano, etc.) + comentario libre. | 🔴 |
 | Mapa de propiedades | Mapa interactivo con ubicaciones de propiedades del shortlist. Proveedor: Atlas.co (API + embed). | 🔴 |
@@ -104,7 +107,8 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 
 ### Necesita (upstream)
 - **Supabase** → Base de datos (propiedades, shortlists, feedback) + Auth (magic link, RLS) + Storage
-- **Scraper** → Datos de propiedades en Supabase (~60K+ listings)
+- **Scraper** → Datos de propiedades en Supabase (~30K listings)
+- **Mastra Scoring Agent** → Genera scoring de propiedades vs requerimientos de clientes (AI Brain)
 - **HubSpot** → Datos de scoring via pipeline de Circleback
 
 ### Depende de este (downstream)
