@@ -11,10 +11,12 @@
 | Métrica | Valor |
 |---------|-------|
 | **Costo mensual actual** | **$747 – $896 USD** |
+| **Costo mensual con Mastra** | **~$814 – $984 USD** |
 | Costos fijos | $329 – $443 |
 | Costos variables | $418 – $453 |
-| Proyección 6 meses | $775 – $940 |
-| Proyección 12 meses | $855 – $1,200 |
+| Mastra LLM costs (nuevo) | ~$67 – $88 (estimado, TBD) |
+| Proyección 6 meses (con Mastra) | $842 – $1,028 |
+| Proyección 12 meses (con Mastra) | $922 – $1,288 |
 
 **Distribución por categoría:**
 
@@ -24,7 +26,8 @@
 | GIS / Mapas | $178 – $267 | 20 – 30% |
 | AI Workspace (Rube + Claude Desktop) | $75 – $100 | 10 – 11% |
 | Orquestación (Trigger.dev) | $50 | 6 – 7% |
-| AI Processing (OpenRouter) | $15 – $30 | 2 – 3% |
+| AI Processing (OpenRouter, legacy) | $15 – $30 | 2 – 3% |
+| AI Agents — Mastra LLM (nuevo) | ~$67 – $88 | 7 – 10% |
 | Infraestructura (Supabase + dominio) | $26 | 3% |
 
 ---
@@ -174,13 +177,36 @@ Costos que **no** se incluyen en este presupuesto:
 
 ---
 
-## 8. Pendientes de verificar
+## 8. Costos de Mastra / AI Agents (nuevo)
+
+> **Estado**: Estimación preliminar — costos reales dependen de modelos LLM seleccionados (TBD, requiere testing).
+
+| Concepto | Costo estimado/mes | Notas |
+|----------|-------------------|-------|
+| Address Enrichment (LLM) | ~$36 | ~60K propiedades × ~$0.0006/propiedad. Modelo TBD. |
+| Data Normalization (LLM) | ~$15–20 | Feature extraction de descripciones. Modelo TBD. |
+| Deduplication (LLM) | ~$1–2 | Solo para casos ambiguos (score 0.70–0.95). |
+| Scoring / Matching | ~$5–10 | On-demand, ~50–100 scorings/mes. |
+| Market Intelligence | ~$3–5 | Generación de reportes por zona. |
+| GIS Analysis | ~$5–10 | Análisis contextual con LLM. |
+| **Total LLM mensual ongoing** | **~$67–88** | |
+| **Backfill one-time** | **~$180** | Procesar 60K propiedades existentes. Se paga una vez. |
+
+**Nota**: El framework Mastra es $0 (open source, Apache 2.0). Los costos son exclusivamente de APIs de modelos LLM. Conforme se evalúen modelos (Claude Haiku, GPT-4o-mini, Llama, etc.), estos números se ajustarán.
+
+**Nota sobre OpenRouter**: Con Mastra, la extracción AI que hoy hace OpenRouter ($15–30/mo) se absorbe en los costos de agentes. El costo neto incremental de Mastra es la diferencia: ~$37–58/mo adicionales vs el costo actual de OpenRouter.
+
+---
+
+## 9. Pendientes de verificar
 
 - [ ] **Browserbase**: Confirmar con Fabrizio si se usa activamente y cuánto cuesta (estimado $0–20)
-- [ ] **OpenRouter**: Obtener billing real del último mes (estimación actual: $15–30 basada en Pablo)
+- [ ] **OpenRouter**: Obtener billing real del último mes (estimación actual: $15–30 basada en Pablo). Se absorbe en Mastra.
 - [ ] **Atlas.co**: Confirmar número exacto de usuarios (2 o 3 → rango $178–$267)
 - [ ] **Google Maps**: Revisar consumo real del crédito en Google Cloud Console
 - [ ] **Geocoding**: Decisión pendiente — Google Maps Platform vs. OpenStreetMap/Nominatim para I24/Pincali
+- [ ] **Mastra LLM costs**: Costos reales dependen de modelos seleccionados. Evaluar después de Sprint 1.
+- [ ] **Backfill cost**: Costo one-time de ~$180 — verificar después de procesar primeras 10K propiedades
 
 ---
 
@@ -194,4 +220,4 @@ Este documento reemplaza completamente la versión anterior que contenía:
 
 ---
 
-*Última actualización: 2026-03-02*
+*Última actualización: 2026-03-05 | Costos de Mastra/AI Agents agregados (sección 8). Ver [ADR-020](../02-Architecture/ADRs/ADR-020-Mastra.md).*

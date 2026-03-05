@@ -1,79 +1,99 @@
 # AI Brain
 
-**Fase del proyecto**: Fase 3+ — Post-MVP
-**Estado**: 🔴 Por iniciar
-**Owner**: Por definir
+**Fase del proyecto**: Actual — Sprint 1+
+**Estado**: 🟢 En desarrollo
+**Owner**: Pablo + Fabrizio
 
 ---
 
-## Descripcion
+## Descripción
 
-El modulo AI Brain es la capa de inteligencia artificial de la plataforma BEIQA. Su funcion principal es el matching inteligente entre los requerimientos de clientes corporativos y las propiedades disponibles en la base de datos. Utiliza procesamiento de lenguaje natural (NLP) para analizar descripciones de propiedades, extraer atributos no estructurados y enriquecer los registros. Ademas, implementa un motor de recomendaciones que aprende de las preferencias del equipo y el feedback de clientes para mejorar progresivamente la calidad de las sugerencias.
+El módulo AI Brain es la **capa transversal de inteligencia** de la plataforma BEIQA. Implementado con [Mastra](https://mastra.ai) ([ADR-020](../../02-Architecture/ADRs/ADR-020-Mastra.md)), orquesta agentes AI especializados que proveen inteligencia a todos los demás módulos del sistema.
 
-En la operacion actual de BEIQA, el proceso de encontrar propiedades que cumplan con los criterios de un cliente corporativo requiere experiencia y tiempo significativo del equipo. Un asesor debe mentalmente cruzar decenas de variables — superficie, precio, ubicacion, accesibilidad, tipo de inmueble, condiciones de contrato — contra un inventario de cientos o miles de opciones. Este modulo automatiza ese proceso de matching, genera shortlists ordenados por relevancia, y detecta propiedades duplicadas publicadas en multiples portales. Con el tiempo, el sistema aprende que combinaciones de factores son mas relevantes para cada tipo de cliente, mejorando la eficiencia del equipo.
+No es un módulo aislado — el AI Brain consume datos de y provee inteligencia a: Scraper, Data, Geospatial, Market Intelligence, Internal App, y Tenant Portal.
+
+**Framework**: Mastra (TypeScript, open source, Apache 2.0)
+**Repo**: `github.com/pablo-beiqa/beiqa-agents`
+**Separación de responsabilidades**: Trigger.dev = ejecución durable (scraping, cron, sync). Mastra = AI reasoning (enrichment, scoring, intelligence). Ver [ADR-021](../../02-Architecture/ADRs/ADR-021-Separacion-Trigger-Mastra.md).
 
 ---
 
 ## Objetivos
 
-1. Implementar un motor de matching que genere shortlists de propiedades relevantes para un requerimiento de cliente con una precision de al menos 80% (medida como propiedades aceptadas / propiedades sugeridas).
-2. Automatizar la extraccion de atributos de descripciones de propiedades en texto libre mediante NLP, reduciendo la entrada manual de datos en un 60%.
-3. Detectar y consolidar propiedades duplicadas entre portales con una precision de al menos 90%, eliminando redundancia en la base de datos.
+1. **Address Enrichment**: Corregir el 50%+ de direcciones incorrectas en portales de alto volumen, alcanzando >80% de accuracy medida contra verificación manual.
+2. **Data Normalization**: Mapear datos de 4 portales con schemas diferentes al golden record unificado (`properties`), con >95% de campos mapeados correctamente.
+3. **Deduplication**: Detectar y consolidar propiedades duplicadas cross-portal con precisión >85%.
+4. **Scoring / Matching**: Generar shortlists de propiedades relevantes para requerimientos de clientes con concordancia >75% vs evaluación humana. Migrado del frontend.
+5. **Market Intelligence**: Producir inteligencia de mercado automatizada (tendencias, comparables, análisis por zona).
+6. **GIS Analysis**: Cálculo de H3, asignación de AGEB, análisis de proximidad y calidad de zona.
 
 ---
 
-## Metricas de Exito / KPIs
+## Métricas de Éxito / KPIs
 
-| Metrica | Target | Como se mide |
+| Métrica | Target | Cómo se mide |
 |---------|--------|--------------|
-| Precision de matching | >=80% de propiedades sugeridas son relevantes para el cliente | (Propiedades aceptadas en shortlist) / (propiedades sugeridas por el modelo) |
-| Tasa de aceptacion de recomendaciones | >=60% de recomendaciones del sistema son incluidas en shortlists finales | Tracking de recomendaciones aceptadas vs rechazadas por el equipo |
-| Tiempo para generar shortlist | <5 minutos (vs 2-4 horas manual) | Medicion de tiempo desde ingreso de requerimiento hasta shortlist generada |
-| Precision de deduplicacion | >=90% de duplicados detectados correctamente | Muestreo manual de pares marcados como duplicados y verificacion |
-| Atributos extraidos por NLP | >=85% de campos clave extraidos correctamente de descripciones | Comparacion de extraccion automatica vs etiquetado manual en muestra |
+| Accuracy de Address Enrichment | >80% | Verificación manual de 100 propiedades random por portal |
+| Campos normalizados correctamente | >95% | Comparación automática vs manual de 50 propiedades por portal |
+| Precisión de deduplicación | >85% | Verificación manual de 50 pares marcados como duplicados |
+| Concordancia de scoring | >75% | 20 scorings comparados con criterio de Pablo |
+| Tiempo de enrichment (nuevas propiedades) | <60 min | Medición de latencia scrape → golden record |
+| Costo LLM mensual | Dentro de presupuesto (TBD) | Monitoreo de costos por agente en `agent_runs` |
 
 ---
 
-## Entregables Clave
+## Agentes
 
-| Entregable | Descripcion | Estado |
-|-----------|-------------|--------|
-| Motor de matching propiedad-cliente | Algoritmo que cruza requerimientos de clientes contra inventario de propiedades, ponderando multiples criterios | 🔴 |
-| Pipeline de NLP | Procesamiento de descripciones de propiedades para extraer superficie, amenidades, condiciones de contrato y atributos cualitativos | 🔴 |
-| API de recomendaciones | Endpoint que recibe un perfil de requerimiento y retorna propiedades rankeadas por relevancia con score explicable | 🔴 |
-| Sistema de deduplicacion con AI | Modelo que identifica la misma propiedad publicada en diferentes portales usando similitud de texto, ubicacion y atributos | 🔴 |
-| Feedback loop | Mecanismo para capturar aceptacion/rechazo de recomendaciones por el equipo y reentrenar el modelo periodicamente | 🔴 |
+Ver arquitectura completa en [Agent-Architecture.md](../../02-Architecture/Agent-Architecture.md).
+
+| Agente | Prioridad | Módulo que sirve | Estado |
+|--------|-----------|-----------------|--------|
+| Address Enrichment | P0 (bloqueador) | Data, Geospatial | 🔴 Por implementar |
+| Data Normalization | P0 | Data | 🔴 Por implementar |
+| Deduplication | P1 | Data | 🔴 Por implementar |
+| Scoring / Matching | P1 (migra de frontend) | Internal App, Tenant Portal | 🔴 Por implementar |
+| Market Intelligence | P2 | Market Intelligence | 🔴 Por implementar |
+| GIS Analysis | P2 | Geospatial | 🔴 Por implementar |
+
+**Modelos LLM**: TBD por agente. Requiere evaluación empírica (costo vs calidad vs velocidad). Mastra permite asignar diferentes modelos por agente.
 
 ---
 
 ## Dependencias
 
-### Necesita (upstream)
-- **Base de datos** → Datos historicos de propiedades, requerimientos de clientes y feedback de shortlists anteriores
-- **Scraper** → Descripciones de propiedades en texto libre y atributos estructurados para entrenamiento y ejecucion
-- **Market Intelligence** → Tendencias de mercado y contexto de precios como features adicionales para el modelo
-- **Geospatial** → Datos de proximidad, zona y contexto geografico como variables de matching
+### Necesita (upstream — todos los módulos)
+- **Scraper** → Datos crudos de propiedades en staging tables + HTTP trigger post-scrape
+- **Data** → Schema de golden record, staging tables existentes
+- **Geospatial** → Datos de coordenadas, shapefiles AGEB, configuración H3
+- **Market Intelligence** → Definición de métricas de mercado, zonas de interés
+- **Base de datos** → Supabase con PostGIS, tablas nuevas (properties, agent_runs, enrichment_queue, etc.)
 
-### Depende de este (downstream)
-- **Internal App** → Muestra recomendaciones, shortlists generados por AI y propiedades deduplicadas al equipo
-- **Tenant Portal** → Presenta recomendaciones personalizadas a clientes corporativos
+### Depende de este (downstream — todos los módulos)
+- **Data** → Golden record poblado y mantenido por agentes
+- **Geospatial** → H3 y AGEB calculados por GIS Agent
+- **Market Intelligence** → Reportes y análisis generados por Market Intelligence Agent
+- **Internal App** → Scoring on-demand, datos enriquecidos, analytics
+- **Tenant Portal** → Scoring, shortlists, recomendaciones personalizadas
 
 ---
 
 ## Riesgos Clave
 
-| # | Riesgo | Impacto | Probabilidad | Mitigacion |
+| # | Riesgo | Impacto | Probabilidad | Mitigación |
 |---|--------|---------|--------------|------------|
-| 1 | Escasez de datos de entrenamiento (pocas transacciones historicas con feedback estructurado) | Alto | Alta | Comenzar con reglas heuristicas + pesos configurables, capturar feedback desde el dia uno, migrar gradualmente a ML |
-| 2 | Precision insuficiente del modelo que genere desconfianza del equipo | Alto | Media | Implementar explicabilidad (por que se recomienda cada propiedad), permitir ajuste manual de pesos, revision humana siempre |
-| 3 | Costos de LLM/API de OpenAI para procesamiento de NLP a escala | Medio | Media | Evaluar modelos open-source (Llama, Mistral) para tareas de NLP, cache de resultados, procesamiento batch |
-| 4 | Descripciones de propiedades en portales mexicanos con lenguaje inconsistente y errores | Medio | Alta | Pipeline de limpieza de texto pre-NLP, entrenamiento con datos reales del mercado mexicano, diccionario de terminos inmobiliarios |
-| 5 | Complejidad de mantener modelos actualizados conforme cambian las condiciones del mercado | Medio | Media | Reentrenamiento periodico automatizado, monitoreo de drift en metricas de precision |
+| 1 | Address accuracy insuficiente (<80%) | Alto | Media | 4 señales de validación (geocoding, reverse geocoding, descripción, coordenadas). Confidence score permite filtrar. <50 → revisión humana. |
+| 2 | Costos LLM exceden presupuesto | Medio | Media | Monitoreo por agente en `agent_runs`. Alertas al 80% del budget. Testing de modelos baratos para bulk ops. |
+| 3 | Mastra framework inestable (breaking changes) | Medio | Baja | Apache 2.0 — se puede fork. Lógica de agentes es TypeScript portable. Fallback: Trigger.dev direct tasks. |
+| 4 | Google Maps API credit exhaustion | Alto | Baja | Cache agresivo (30d TTL). Daily budget caps. Procesar portales premium last (ya tienen direcciones correctas). |
+| 5 | Equipo limitado (2 devs para todo) | Alto | Alta | Implementación incremental (2-3 agentes/sprint). Address Enrichment es el único bloqueador real. Los demás pueden diferirse. |
 
 ---
 
-## Documentos del Modulo
+## Documentos del Módulo
 
 - [Product Questions](./Product-Questions.md) — Cuestionario de discovery
-- [Requirements](./Requirements.md) — Capacidades y criterios de aceptacion
-- [Research/](./Research/) — Investigacion tecnica
+- [Requirements](./Requirements.md) — Capacidades y criterios de aceptación
+- [Research/](./Research/) — Investigación técnica
+- **[Agent-Architecture.md](../../02-Architecture/Agent-Architecture.md)** — Arquitectura completa de agentes (tools, flujos, schema, evals)
+- **[ADR-020](../../02-Architecture/ADRs/ADR-020-Mastra.md)** — Decisión de usar Mastra
+- **[ADR-021](../../02-Architecture/ADRs/ADR-021-Separacion-Trigger-Mastra.md)** — Separación Trigger.dev vs Mastra

@@ -31,22 +31,24 @@
 | [ADR-010](ADR-010-AGEB-INEGI.md) | AGEB/INEGI — Polígonos geoespaciales | $0 | 2026-02-27 | Fabrizio, Pablo |
 | [ADR-011](ADR-011-Google-Maps-Platform.md) | Google Maps Platform — APIs | ~$0 | 2026-02-25 | Pablo |
 | [ADR-012](ADR-012-Multi-Portal-Data.md) | Estrategia Multi-Portal — Staging + Golden Record | $0 | 2026-02-27 | Fabrizio, Pablo |
+| [ADR-020](ADR-020-Mastra.md) | Mastra — Framework de Orquestación de Agentes AI | $0 + LLM TBD | 2026-03-05 | Pablo, Fabrizio |
+| [ADR-021](ADR-021-Separacion-Trigger-Mastra.md) | Separación de Responsabilidades — Trigger.dev vs Mastra | $0 | 2026-03-05 | Pablo, Fabrizio |
 
 ### Propuestos (decisiones por tomar)
 
 | # | Título | Cuándo decidir |
 |---|--------|---------------|
-| [ADR-013](ADR-013-OpenRouter.md) | OpenRouter — AI Routing y Orquestación | Frontend propio |
-| [ADR-014](ADR-014-Backboard.md) | Backboard.io — Memoria Persistente AI | Módulo AI Brain |
+| [ADR-013](ADR-013-OpenRouter.md) | OpenRouter — AI Routing y Orquestación | Con Mastra activo |
 | [ADR-015](ADR-015-Frontend-Next-js.md) | Frontend Next.js — Detalles | Fase 2 |
 | [ADR-016](ADR-016-Deduplicacion.md) | Algoritmo de Deduplicación | Con nuevos portales |
 | [ADR-017](ADR-017-Plataforma-GIS.md) | Plataforma GIS | Fase 2 |
 | [ADR-018](ADR-018-CI-CD.md) | Estrategia CI/CD | Con frontend activo |
 
-### Deprecados
+### Deprecados / Supersedidos
 
 | # | Título | Supersedido por |
 |---|--------|----------------|
+| [ADR-014](ADR-014-Backboard.md) | Backboard.io — Memoria Persistente AI | [ADR-020](ADR-020-Mastra.md) (Mastra memory) |
 | [ADR-019](ADR-019-n8n-Deprecado.md) | n8n Cloud | [ADR-003](ADR-003-Trigger-dev.md) |
 
 ---

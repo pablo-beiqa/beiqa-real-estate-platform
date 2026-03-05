@@ -25,9 +25,9 @@ Eres un **co-founder técnico y consultor estratégico** del equipo Beiqa. Esto 
 
 | Persona | Rol | Responsabilidad principal |
 |---------|-----|--------------------------|
-| **Pablo** | CEO / Product Owner | Visión, prioridades, decisiones de negocio |
-| **Fabrizio** | Tech Lead | Scraper, Supabase, Trigger.dev, H3, arquitectura |
-| **Pamela** | Frontend | Internal App y Tenant Portal (Next.js) — Fase 2-3 |
+| **Pablo** | CEO / Product Owner | Visión, prioridades, decisiones de negocio. Construye frontend + agentes AI con Fabrizio |
+| **Fabrizio** | Tech Lead | Scraper, Supabase, Trigger.dev, H3, arquitectura. Construye frontend + agentes AI con Pablo |
+| **Pamela** | Frontend Design | Diseño de Internal App y Tenant Portal (solo diseño, no código) |
 | **Jerónimo** | Ops | Llamadas, operación con clientes, feedback de campo |
 | **Alex** | Advisor externo | Consultoría técnica estratégica |
 
@@ -67,7 +67,8 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 | Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo |
 | Scraping (browser) | Browserbase (cloud browser sessions) | ✅ Activo |
 | Automatización | Trigger.dev (scrapers, sync, limpieza, cron, AI batch) | ✅ Activo |
-| AI / NLP | Claude API | ✅ Activo |
+| AI Agent Orchestration | Mastra (agents, workflows, tools, memory, MCP) | 🟢 En implementación |
+| AI / NLP | LLMs vía Mastra (modelo TBD por agente) | 🟡 TBD |
 | UI actual | Rube + Claude Desktop (MCP bridge) | ✅ Activo (transitorio) |
 | CRM | HubSpot | ✅ Activo |
 | Geocodificación | Google Maps Platform (Geocoding + Places API) | ✅ Activo |
@@ -82,6 +83,7 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 - No Scrapy/Python para scraping — se usa Apify + Firecrawl
 - No n8n — todo migrado a Trigger.dev ([ADR-019](02-Architecture/ADRs/ADR-019-n8n-Deprecado.md))
 - No Sentry/Datadog — Slack + error_logs suficiente para el volumen actual
+- No Backboard.io — supersedido por Mastra memory ([ADR-014](02-Architecture/ADRs/ADR-014-Backboard.md))
 
 ---
 
@@ -95,7 +97,7 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 | [Market Intelligence](01-Modules/Market-Intelligence/) | 2 | 🔴 Por iniciar | — |
 | [Geospatial](01-Modules/Geospatial/) | 2 | 🔴 Por iniciar | — |
 | [Tenant Portal](01-Modules/Tenant-Portal/) | 2 | 🟡 En diseño | Pamela |
-| [AI Brain](01-Modules/AI-Brain/) | 3 | 🔴 Por iniciar | — |
+| [AI Brain](01-Modules/AI-Brain/) | Actual | 🟢 En desarrollo | Pablo, Fabrizio |
 
 La base de datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](02-Architecture/Database/) como infraestructura compartida.
 
@@ -225,7 +227,8 @@ Cuando una tarea involucre múltiples investigaciones independientes, Claude pue
 Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 
 - [Stack-Decidido.md](02-Architecture/Stack-Decidido.md) — dashboard de decisiones con costos y links a ADRs
-- [ADRs/README.md](02-Architecture/ADRs/README.md) — índice de 19 ADRs documentados
+- [ADRs/README.md](02-Architecture/ADRs/README.md) — índice de 21 ADRs documentados
+- [Agent-Architecture.md](02-Architecture/Agent-Architecture.md) — arquitectura completa de agentes AI (Mastra)
 - [System-Architecture.md](02-Architecture/System-Architecture.md) — diagrama del sistema actual
 - [Schema-Real.md](02-Architecture/Database/Schema-Real.md) — schema implementado (14 migrations)
 - [Vision-and-Goals.md](00-Project/Vision-and-Goals.md) — visión y métricas objetivo

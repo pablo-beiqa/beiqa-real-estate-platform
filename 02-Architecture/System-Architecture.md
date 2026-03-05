@@ -1,13 +1,14 @@
-# Arquitectura del Sistema — BEIQA Platform (Estado Actual)
+# Arquitectura del Sistema — BEIQA Platform
 
-> **Estado**: ✅ Stack decidido e implementado | **Actualizado**: 2026-02-27
+> **Estado**: ✅ Stack decidido e implementado | **Actualizado**: 2026-03-05
 >
 > Para el detalle de cada decisión técnica: [Stack-Decidido.md](./Stack-Decidido.md)
 > Para cada ADR individual: [ADRs/README.md](ADRs/README.md)
+> Para la arquitectura de agentes AI: [Agent-Architecture.md](./Agent-Architecture.md)
 
 ---
 
-## Diagrama de arquitectura (stack real — febrero 2026)
+## Diagrama de arquitectura (stack real — marzo 2026)
 
 ```mermaid
 flowchart TB
@@ -27,28 +28,39 @@ flowchart TB
         Browserbase[Browserbase\ncloud browser sessions]
     end
 
-    subgraph Automation[Automatización — Trigger.dev]
+    subgraph Automation[Ejecución Durable — Trigger.dev]
         ScraperTasks[Scraper tasks\nPincali, CBRE, Colliers]
-        Persistence[Persistencia\nupsert a Supabase]
+        Persistence[Persistencia\nupsert a staging tables]
         HubspotSync[Sync HubSpot\none-way]
-        BatchAI[Batch AI\nextraction]
         CronJobs[Cron jobs\nscheduled runs]
+        HTTPTrigger[HTTP trigger\na Mastra post-scrape]
+    end
+
+    subgraph AIBrain[AI Brain — Mastra ⚡ Capa Transversal]
+        AddressAgent[Address Enrichment\nAgent]
+        NormAgent[Data Normalization\nAgent]
+        DedupAgent[Deduplication\nAgent]
+        ScoringAgent[Scoring / Matching\nAgent]
+        MarketAgent[Market Intelligence\nAgent]
+        GISAgent[GIS Analysis\nAgent]
     end
 
     subgraph DB[Base de Datos — Supabase]
         PG[(PostgreSQL 15\n+ PostGIS)]
+        GoldenRecord[(Golden Record\nproperties)]
+        StagingTables[(Staging Tables\ninmuebles24, pincali...)]
         Auth[Supabase Auth]
         Storage[Supabase Storage]
         REST[REST API\nautomática]
     end
 
-    subgraph AI[AI / NLP]
-        Claude[Claude API]
-    end
-
     subgraph CRM[CRM]
         HubSpot[HubSpot]
-        Clay[Clay\ntransitorio]
+    end
+
+    subgraph Frontend[Frontend — Next.js 15]
+        InternalApp[Internal App\napp.beiqa.com]
+        TenantPortal[Tenant Portal\nportal.beiqa.com]
     end
 
     subgraph UI[Interfaz Actual — Rube]
@@ -57,13 +69,19 @@ flowchart TB
 
     subgraph Geo[Geoespacial]
         Google[Google Maps\nGeocoding + Places]
-        H3[H3 Index\nen pruebas]
+        H3[H3 Index]
+        ArcGIS[ArcGIS\nvía MCP]
+    end
+
+    subgraph LLMs[Modelos LLM]
+        LLM[Claude / GPT / etc\nmodelo TBD por agente]
     end
 
     subgraph Monitoring[Monitoreo]
-        Slack[Slack\nalertas + triggers]
+        Slack[Slack\nalertas]
     end
 
+    %% Scraping flow
     I24 --> Apify
     Pincali --> Firecrawl
     Pincali --> Browserbase
@@ -74,22 +92,48 @@ flowchart TB
     Firecrawl --> ScraperTasks
     Browserbase --> ScraperTasks
     ScraperTasks --> Persistence
-    Persistence -->|upsert| PG
+    Persistence -->|upsert| StagingTables
     CronJobs --> ScraperTasks
     CronJobs --> Apify
+
+    %% Trigger.dev → Mastra
+    Persistence -->|HTTP POST| HTTPTrigger
+    HTTPTrigger -->|trigger enrichment| AddressAgent
+
+    %% AI Agent flows
+    StagingTables -->|lee datos crudos| AddressAgent
+    AddressAgent --> NormAgent
+    NormAgent --> GoldenRecord
+    GoldenRecord --> DedupAgent
+    AddressAgent -->|geocoding| Google
+    GISAgent -->|H3, AGEB| H3
+    GISAgent -->|MCP| ArcGIS
+    AddressAgent --> LLM
+    NormAgent --> LLM
+    DedupAgent --> LLM
+    ScoringAgent --> LLM
+    MarketAgent --> LLM
+
+    %% Data consumption
+    GoldenRecord --> REST
+    REST --> InternalApp
+    REST --> TenantPortal
+    InternalApp -->|scoring request| ScoringAgent
+    TenantPortal -->|scoring request| ScoringAgent
+
+    %% HubSpot (determinístico, queda en Trigger.dev)
     PG --> HubspotSync --> HubSpot
-    HubSpot --> Clay --> HubSpot
-    PG -->|listings sin features| BatchAI
-    BatchAI --> Claude --> PG
+
+    %% Rube (transitorio)
     REST --> Rube
     Auth --> Rube
     Rube -->|MCP| PG
     Rube -->|MCP| HubSpot
     Rube -->|MCP| Slack
-    Google --> PG
-    H3 --> PG
+
+    %% Monitoring
     Persistence --> Slack
-    BatchAI --> Slack
+    HTTPTrigger --> Slack
 ```
 
 ---
@@ -112,12 +156,12 @@ flowchart TB
 
 ---
 
-### Automatización (Trigger.dev)
+### Ejecución Durable (Trigger.dev)
 
 - **ADR**: [ADR-003](ADRs/ADR-003-Trigger-dev.md)
 - **Repo**: `github.com/pablo-beiqa/beiqa-scraper`
-- **Scope**: Scrapers custom, limpieza de datos, persistencia a Supabase, sync HubSpot, cron jobs, batch AI extraction
-- **NO es**: el backend, ni la base de datos, ni el "cerebro" del sistema
+- **Scope**: Scrapers custom, persistencia a Supabase staging tables, sync HubSpot, cron jobs, HTTP trigger a Mastra post-scrape
+- **NO es**: el backend, ni el motor de AI/NLP (→ Mastra), ni el "cerebro" del sistema
 
 **Tasks activos**:
 | Task | Función |
@@ -126,8 +170,33 @@ flowchart TB
 | `cbre-scraper` | Scraping de CBRE via Firecrawl |
 | `colliers-scraper` | Scraping de Colliers via Firecrawl + Browserbase |
 | `persist-to-supabase` | Upsert de datos scrapeados a staging tables |
-| `batch-ai-extraction` | Extracción de features con Claude API |
 | `sync-hubspot` | Sync one-way Supabase → HubSpot (en migración) |
+| `trigger-mastra` | HTTP POST a Mastra post-scrape (por implementar) |
+
+> **Nota**: `batch-ai-extraction` migra a Mastra como Address Enrichment + Data Normalization Agents. Ver [ADR-020](ADRs/ADR-020-Mastra.md).
+
+---
+
+### AI Brain — Mastra (Capa Transversal)
+
+- **ADR**: [ADR-020](ADRs/ADR-020-Mastra.md)
+- **Separación de responsabilidades**: [ADR-021](ADRs/ADR-021-Separacion-Trigger-Mastra.md)
+- **Repo**: `github.com/pablo-beiqa/beiqa-agents`
+- **Framework**: [Mastra](https://mastra.ai) (TypeScript, open source, Apache 2.0)
+- **Scope**: Orquestación de agentes AI — enrichment, normalization, deduplication, scoring, market intelligence, GIS analysis
+- **Comunicación**: HTTP API (Hono server) + Supabase shared DB + MCP clients (ArcGIS, etc.)
+
+**Agentes**:
+| Agente | Prioridad | Módulo que sirve |
+|--------|-----------|-----------------|
+| Address Enrichment | P0 | Data, Geospatial |
+| Data Normalization | P0 | Data |
+| Deduplication | P1 | Data |
+| Scoring / Matching | P1 | Internal App, Tenant Portal |
+| Market Intelligence | P2 | Market Intelligence |
+| GIS Analysis | P2 | Geospatial |
+
+Ver arquitectura completa de agentes: [Agent-Architecture.md](./Agent-Architecture.md)
 
 ---
 
@@ -142,7 +211,23 @@ flowchart TB
 - **14 migrations** activas
 - **~60,000 propiedades** en `inmuebles24_listings`
 
+**Estructura de datos** ([ADR-012](ADRs/ADR-012-Multi-Portal-Data.md)):
+- **Staging tables**: `inmuebles24_listings`, `pincali_listings`, `cbre_listings`, `colliers_listings` — datos crudos por portal
+- **Golden record**: `properties` — datos normalizados, deduplicados, enriquecidos por Mastra
+- **Source of truth**: Supabase es source of truth para propiedades, listings, brokers, analytics, geo data
+
 Ver schema: [Database/Schema-Real.md](./Database/Schema-Real.md)
+
+---
+
+### Frontend (Next.js 15)
+
+- **ADR**: [ADR-015](ADRs/ADR-015-Frontend-Next-js.md)
+- **Repo**: `github.com/pablo-beiqa/beiqa-frontend`
+- **Internal App** (`app.beiqa.com`): Dashboard del equipo — gestión de propiedades, shortlists, analytics
+- **Tenant Portal** (`portal.beiqa.com`): Portal de clientes — scoring, shortlists compartidas, feedback
+- **Consume**: Supabase REST API (golden record) + Mastra API (scoring on-demand)
+- **Estado**: Phase 0 completo, en desarrollo
 
 ---
 
@@ -150,17 +235,8 @@ Ver schema: [Database/Schema-Real.md](./Database/Schema-Real.md)
 
 - **ADR**: [ADR-004](ADRs/ADR-004-Rube-MCP-Bridge.md)
 - **Función**: Bridge MCP que conecta Claude Desktop con Supabase, HubSpot, Slack
-- **Scope**: SOLO interacción humana. Los pipelines automáticos van por Trigger.dev.
-- **Transitorio**: Se reemplazará por Internal App (Next.js) en Fase 2-3
-
----
-
-### AI / NLP (Claude API)
-
-- **Acceso**: Claude API, accedida vía Rube (para interacción humana) y Trigger.dev (para batch)
-- **Uso actual**: Extracción de features de descripciones de propiedades (batch)
-- **Uso futuro**: Matching de propiedades, NLP en búsquedas, procesamiento de transcripts
-- **Razón sobre OpenAI**: mejor calidad en español
+- **Scope**: SOLO interacción humana. Los pipelines automáticos van por Trigger.dev y Mastra.
+- **Transitorio**: Se reemplazará progresivamente por Internal App + Tenant Portal
 
 ---
 
@@ -168,16 +244,16 @@ Ver schema: [Database/Schema-Real.md](./Database/Schema-Real.md)
 
 - **ADR**: [ADR-005](ADRs/ADR-005-HubSpot-CRM.md)
 - **HubSpot**: CRM para clientes (tenants), deals y pipeline comercial
-- **Clay** (transitorio): Enriquece datos de brokers y empresas → sale pronto, lógica migra a Trigger.dev
-- **Sincronización**: Supabase → HubSpot (one-way vía Trigger.dev). HubSpot → Supabase (deal status, minimal).
+- **Sincronización**: Supabase → HubSpot (one-way vía Trigger.dev, determinístico). HubSpot → Supabase (deal status, minimal).
 
 ---
 
 ### Geoespacial
 
-- **H3 Indexing** ([ADR-009](ADRs/ADR-009-H3-Indexing.md)): Sistema hexagonal, capas 5-11, en pruebas (Fabrizio)
-- **AGEB/INEGI** ([ADR-010](ADRs/ADR-010-AGEB-INEGI.md)): Polígonos censales, decidido, por implementar
-- **Google Maps** ([ADR-011](ADRs/ADR-011-Google-Maps-Platform.md)): Geocoding + Places API activas
+- **H3 Indexing** ([ADR-009](ADRs/ADR-009-H3-Indexing.md)): Sistema hexagonal, capas 5-11 — calculado por GIS Agent post-enrichment
+- **AGEB/INEGI** ([ADR-010](ADRs/ADR-010-AGEB-INEGI.md)): Polígonos censales — asignados por GIS Agent via PostGIS spatial join
+- **Google Maps** ([ADR-011](ADRs/ADR-011-Google-Maps-Platform.md)): Geocoding + Places API — usado como tool del Address Enrichment Agent
+- **ArcGIS**: Análisis geoespacial avanzado — consumido vía MCP server por GIS Agent
 - **PostGIS**: Trigger `populate_geo` operando, índices GIST activos
 
 ---
@@ -193,6 +269,7 @@ sequenceDiagram
     participant Portal as Inmuebles24
     participant TDev as Trigger.dev
     participant Supabase
+    participant Mastra
     participant Slack
 
     Cron->>Apify: Trigger run
@@ -201,6 +278,7 @@ sequenceDiagram
     Apify-->>TDev: Webhook (run completado)
     TDev->>Supabase: Upsert listings (inmuebles24_listings)
     Note over Supabase: trigger populate_geo
+    TDev->>Mastra: HTTP POST (new listings available)
     TDev->>Slack: Notificación completado
 ```
 
@@ -213,6 +291,7 @@ sequenceDiagram
     participant BB as Browserbase
     participant TDev as Trigger.dev Task
     participant Supabase
+    participant Mastra
     participant Slack
 
     Cron->>TDev: Trigger scraper task
@@ -224,27 +303,63 @@ sequenceDiagram
     end
     TDev->>TDev: Limpiar + normalizar datos
     TDev->>Supabase: Upsert a staging table
+    TDev->>Mastra: HTTP POST (new listings available)
     TDev->>Slack: Notificación completado
 ```
 
-### Flujo 3: Batch AI extraction
+### Flujo 3: Enrichment Pipeline (Mastra)
 
 ```mermaid
 sequenceDiagram
-    participant TDev as Trigger.dev
+    participant Mastra as Mastra Orchestrator
+    participant AE as Address Enrichment Agent
+    participant DN as Data Normalization Agent
+    participant Google as Google Maps API
+    participant LLM as LLM (TBD)
     participant Supabase
-    participant Claude as Claude API
 
-    TDev->>Supabase: Query: listings WHERE property_features IS NULL
-    Supabase-->>TDev: Batch de listings
+    Mastra->>Supabase: Query: staging WHERE enrichment_status = 'pending'
+    Supabase-->>Mastra: Batch de listings nuevos
     loop Por cada listing
-        TDev->>Claude: Procesar descripción
-        Claude-->>TDev: property_features estructuradas
+        Mastra->>AE: Enriquecer dirección
+        AE->>Google: Geocode dirección
+        Google-->>AE: Coordenadas + formatted_address
+        AE->>Google: Reverse geocode coordenadas originales
+        Google-->>AE: Dirección verificación
+        AE->>LLM: Extraer dirección de descripción
+        LLM-->>AE: Dirección + landmarks
+        AE->>AE: Calcular confidence score
+        AE->>Supabase: UPDATE staging (corrected address + confidence)
+        Mastra->>DN: Normalizar al golden record
+        DN->>LLM: Extraer features de descripción
+        LLM-->>DN: Features estructuradas
+        DN->>Supabase: UPSERT properties (golden record)
     end
-    TDev->>Supabase: UPDATE property_features
+    Mastra->>Supabase: Log en agent_runs
 ```
 
-### Flujo 4: Sync HubSpot (one-way)
+### Flujo 4: Scoring on-demand (Mastra)
+
+```mermaid
+sequenceDiagram
+    participant FE as Frontend
+    participant Mastra as Mastra API
+    participant SA as Scoring Agent
+    participant LLM as LLM (TBD)
+    participant Supabase
+
+    FE->>Mastra: POST /api/agents/scoring/generate
+    Mastra->>SA: Generar scoring
+    SA->>Supabase: Query propiedades (filtros del requerimiento)
+    Supabase-->>SA: Propiedades candidatas
+    SA->>LLM: Evaluar fit propiedad-requerimiento
+    LLM-->>SA: Score + justificación por propiedad
+    SA->>Supabase: INSERT scoring_report + scoring_results
+    SA-->>Mastra: Shortlist generada
+    Mastra-->>FE: Respuesta con shortlist
+```
+
+### Flujo 5: Sync HubSpot (one-way, Trigger.dev)
 
 ```mermaid
 sequenceDiagram
@@ -266,6 +381,7 @@ sequenceDiagram
 | Componente eliminado | Reemplazado por |
 |--------------------|----------------|
 | n8n Cloud | Trigger.dev ([ADR-019](ADRs/ADR-019-n8n-Deprecado.md)) |
+| Backboard.io | Mastra memory ([ADR-020](ADRs/ADR-020-Mastra.md), supersede [ADR-014](ADRs/ADR-014-Backboard.md)) |
 | Python / Scrapy | Apify + Firecrawl |
 | FastAPI / Express | Supabase REST automático |
 | GraphQL API | REST auto-generado |
@@ -277,4 +393,4 @@ sequenceDiagram
 
 ---
 
-*Documento actualizado: 2026-02-27 | Versión anterior archivada en [archive/](archive/)*
+*Documento actualizado: 2026-03-05 | Versión anterior archivada en [archive/](archive/)*

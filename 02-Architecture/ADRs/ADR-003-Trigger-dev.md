@@ -35,16 +35,19 @@ Opción elegida: "**Solo Trigger.dev**", porque la lógica de los scrapers y aut
 
 **Scope de Trigger.dev (ES):**
 - Scrapers: ejecución, orquestación, scheduling
-- Limpieza de datos: parsing, normalización, AI extraction
-- Push a HubSpot: sync de propiedades y brokers
-- Push a Supabase: persistencia de datos scrapeados
+- Push a Supabase: persistencia de datos scrapeados en staging tables
+- Push a HubSpot: sync de propiedades y brokers (one-way, determinístico)
 - Cron jobs: scheduling semanal/mensual
 - Notificaciones: alertas a Slack
+- HTTP trigger a Mastra: notificar post-scrape para iniciar enrichment pipeline
 
 **Scope de Trigger.dev (NO ES):**
 - No es el backend de la aplicación
 - No es el cerebro central del sistema
 - No es un componente de consulta para el frontend
+- No es el motor de AI/NLP — la orquestación AI pasa a Mastra ([ADR-020](ADR-020-Mastra.md), [ADR-021](ADR-021-Separacion-Trigger-Mastra.md))
+
+> **Actualizado 2026-03-05**: Limpieza de datos con AI y batch AI extraction migran a Mastra como agentes independientes. Ver [ADR-020](ADR-020-Mastra.md) y [ADR-021](ADR-021-Separacion-Trigger-Mastra.md).
 
 ### Consecuencias
 
@@ -68,11 +71,12 @@ Opción elegida: "**Solo Trigger.dev**", porque la lógica de los scrapers y aut
 ### Verificación
 
 - [x] Trigger.dev configurado con 3 scrapers (Pincali, CBRE, Colliers)
-- [x] Batch AI extraction con Claude API funcionando
+- [x] Batch AI extraction con Claude API funcionando → **migrado a Mastra** ([ADR-020](ADR-020-Mastra.md))
 - [ ] Cron scheduling migrado de n8n a Trigger.dev
 - [ ] Sync HubSpot migrado de n8n a Trigger.dev
 - [ ] Notificaciones Slack migradas de n8n a Trigger.dev
 - [ ] n8n Cloud deprecado (sin flujos activos)
+- [ ] HTTP trigger a Mastra post-scrape implementado
 
 ## Pros y Contras por Opción
 

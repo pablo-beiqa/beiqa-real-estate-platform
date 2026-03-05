@@ -1,11 +1,13 @@
 ---
-status: "propuesto"
+status: "supersedido por [ADR-020](ADR-020-Mastra.md)"
 date: 2026-02-27
 decision-makers: "Pablo (CEO), Fabrizio (Tech Lead)"
-costo-mensual: "por definir"
+costo-mensual: "$0 (supersedido)"
 ---
 
 # Backboard.io — Memoria Persistente para AI
+
+> **⚠️ SUPERSEDIDO**: Esta decisión fue supersedida por [ADR-020 — Mastra](ADR-020-Mastra.md) (2026-03-05). Mastra incluye persistent memory, RAG, y shared memory entre agentes como funcionalidad built-in, eliminando la necesidad de un servicio externo de memoria AI.
 
 ## Contexto y Problema
 
@@ -30,11 +32,16 @@ Backboard.io es una plataforma que ofrece "the world's smartest AI memory" — p
 
 ## Decisión
 
-**Pendiente.** Se evaluará cuando se defina el módulo AI Brain (Fase 3). La decisión depende de: volumen de interacciones, complejidad de contexto requerido, y costo.
+**Supersedido por [ADR-020 — Mastra](ADR-020-Mastra.md).** Mastra (mastra.ai) incluye:
+- **Persistent memory**: almacenamiento de contexto entre ejecuciones de agentes
+- **RAG**: retrieval-augmented generation integrado
+- **Shared memory**: múltiples agentes compartiendo contexto
+- **PostgreSQL backend**: usa la misma Supabase que el resto del sistema
+
+No se necesita un servicio externo de memoria AI.
 
 ## Información Adicional
 
 - Backboard.io: [https://backboard.io](https://backboard.io)
-- Complementa a: [ADR-013](ADR-013-OpenRouter.md) (OpenRouter para routing)
-- Relevante para: módulo AI Brain (Fase 3), matching tenant-propiedad
-- Condición para activar esta decisión: cuando se inicie el diseño del AI Brain
+- **Supersedido por**: [ADR-020](ADR-020-Mastra.md) (Mastra — framework que incluye memory)
+- Mastra memory docs: [https://mastra.ai/docs/memory](https://mastra.ai/docs/memory)

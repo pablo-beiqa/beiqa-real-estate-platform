@@ -1,6 +1,6 @@
 # Stack Tecnológico — Dashboard de Decisiones
 
-> **Fecha**: Febrero 2026 | **Actualizado**: 2026-03-02
+> **Fecha**: Febrero 2026 | **Actualizado**: 2026-03-05
 >
 > Cada decisión tiene un ADR (Architecture Decision Record) con justificación completa.
 > Ver [ADRs/README.md](ADRs/README.md) para el índice completo.
@@ -19,14 +19,13 @@ Portales inmobiliarios
   Colliers    ──→ Firecrawl + Browserbase ──→ Trigger.dev tasks
                                                     ↓
                                               Supabase (PostgreSQL + PostGIS)
-                                                ↓           ↓
-                                          Trigger.dev    HubSpot (CRM)
-                                          (sync, AI)
-                                                ↓
-                                          Claude API (vía Rube)
-                                                ↓
-                                          Rube + Claude Desktop  ← UI actual (Fase 1)
-                                          Next.js 15 (beiqa-frontend) ← Tenant Portal (Fase 2)
+                                              staging tables ──→ Mastra agents ──→ golden record
+                                                ↓                    ↓                 ↓
+                                          Trigger.dev           LLMs (TBD)        Next.js 15
+                                          (sync HubSpot)     Google Maps        (Internal App +
+                                                             ArcGIS MCP         Tenant Portal)
+                                                                ↓
+                                          Rube + Claude Desktop  ← UI actual (transitorio)
 ```
 
 ---
@@ -39,8 +38,9 @@ Portales inmobiliarios
 | **Scraping (I24)** | Apify (actor contratado) | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) | ✅ Activo | $300 ($150 × 2 corridas/mes) |
 | **Scraping (motor)** | Firecrawl (HTTP engine, LLM extraction, stealth proxy) | [ADR-007](ADRs/ADR-007-Firecrawl.md) | ✅ Activo | ~$103 ($1,800 MXN) |
 | **Scraping (browser)** | Browserbase (cloud browser sessions) | [ADR-008](ADRs/ADR-008-Browserbase.md) | ✅ Activo | $0–20 (TBD) |
-| **Automatización** | Trigger.dev (scrapers, sync, limpieza, cron, AI batch) | [ADR-003](ADRs/ADR-003-Trigger-dev.md) | ✅ Activo | $50 |
-| **AI Processing** | OpenRouter (GPT-4o-mini para extracción de campos) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | ✅ Activo | $15–30 |
+| **Ejecución Durable** | Trigger.dev (scrapers, persistencia, cron, sync HubSpot — NO AI) | [ADR-003](ADRs/ADR-003-Trigger-dev.md) | ✅ Activo | $50 |
+| **AI Agent Orchestration** | Mastra (agents, workflows, tools, memory, MCP) | [ADR-020](ADRs/ADR-020-Mastra.md) | 🟢 En implementación | $0 (framework) + LLM TBD |
+| **AI Processing** | LLMs vía Mastra (modelo TBD por agente — requiere testing) | [ADR-020](ADRs/ADR-020-Mastra.md) | 🟡 TBD | ~$67–88 (estimado) |
 | **UI actual** | Rube + Claude Desktop (MCP bridge) | [ADR-004](ADRs/ADR-004-Rube-MCP-Bridge.md) | ✅ Activo (transitorio) | $75–100 (Rube $25 + Claude $25 × 2–3) |
 | **CRM** | HubSpot (clientes, deals, pipeline comercial) | [ADR-005](ADRs/ADR-005-HubSpot-CRM.md) | ✅ Activo | No atribuido (costo general Beiqa) |
 | **Monitoreo** | Slack + tabla `error_logs` | [ADR-006](ADRs/ADR-006-Monitoreo.md) | ✅ Activo | $0 |
@@ -56,9 +56,8 @@ Portales inmobiliarios
 
 | Componente | Opciones | ADR | Cuándo decidir |
 |-----------|---------|-----|---------------|
-| **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | ✅ Activo (scraping pipeline) |
-| **AI Memory** | Backboard.io (persistent memory + RAG) | [ADR-014](ADRs/ADR-014-Backboard.md) | Con módulo AI Brain |
-| **Deduplicación** | Scoring + LLM-assisted (híbrido) | [ADR-016](ADRs/ADR-016-Deduplicacion.md) | Con ≥2 portales en staging |
+| **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | Con Mastra activo — evaluar si OpenRouter o API directa |
+| **Deduplicación** | Scoring + LLM-assisted (híbrido) vía Mastra agent | [ADR-016](ADRs/ADR-016-Deduplicacion.md) | Con ≥2 portales en staging |
 | **Mapas GIS** | Atlas.co (API + embed) — $89/usuario | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | ✅ Activo (2–3 usuarios, $178–267/mes) |
 | **CI/CD** | GitHub Actions + Vercel | [ADR-018](ADRs/ADR-018-CI-CD.md) | Con frontend activo |
 
@@ -70,6 +69,7 @@ Portales inmobiliarios
 |-----------|--------|-------------|
 | **n8n Cloud** | ❌ Deprecado | [ADR-019](ADRs/ADR-019-n8n-Deprecado.md) — todo migrado a Trigger.dev |
 | **Clay** | ⚠️ Transitorio, saliendo | Lógica se replica en Trigger.dev tasks |
+| **Backboard.io** | ❌ Supersedido | [ADR-014](ADRs/ADR-014-Backboard.md) — Mastra memory reemplaza ([ADR-020](ADRs/ADR-020-Mastra.md)) |
 | **EasyBroker** | ❌ Descartado como portal | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) — portal no viable |
 | **FastAPI / Express** | ❌ No necesario | Supabase genera REST API automática |
 | **Auth0 / Clerk** | ❌ No necesario | Supabase Auth incluido |
@@ -87,13 +87,16 @@ Portales inmobiliarios
 
 | Sistema | Source of truth para... | Recibe datos de... |
 |---------|--------------------------|-------------------|
-| **Supabase** | Propiedades, listings, brokers, analytics, geo data | Apify, Trigger.dev (scrapers), Google APIs |
+| **Supabase** | Propiedades, listings, brokers, analytics, geo data, golden record | Apify, Trigger.dev (scrapers), Mastra (enrichment), Google APIs |
 | **HubSpot** | Clientes, deals, comunicación comercial | Supabase (sync one-way vía Trigger.dev) |
+| **Mastra** | NO es source of truth — lee y escribe a Supabase | Supabase (lee staging), Google APIs, ArcGIS MCP, LLMs |
 
 **Sincronizaciones:**
+- Trigger.dev → Supabase: datos crudos de scraping a staging tables
+- Mastra → Supabase: datos enriquecidos al golden record (`properties`)
 - Supabase → HubSpot: propiedades y brokers (one-way, vía Trigger.dev)
 - HubSpot → Supabase: deal status (one-way, minimal)
-- Clay → HubSpot: enriquecimiento (transitorio, no toca Supabase)
+- Trigger.dev → Mastra: HTTP POST post-scrape (trigger enrichment)
 
 ---
 
@@ -108,4 +111,4 @@ Portales inmobiliarios
 
 ---
 
-*Documento actualizado: 2026-03-02 | Costos actualizados con datos reales verificados. Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*
+*Documento actualizado: 2026-03-05 | Mastra agregado como AI Agent Orchestration. Trigger.dev scope reducido a ejecución durable. Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo y [Agent-Architecture.md](Agent-Architecture.md) para la arquitectura de agentes.*
