@@ -25,6 +25,19 @@ Portales inmobiliarios
                                           (sync HubSpot)     Google Maps        (Internal App +
                                                              ArcGIS MCP         Tenant Portal)
                                                                 ↓
+                                                                ↓
+                                              ┌─ Vercel Pro ─────────────┐
+                                              │  Next.js 15              │
+                                              │  (Internal App +         │
+                                              │   Tenant Portal)         │
+                                              └──────────────────────────┘
+
+                                              ┌─ Mastra Cloud ───────────┐
+                                              │  beiqa-agents            │
+                                              │  Hono server + agents    │
+                                              │  (beta, gratis)          │
+                                              └──────────────────────────┘
+
                                           Rube + Claude Desktop  ← UI actual (transitorio)
 ```
 
@@ -48,7 +61,9 @@ Portales inmobiliarios
 | **Geoespacial (AGEB)** | Polígonos INEGI para análisis territorial | [ADR-010](ADRs/ADR-010-AGEB-INEGI.md) | 🔴 Decidido, por implementar | $0 |
 | **Geocodificación** | Google Maps Platform (Geocoding + Places API) | [ADR-011](ADRs/ADR-011-Google-Maps-Platform.md) | ✅ Activo | ~$0 (crédito $200) |
 | **Data architecture** | Staging tables por portal + golden record `properties` | [ADR-012](ADRs/ADR-012-Multi-Portal-Data.md) | ✅ Decidido | $0 |
-| **Frontend** | Next.js 15 + App Router + TypeScript + Tailwind + shadcn/ui | [ADR-015](ADRs/ADR-015-Frontend-Next-js.md) | 🟡 Phase 0 completo | $0 (Vercel free) |
+| **Frontend** | Next.js 15 + App Router + TypeScript + Tailwind + shadcn/ui | [ADR-015](ADRs/ADR-015-Frontend-Next-js.md) | 🟡 Phase 0 completo | — |
+| **Frontend Hosting** | Vercel Pro (portal.beiqa.com + app.beiqa.com) | [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) | 🟡 Por deployar | $20 |
+| **AI Agent Hosting** | Mastra Cloud (beta — observabilidad, Studio, deploy) | [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) | 🔴 Por implementar | $0 (beta, pricing TBD) |
 
 ---
 
@@ -59,7 +74,7 @@ Portales inmobiliarios
 | **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | Con Mastra activo — evaluar si OpenRouter o API directa |
 | **Deduplicación** | Scoring + LLM-assisted (híbrido) vía Mastra agent | [ADR-016](ADRs/ADR-016-Deduplicacion.md) | Con ≥2 portales en staging |
 | **Mapas GIS** | Atlas.co (API + embed) — $89/usuario | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | ✅ Activo (2–3 usuarios, $178–267/mes) |
-| **CI/CD** | GitHub Actions + Vercel | [ADR-018](ADRs/ADR-018-CI-CD.md) | Con frontend activo |
+| **CI/CD** | GitHub Actions (CI: lint, tests) — Deploy: resuelto por [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) | [ADR-018](ADRs/ADR-018-CI-CD.md) | Con frontend activo |
 
 ---
 
@@ -111,4 +126,4 @@ Portales inmobiliarios
 
 ---
 
-*Documento actualizado: 2026-03-05 | Mastra agregado como AI Agent Orchestration. Trigger.dev scope reducido a ejecución durable. Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo y [Agent-Architecture.md](Agent-Architecture.md) para la arquitectura de agentes.*
+*Documento actualizado: 2026-03-05 | Vercel y Mastra Cloud agregados como hosting ([ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md)). Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*

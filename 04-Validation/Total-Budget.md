@@ -11,12 +11,14 @@
 | Métrica | Valor |
 |---------|-------|
 | **Costo mensual actual** | **$747 – $896 USD** |
-| **Costo mensual con Mastra** | **~$814 – $984 USD** |
-| Costos fijos | $329 – $443 |
+| **Costo mensual con Mastra + Hosting** | **~$834 – $1,004 USD** |
+| Costos fijos | $349 – $463 |
 | Costos variables | $418 – $453 |
-| Mastra LLM costs (nuevo) | ~$67 – $88 (estimado, TBD) |
-| Proyección 6 meses (con Mastra) | $842 – $1,028 |
-| Proyección 12 meses (con Mastra) | $922 – $1,288 |
+| Mastra LLM costs | ~$67 – $88 (estimado, TBD) |
+| Hosting (Vercel Pro) | $20 |
+| Hosting (Mastra Cloud) | $0 (beta, pricing TBD) |
+| Proyección 6 meses | $862 – $1,048 |
+| Proyección 12 meses | $942 – $1,308 |
 
 **Distribución por categoría:**
 
@@ -28,7 +30,8 @@
 | Orquestación (Trigger.dev) | $50 | 6 – 7% |
 | AI Processing (OpenRouter, legacy) | $15 – $30 | 2 – 3% |
 | AI Agents — Mastra LLM (nuevo) | ~$67 – $88 | 7 – 10% |
-| Infraestructura (Supabase + dominio) | $26 | 3% |
+| Hosting (Vercel Pro) | $20 | ~2% |
+| Infraestructura (Supabase + dominio) | $26 | ~3% |
 
 ---
 
@@ -44,6 +47,8 @@ Estos costos no cambian con el volumen de propiedades extraídas.
 | Rube | $25 | MCP bridge para conectar Claude Desktop con Supabase | 1 suscripción |
 | Supabase Pro | $25 | PostgreSQL + PostGIS + Auth + Storage + REST API | 1 proyecto |
 | Dominio | ~$1.25 | beiqa.com | $15/año |
+| Vercel Pro | $20 | Hosting frontend Next.js (portal.beiqa.com, app.beiqa.com) | 1 proyecto (por activar, Fase 2) |
+| Mastra Cloud | $0 | Hosting agentes AI (beiqa-agents) — beta gratis, pricing TBD | 1 proyecto (por activar) |
 
 ---
 
@@ -120,31 +125,35 @@ El costo total de incorporar una propiedad a la plataforma depende de si es nuev
 | Categoría | USD/mes |
 |-----------|---------|
 | Costos actuales | $747 – $896 |
+| + Mastra LLM costs | +$67 – $88 |
+| + Vercel Pro (hosting frontend) | +$20 |
+| + Mastra Cloud (hosting agents) | +$0 (beta) – TBD |
 | + Storage (imágenes + PDFs) | +$3 – $5 |
 | + Supabase Bandwidth | +$5 – $15 |
-| + Vercel Pro | +$20 |
 | + Email | +$0 – $5 |
-| **Total proyectado** | **~$775 – $940** |
+| **Total proyectado** | **~$842 – $1,028** |
 
 ### Escenario de crecimiento — 12 meses
 
 | Categoría | USD/mes |
 |-----------|---------|
 | Costos actuales | $747 – $896 |
+| + Mastra LLM costs | +$67 – $88 |
+| + Vercel Pro (hosting frontend) | +$20 |
+| + Mastra Cloud (hosting agents) | +$0 – TBD |
 | + Storage acumulado | +$7 – $15 |
 | + Supabase Bandwidth (50–200 users) | +$20 – $50 |
-| + Vercel Pro | +$20 |
 | + Email | +$10 – $20 |
 | + 1–2 portales adicionales | +$50 – $200 |
-| **Total proyectado** | **~$855 – $1,200** |
+| **Total proyectado** | **~$922 – $1,288** |
 
 ### Costo operativo anualizado
 
 | Escenario | Mes actual | Anualizado |
 |-----------|-----------|------------|
 | Actual (hoy) | $747 – $896 | $8,964 – $10,752 |
-| 6 meses | $775 – $940 | $9,300 – $11,280 |
-| 12 meses | $855 – $1,200 | $10,260 – $14,400 |
+| 6 meses (con Mastra + hosting) | $842 – $1,028 | $10,104 – $12,336 |
+| 12 meses (crecimiento) | $922 – $1,288 | $11,064 – $15,456 |
 
 ---
 
@@ -220,4 +229,4 @@ Este documento reemplaza completamente la versión anterior que contenía:
 
 ---
 
-*Última actualización: 2026-03-05 | Costos de Mastra/AI Agents agregados (sección 8). Ver [ADR-020](../02-Architecture/ADRs/ADR-020-Mastra.md).*
+*Última actualización: 2026-03-05 | Vercel Pro y Mastra Cloud agregados como hosting ([ADR-022](../02-Architecture/ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md)). Proyecciones actualizadas.*

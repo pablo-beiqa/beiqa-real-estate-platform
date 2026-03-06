@@ -7,6 +7,7 @@
 
 ## 2026-03-05 — Integración Mastra y reestructuración Sprint-based
 
+- **Hosting Strategy decidido (ADR-022)** — Vercel Pro para frontend ($20/mo), Mastra Cloud (beta, gratis) para agentes AI. DigitalOcean y Railway descartados. Stack-Decidido, Total-Budget, System-Architecture y ADR-015 actualizados.
 - **Mastra adoptado como framework de AI agents** — ADR-020 y ADR-021 aprobados. Mastra maneja agentes, workflows, tools, memory y MCP. Reemplaza uso directo de Claude API para orquestación.
 - **Agent-Architecture.md creado** — Diseño completo de 6 agentes AI: Address Enrichment, Data Normalization, Deduplication, Scoring/Matching, Market Intelligence, GIS Analysis.
 - **System-Architecture.md reescrito** — Diagrama actualizado con Mastra como capa transversal de AI entre staging tables y golden record.

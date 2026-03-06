@@ -51,13 +51,17 @@ Implementado en beiqa-frontend con server components, route groups `(dashboard)`
 - Internal App = repo futuro (team-facing)
 - Mismo stack (Next.js 15 + shadcn/ui) pero sin monorepo
 
+### Deploy y hosting ✅ Decidido
+
+**Elección**: Vercel Pro — resuelto en [ADR-022](ADR-022-Hosting-Vercel-Mastra-Cloud.md)
+
+Vercel Pro ($20/mo). Git push → deploy automático. Preview deployments por PR. CDN global. 99.99% SLA.
+Dominios: `portal.beiqa.com` (Tenant Portal), `app.beiqa.com` (Internal App).
+
 ## Decisiones Pendientes
 
 ### Monorepo vs componentes compartidos
 Si Internal App y Tenant Portal comparten componentes, se evaluará extraer un paquete de UI compartido. Por ahora, cada repo es independiente.
-
-### Deploy y hosting
-Vercel es la opción natural para Next.js. Pendiente crear proyecto en Vercel y configurar CI/CD ([ADR-018](ADR-018-CI-CD.md)).
 
 ### Mapas
 Atlas.co como proveedor preferido ([ADR-017](ADR-017-Plataforma-GIS.md)). Pendiente evaluación técnica de pricing e integración con embed.

@@ -33,6 +33,7 @@
 | [ADR-012](ADR-012-Multi-Portal-Data.md) | Estrategia Multi-Portal — Staging + Golden Record | $0 | 2026-02-27 | Fabrizio, Pablo |
 | [ADR-020](ADR-020-Mastra.md) | Mastra — Framework de Orquestación de Agentes AI | $0 + LLM TBD | 2026-03-05 | Pablo, Fabrizio |
 | [ADR-021](ADR-021-Separacion-Trigger-Mastra.md) | Separación de Responsabilidades — Trigger.dev vs Mastra | $0 | 2026-03-05 | Pablo, Fabrizio |
+| [ADR-022](ADR-022-Hosting-Vercel-Mastra-Cloud.md) | Hosting Strategy — Vercel (Frontend) + Mastra Cloud (Agents) | $20 + TBD | 2026-03-05 | Pablo, Fabrizio |
 
 ### Propuestos (decisiones por tomar)
 
@@ -42,7 +43,7 @@
 | [ADR-015](ADR-015-Frontend-Next-js.md) | Frontend Next.js — Detalles | Fase 2 |
 | [ADR-016](ADR-016-Deduplicacion.md) | Algoritmo de Deduplicación | Con nuevos portales |
 | [ADR-017](ADR-017-Plataforma-GIS.md) | Plataforma GIS | Fase 2 |
-| [ADR-018](ADR-018-CI-CD.md) | Estrategia CI/CD | Con frontend activo |
+| [ADR-018](ADR-018-CI-CD.md) | Estrategia CI/CD — GitHub Actions (CI). Frontend deploy resuelto por [ADR-022](ADR-022-Hosting-Vercel-Mastra-Cloud.md) | Con frontend activo |
 
 ### Deprecados / Supersedidos
 

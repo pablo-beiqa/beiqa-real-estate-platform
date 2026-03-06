@@ -32,7 +32,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 ### Para el equipo técnico
 - [Stack Decidido](./02-Architecture/Stack-Decidido.md) — Dashboard de decisiones con costos y links a ADRs
 - [Arquitectura del Sistema](./02-Architecture/System-Architecture.md) — Diagrama del stack real (febrero 2026)
-- [ADRs](./02-Architecture/ADRs/README.md) — 21 Architecture Decision Records documentados
+- [ADRs](./02-Architecture/ADRs/README.md) — 22 Architecture Decision Records documentados
 - [Schema Real de la DB](./02-Architecture/Database/Schema-Real.md) — Tablas, triggers y RPCs implementados
 
 ### Para planificación
@@ -59,13 +59,14 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 - ✅ Claude API para procesamiento de descripciones
 - ✅ Rube + Claude Desktop como interfaz actual (MCP bridge a Supabase, HubSpot, Slack)
 - ✅ Google Maps Platform (Geocoding + Places API)
-- ✅ 21 ADRs documentados cubriendo todas las decisiones de arquitectura
+- ✅ 22 ADRs documentados cubriendo todas las decisiones de arquitectura
 
-#### Próximas prioridades
-- Normalización multi-portal (staging tables por portal + golden record `properties`)
-- H3 indexing geoespacial (en pruebas, Fabrizio)
-- Deduplicación cross-portal
-- Internal App (Next.js, Pamela) — Fase 2-3
+#### Próximas prioridades (Sprint 1-2)
+- Golden record schema + staging tables por portal
+- Mastra AI agents (Address Enrichment, Data Normalization)
+- CBRE/Colliers/Pincali persistence a Supabase
+- Tenant Portal auth (magic link + password)
+- Scoring dashboard refactorizado a DB
 
 > **[Ver Roadmap con sprints →](./03-Roadmap/Roadmap.md)**
 
@@ -73,15 +74,15 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 ## Módulos de la Plataforma
 
-| Módulo | Descripción | Fase | Estado |
-|--------|-------------|------|--------|
-| [Scraper](./01-Modules/Scraper/) | Extracción automatizada de 4 portales (Apify, Firecrawl, Browserbase) | Fase 1 | 🟢 En desarrollo |
-| [Internal App](./01-Modules/Internal-App/) | Aplicación web para el equipo Beiqa (Next.js) | Fase 3 | 🔴 Por iniciar |
-| [Data](./01-Modules/Data/) | Normalización, deduplicación, integración de fuentes externas | Fase 1-2 | 🟡 Diseño/investigación |
-| [Market Intelligence](./01-Modules/Market-Intelligence/) | Análisis y reportes de mercado automatizados | Fase 2 | 🔴 Por iniciar |
-| [Geospatial](./01-Modules/Geospatial/) | Análisis geoespacial, H3 index, AGEB | Fase 2 | 🟡 Diseño/investigación |
-| [Tenant Portal](./01-Modules/Tenant-Portal/) | Portal web para clientes (shortlists, feedback) | Fase 2 | 🔴 Por iniciar |
-| [AI Brain](./01-Modules/AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Fase 3 | 🔴 Por iniciar |
+| Módulo | Descripción | Sprint | Estado |
+|--------|-------------|--------|--------|
+| [Scraper](./01-Modules/Scraper/) | Extracción automatizada de 5+ portales (Apify, Firecrawl, Browserbase) | 1+ | 🟢 En desarrollo |
+| [Data](./01-Modules/Data/) | Normalización, deduplicación, integración de fuentes externas | 1-2 | 🟢 En desarrollo |
+| [AI Brain](./01-Modules/AI-Brain/) | Agentes AI con Mastra (enrichment, normalization, matching) | 1+ | 🟢 En desarrollo |
+| [Geospatial](./01-Modules/Geospatial/) | Análisis geoespacial, H3 index, AGEB | 3+ | 🟡 En pruebas |
+| [Tenant Portal](./01-Modules/Tenant-Portal/) | Portal web para clientes (shortlists, feedback) | 1+ | 🟡 En desarrollo |
+| [Internal App](./01-Modules/Internal-App/) | Aplicación web para el equipo Beiqa (Next.js) | 5+ | 🟡 En diseño |
+| [Market Intelligence](./01-Modules/Market-Intelligence/) | Análisis y reportes de mercado automatizados | 4+ | 🔴 Por iniciar |
 
 > **[Ver mapa completo de módulos con dependencias →](./01-Modules/)**
 
@@ -103,6 +104,8 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | Geocodificación | Google Maps Platform (Geocoding + Places) | ✅ Activo | [ADR-011](./02-Architecture/ADRs/ADR-011-Google-Maps-Platform.md) |
 | Geoespacial | H3 indexing (h3-js, capas 5-11) | 🟡 En pruebas | [ADR-009](./02-Architecture/ADRs/ADR-009-H3-Indexing.md) |
 | Frontend | Next.js | 🟡 Fase 2-3 | [ADR-015](./02-Architecture/ADRs/ADR-015-Frontend-Next-js.md) |
+| Frontend Hosting | Vercel Pro | 🟡 Por deployar | [ADR-022](./02-Architecture/ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) |
+| AI Agent Hosting | Mastra Cloud (beta) | 🔴 Por implementar | [ADR-022](./02-Architecture/ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) |
 
 > **[Ver todas las decisiones técnicas →](./02-Architecture/Stack-Decidido.md)** | **[Ver los 21 ADRs →](./02-Architecture/ADRs/README.md)**
 
@@ -167,7 +170,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
-| **2026-03-05** | **Integración Mastra y reestructuración Sprint-based** — Mastra adoptado como framework de AI agents (ADR-020, ADR-021). Agent-Architecture.md creado. Roadmap reescrito de fases a sprints de 2 semanas. 7 módulos actualizados. Archivos CONFLICT limpiados. |
+| **2026-03-05** | **Hosting Strategy + Integración Mastra** — ADR-022: Vercel (frontend) + Mastra Cloud (agents). Mastra adoptado como framework de AI agents (ADR-020, ADR-021). Agent-Architecture.md creado. Roadmap reescrito a sprints. |
 | **2026-03-02** | **Presupuesto operativo reescrito con datos reales** — De $30–50/mes estimados a $747–896/mes verificados. Stack-Decidido.md con costos reales. |
 | **2026-02-28** | **Workflow Boris Cherny implementado** — tasks/, auto-mejora, principios de trabajo, delegación y autonomía en CLAUDE.md. |
 | **2026-02-27** | **Gran refactor de documentación** — 19 ADRs, Stack-Decidido dashboard, System-Architecture actualizado, documentos legacy archivados. |

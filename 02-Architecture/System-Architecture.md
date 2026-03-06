@@ -36,7 +36,7 @@ flowchart TB
         HTTPTrigger[HTTP trigger\na Mastra post-scrape]
     end
 
-    subgraph AIBrain[AI Brain — Mastra ⚡ Capa Transversal]
+    subgraph AIBrain["AI Brain — Mastra ⚡ · Mastra Cloud"]
         AddressAgent[Address Enrichment\nAgent]
         NormAgent[Data Normalization\nAgent]
         DedupAgent[Deduplication\nAgent]
@@ -58,7 +58,7 @@ flowchart TB
         HubSpot[HubSpot]
     end
 
-    subgraph Frontend[Frontend — Next.js 15]
+    subgraph Frontend["Frontend — Next.js 15 · Vercel"]
         InternalApp[Internal App\napp.beiqa.com]
         TenantPortal[Tenant Portal\nportal.beiqa.com]
     end
@@ -181,8 +181,11 @@ flowchart TB
 
 - **ADR**: [ADR-020](ADRs/ADR-020-Mastra.md)
 - **Separación de responsabilidades**: [ADR-021](ADRs/ADR-021-Separacion-Trigger-Mastra.md)
+- **Hosting**: Mastra Cloud ([ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md)) — 🔴 por implementar (beta, gratis)
+- **Fallback**: Deploy a Vercel usando deployer oficial de Mastra
 - **Repo**: `github.com/pablo-beiqa/beiqa-agents`
 - **Framework**: [Mastra](https://mastra.ai) (TypeScript, open source, Apache 2.0)
+- **Server**: Hono HTTP server — persistente, no serverless
 - **Scope**: Orquestación de agentes AI — enrichment, normalization, deduplication, scoring, market intelligence, GIS analysis
 - **Comunicación**: HTTP API (Hono server) + Supabase shared DB + MCP clients (ArcGIS, etc.)
 
@@ -223,6 +226,9 @@ Ver schema: [Database/Schema-Real.md](./Database/Schema-Real.md)
 ### Frontend (Next.js 15)
 
 - **ADR**: [ADR-015](ADRs/ADR-015-Frontend-Next-js.md)
+- **Hosting**: Vercel Pro ([ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md)) — 🟡 por deployar
+- **Dominios**: `portal.beiqa.com` (Tenant Portal), `app.beiqa.com` (Internal App)
+- **Deploy**: git push a `main` → deploy automático. Preview deploys por PR.
 - **Repo**: `github.com/pablo-beiqa/beiqa-frontend`
 - **Internal App** (`app.beiqa.com`): Dashboard del equipo — gestión de propiedades, shortlists, analytics
 - **Tenant Portal** (`portal.beiqa.com`): Portal de clientes — scoring, shortlists compartidas, feedback
@@ -393,4 +399,4 @@ sequenceDiagram
 
 ---
 
-*Documento actualizado: 2026-03-05 | Versión anterior archivada en [archive/](archive/)*
+*Documento actualizado: 2026-03-05 | Hosting de Frontend (Vercel) y Mastra (Mastra Cloud) documentado. Ver [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md).*
