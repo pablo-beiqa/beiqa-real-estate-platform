@@ -79,8 +79,23 @@ _[Reflexión breve: qué salió bien, qué se podría mejorar]_
 
 ## Historial de tareas completadas
 
-_Las tareas completadas se mueven aquí con fecha de finalización y referencia al issue._
+### 2026-03-05 — Integración Mastra en documentación + limpieza CONFLICT + merge a main
+
+**Solicitado por**: Pablo
+**Repo destino**: platform
+**Contexto**: Incorporar Mastra como capa transversal de AI agents en toda la documentación del proyecto, limpiar archivos CONFLICT generados por herramienta de sync, y unificar todo en main.
+
+**Resumen**:
+1. Limpieza de 10 archivos CONFLICT (3 workspace + 7 .git/) — artefactos de sync, no git
+2. Comparativa main vs mastra-orchestration: 1 commit, 14 archivos, +1,124 líneas
+3. Commit de 9 archivos adicionales (módulos, roadmap, CLAUDE.md)
+4. Merge fast-forward mastra-orchestration → main, push exitoso
+5. Creación de CHANGELOG.md con historial completo (19 entradas)
+6. README.md actualizado: links corregidos, metadata, changelog resumido
+7. 9 lecciones documentadas en lessons.md
+
+**Verificación**: ✅ git status limpio, sin archivos CONFLICT, main actualizado en GitHub
 
 ---
 
-*Última actualización: 2026-02-28*
+*Última actualización: 2026-03-05*

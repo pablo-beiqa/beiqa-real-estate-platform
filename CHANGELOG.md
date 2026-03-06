@@ -1,0 +1,68 @@
+# Changelog
+
+> Registro cronológico de cambios significativos en la documentación y planeación de Beiqa Platform.
+> Para el backlog de desarrollo: [GitHub Issues](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues)
+
+---
+
+## 2026-03-05 — Integración Mastra y reestructuración Sprint-based
+
+- **Mastra adoptado como framework de AI agents** — ADR-020 y ADR-021 aprobados. Mastra maneja agentes, workflows, tools, memory y MCP. Reemplaza uso directo de Claude API para orquestación.
+- **Agent-Architecture.md creado** — Diseño completo de 6 agentes AI: Address Enrichment, Data Normalization, Deduplication, Scoring/Matching, Market Intelligence, GIS Analysis.
+- **System-Architecture.md reescrito** — Diagrama actualizado con Mastra como capa transversal de AI entre staging tables y golden record.
+- **Trigger.dev scope reducido formalmente** — ADR-003 actualizado: Trigger.dev solo hace ejecución durable (scrapers, cron, sync). Toda lógica AI migra a Mastra.
+- **Backboard.io deprecado** — ADR-014 actualizado a "supersedido". Mastra memory cubre persistent context, RAG y shared memory entre agentes.
+- **Roadmap reescrito de fases a sprints** — Metodología Scrum con sprints de 2 semanas. 4 milestones (M1-M4, Mar 29 – Jun 21). Sprint 1 y 2 detallados con OKRs y acceptance criteria.
+- **Archivos de roadmap viejos archivados** — `Fase-Real-1-Scrapers.md` y `Phase-1-MVP.md` movidos a `03-Roadmap/archive/`.
+- **7 READMEs de módulos actualizados** — Scraper, Data, AI Brain, Geospatial, Tenant Portal, Internal App y Market Intelligence reflejan Mastra como capa transversal.
+- **Total-Budget.md actualizado** — Sección 8 agregada con costos de Mastra LLM (~$67–88/mo estimado). Costo total con Mastra: ~$814–984/mo.
+- **CLAUDE.md actualizado** — 21 ADRs (antes 19), Mastra en stack table, OpenRouter marcado como legacy, roles de equipo actualizados.
+- **Archivos CONFLICT de sync tool limpiados** — 10 archivos `*-CONFLICT-1` eliminados (generados por herramienta de sincronización, no conflictos de git).
+
+## 2026-03-02 — Presupuesto real y Tenant Portal
+
+- **Presupuesto operativo reescrito con datos reales** — Total-Budget.md reemplazado completamente: de $30–50/mes estimados a $747–896/mes verificados. Incluye costos fijos vs variables, costo por portal, costo por propiedad (nueva $0.003–0.009 vs update $0.002–0.006), proyecciones 6–12 meses ($775–1,200/mes), puntos de inflexión y exclusiones.
+- **Stack-Decidido.md actualizado con costos reales** — Apify $300, Trigger.dev $50, Atlas.co $178–267, OpenRouter $15–30, Rube+Claude $75–100.
+- **Changelog y quick links actualizados en README** — Refleja presupuesto real.
+
+## 2026-02-28 — Workflow Boris Cherny implementado
+
+- **Nuevas secciones en CLAUDE.md** — Workflow de tareas (modo plan + sync GitHub Issues multi-repo), Principios de trabajo (simplicidad, estándar senior, solo lo necesario), Delegación y autonomía (tabla de autonomía + subagentes). Regla #6 de auto-mejora.
+- **tasks/ creado** — `lessons.md` (loop de auto-mejora) y `todo.md` (scratchpad de sesión sincronizado con GitHub Issues).
+
+## 2026-02-27 — Gran refactor de documentación y ADRs
+
+- **19 ADRs documentados** — Documentación completa de todas las decisiones de arquitectura en formato MADR 4.0: 12 aceptadas (Supabase, scraping multi-portal, Trigger.dev, Firecrawl, Browserbase, Rube, HubSpot, monitoreo, H3, AGEB, Google Maps, multi-portal data), 6 propuestas (OpenRouter, Backboard, frontend Next.js, deduplicación, GIS, CI/CD) y 1 deprecada (n8n).
+- **Templates MADR 4.0 y Simple** — Dos templates adaptados al proyecto en español con campo de costo mensual, plan de implementación y checklist de verificación.
+- **Stack-Decidido.md convertido a dashboard** — Tabla de decisiones con costos y links directos a cada ADR. n8n eliminado como activo, Firecrawl ($99/mo), Browserbase ($20/mo), Rube como UI actual.
+- **System-Architecture.md actualizado** — Diagrama mermaid con stack real: 4 portales (I24/Pincali/CBRE/Colliers), Trigger.dev como orquestador, Rube como interfaz.
+- **CLAUDE.md actualizado** — Stack real: Trigger.dev reemplaza n8n, Firecrawl/Browserbase/Rube/H3/Google Maps agregados, Internal App movida a Fase 2-3.
+- **Documentos legacy archivados** — Tech-Stack-Decision.md, Integraciones.md y Deduplication-Strategy.md movidos a `archive/`.
+- **README.md actualizado** — Stack, módulos, quick links y estructura reflejan el estado real.
+- **.gitignore agregado** — Excluye 30+ carpetas de herramientas AI y config local.
+- **Fases de módulos actualizadas** — Internal App a Fase 3, Geospatial y Data a Diseño/investigación.
+
+## 2026-02-26 — CLAUDE.md inicial
+
+- **CLAUDE.md creado** — Instrucciones para Claude Code: rol, convenciones, reglas, archivos de referencia.
+
+## 2026-02-24 — Reestructuración module-centric
+
+- **Estado real documentado** — Stack decidido, schema real, fases actuales, equipo.
+- **Modelo module-centric por Pablo** — 6 carpetas (00-05), 7 módulos auto-contenidos.
+
+## 2026-02-06 — Expansión de cuestionarios
+
+- **463 preguntas de producto** — Cuestionarios expandidos en 9 módulos.
+
+## 2026-02-05 — Reestructuración README
+
+- **README reestructurado** — Formato actualizado.
+
+## 2026-02-04 — Inicio del proyecto
+
+- **Estructura inicial creada** — Documentación base del proyecto.
+
+---
+
+*Última actualización: 2026-03-05*
