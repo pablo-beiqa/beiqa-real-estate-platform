@@ -8,13 +8,13 @@
 
 | Módulo | Descripción | Sprint | Estado |
 |--------|-------------|--------|--------|
-| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Apify + TriggerDev + Firecrawl) | Sprint 1+ | 🟢 En desarrollo |
-| [Internal App](./Internal-App/) | Aplicación web para el equipo Beiqa (Next.js — Pamela) | Sprint 2+ | 🟡 Diseño activo |
-| [Data](./Data/) | Normalización (Mastra agents), integración de fuentes externas (INEGI, Google, catastro) | Sprint 1+ | 🟢 En desarrollo |
-| [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Sprint 3+ | 🔴 Por iniciar |
-| [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Sprint 2+ | 🟡 En pruebas |
-| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes: scoring, shortlists, feedback | Sprint 3+ | 🟡 En diseño |
-| [AI Brain](./AI-Brain/) | Matching inteligente, NLP, procesamiento de llamadas | Sprint 1+ | 🟢 En desarrollo |
+| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Apify + Trigger.dev + Firecrawl) | Sprint 1+ | 🟢 En desarrollo |
+| [Data](./Data/) | Normalización (Mastra agents), integración de fuentes externas | Sprint 1-2 | 🟢 En desarrollo |
+| [AI Brain](./AI-Brain/) | Agentes AI con Mastra (enrichment, normalization, matching) | Sprint 1+ | 🟢 En desarrollo |
+| [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Sprint 3+ | 🟡 En pruebas |
+| [Tenant Portal](./Tenant-Portal/) | Portal web para clientes: scoring, shortlists, feedback | Sprint 1+ | 🟡 En desarrollo |
+| [Internal App](./Internal-App/) | Aplicación web para el equipo Beiqa (Next.js — Pamela) | Sprint 5+ | 🟡 En diseño |
+| [Market Intelligence](./Market-Intelligence/) | Análisis de mercado, tendencias, reportes automatizados | Sprint 4+ | 🔴 Por iniciar |
 
 > **Nota**: La Base de Datos (PostgreSQL + PostGIS) vive en [02-Architecture/Database/](../02-Architecture/Database/) como infraestructura compartida.
 
@@ -24,29 +24,32 @@
 
 ## Mapeo a Sprints del Proyecto
 
-### Sprint 1+ — Scrapers, Inventario & AI Brain (En curso)
+### Sprint 1-2 — Core: Scrapers, Data, AI Brain, Auth (En curso)
 
 | Módulo | Alcance |
 |--------|---------|
-| **Scraper** | Apify actor Inmuebles24 ✅, TriggerDev como plataforma primaria, Firecrawl + Browserbase para portales custom |
-| **Internal App** | Next.js — lista propiedades, mapa, filtros, shortlists (Pamela) |
-| **Data** | Normalización vía Mastra agents, golden record (properties) |
-| **AI Brain** | Agentes Mastra en implementación (enrichment, normalization, matching) |
-| **Database** *(Arquitectura)* | Supabase activo ✅, 14 migrations ✅, ~30K propiedades ✅ |
+| **Scraper** | Apify I24 ✅, CBRE/Colliers/Pincali persistence a Supabase, golden record staging |
+| **Data** | Golden record schema, normalización vía Mastra agents |
+| **AI Brain** | Address Enrichment Agent, Data Normalization Agent, LLM eval |
+| **Tenant Portal** | Supabase Auth (magic link + password), scoring desde DB |
+| **Database** *(Arquitectura)* | Supabase activo ✅, 14 migrations ✅, ~30K propiedades I24 ✅ |
 
-### Sprint 2+ — Portal Web + Geospatial
-
-| Módulo | Alcance |
-|--------|---------|
-| **Tenant Portal** | Portal para clientes: shortlists, feedback, mapa de opciones |
-| **Geospatial** | H3 + AGEB + Atlas.co visualización + GIS Analysis Agent (Mastra) |
-
-### Sprint 3+ — Data Ingestion + Market Intelligence
+### Sprint 3-4 — Inteligencia: Dedup, Scoring AI, Geospatial
 
 | Módulo | Alcance |
 |--------|---------|
-| **Data (Ingestion)** | INEGI DENUE, Google Places, AGEB shapefiles, indicadores económicos |
-| **Market Intelligence** | Tendencias de precio, precio promedio m2, heatmaps por zona |
+| **Data** | Deduplication Agent, backfill completo |
+| **AI Brain** | Scoring/Matching Agent (migra de frontend) |
+| **Geospatial** | H3 indexer, AGEB lookup, GIS Analysis Agent |
+| **Market Intelligence** | Market Intelligence Agent, reportes por zona |
+| **Tenant Portal** | Shortlists UI, feedback, mapa de opciones |
+
+### Sprint 5+ — Experiencia y Operaciones
+
+| Módulo | Alcance |
+|--------|---------|
+| **Internal App** | Next.js — lee golden record, dashboard interno (Pamela diseño) |
+| **Tenant Portal** | Portal live, pipeline E2E |
 
 ---
 
@@ -62,21 +65,21 @@ flowchart TD
         MA_MATCH[Matching Agent]
     end
 
-    subgraph S1["Sprint 1+ — Core"]
+    subgraph S1["Sprint 1-2 — Core"]
         SCR[Scraper]
         DB[(Database<br/>Arquitectura)]
-        APP[Internal App]
-        AI[AI Brain]
-    end
-
-    subgraph S2["Sprint 2+ — Expansión"]
         DATA[Data]
-        GEO[Geospatial]
+        AI[AI Brain]
         TP[Tenant Portal]
     end
 
-    subgraph S3["Sprint 3+ — Inteligencia"]
+    subgraph S2["Sprint 3-4 — Inteligencia"]
+        GEO[Geospatial]
         MI[Market Intelligence]
+    end
+
+    subgraph S3["Sprint 5+ — Operaciones"]
+        APP[Internal App]
     end
 
     MASTRA -.->|enriquecimiento| SCR

@@ -1,10 +1,10 @@
 # Fase 0: Investigación y Diseño
 
-> ✅ **COMPLETADA** — Febrero 2026
+> ✅ **ARCHIVED** — Fase 0 completada Feb 2026. Ver [Roadmap.md](../Roadmap.md) para el roadmap actual.
 >
-> Todas las decisiones técnicas tomadas. Las decisiones están documentadas en [02-Architecture/Stack-Decidido.md](../02-Architecture/Stack-Decidido.md).
+> Todas las decisiones técnicas tomadas. Documentadas en [Stack-Decidido.md](../../02-Architecture/Stack-Decidido.md).
 >
-> El proyecto pasó a desarrollo activo (Fase 1). Ver: [Fase-Real-1-Scrapers.md](./Fase-Real-1-Scrapers.md)
+> El proyecto pasó a desarrollo activo. Ver: [Fase-Real-1-Scrapers.md](./Fase-Real-1-Scrapers.md)
 
 ---
 

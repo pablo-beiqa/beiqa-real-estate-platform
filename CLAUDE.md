@@ -123,6 +123,16 @@ Ver [01-Modules/README.md](01-Modules/README.md) para el diagrama de dependencia
 
 **Formato**: Markdown limpio, headers jerárquicos, tablas para datos estructurados, mermaid para diagramas.
 
+### Convención de commits
+
+Formato: `<tipo>(<scope>): <descripción en español> — <detalle opcional>`
+
+**Tipos**: `docs`, `feat`, `fix`, `refactor`, `chore`
+**Scopes**: por carpeta o módulo (`adr`, `arch`, `scraper`, `data`, `modules`, `roadmap`, `budget`)
+**Reglas**: español, lowercase, sin punto final, imperativo ("agregar", no "agregado")
+
+Ejemplo: `docs(roadmap): agregar Sprint 3 con deliverables de dedup y H3`
+
 ---
 
 ## Reglas estrictas
@@ -133,6 +143,7 @@ Ver [01-Modules/README.md](01-Modules/README.md) para el diagrama de dependencia
 4. **NUNCA modificar la estructura de carpetas** (00- a 05-) sin permiso explícito del equipo.
 5. **Source of truth**: Supabase para propiedades/listings/brokers. HubSpot para clientes/deals. Respetar esta separación.
 6. **Después de cada corrección, actualizar `tasks/lessons.md`** — cuando el usuario corrija un error o ajuste un comportamiento, Claude propone una lección para agregar al archivo. Esto previene que el mismo error se repita.
+7. **Propagar cambios** — al modificar un archivo clave (Roadmap, Budget, Stack, Architecture, módulos), verificar y actualizar los archivos dependientes según [tasks/propagation-rules.md](tasks/propagation-rules.md).
 
 ---
 
