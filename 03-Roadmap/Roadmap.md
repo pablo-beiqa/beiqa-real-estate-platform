@@ -15,9 +15,11 @@
 | Componente | Estado | Detalle |
 |-----------|--------|---------|
 | Supabase | ✅ Producción | 14 migrations, PostGIS, RLS, ~30K propiedades I24 |
-| Scraper I24 (Apify) | ✅ Activo | Actor contratado, corridas bimensuales |
-| Scraper FinSA | ✅ Activo | Repo separado, Supabase + PDFs funcionando |
-| Scrapers custom (Trigger.dev) | 🟡 En desarrollo | CBRE, Colliers, Pincali: código listo, sin persistencia a Supabase |
+| Scraper I24 (Apify) | ⚠️ Migrando | Apify+Clay → Trigger.dev+Firecrawl (Sprint 1: pruebas, Sprint 2: migración completa) |
+| Scraper FinSA | ✅ Producción | beiqa-scraper, Supabase + PDFs + H3 + validación + Slack |
+| Scraper CBRE | ✅ Producción | Persistencia a Supabase + Storage, cron martes 6am UTC |
+| Scraper Colliers | ✅ Producción | Persistencia a Supabase + Storage, cron lunes 6am UTC |
+| Scraper Pincali | 🟡 Parcial | Scraping funciona, persistencia a Supabase pendiente (Sprint 1) |
 | Frontend (Next.js 15) | 🟡 Phase 0 | Scoring dashboard funcional, scorings en filesystem |
 | Mastra (AI Agents) | 🔴 Por implementar | ADRs aprobados (020, 021), arquitectura diseñada, repo NO existe |
 | Golden record | 🔴 Por implementar | Schema diseñado, sin tablas creadas |
@@ -29,11 +31,11 @@
 
 | Portal | Estado | PDFs | Prioridad |
 |--------|--------|------|-----------|
-| Inmuebles24 | ✅ Producción (Apify) | No | — |
-| FinSA | ✅ Producción | Sí | — |
-| CBRE | Código listo, sin persistence | Posible | Sprint 1 |
-| Colliers | Código listo, sin persistence | Sí | Sprint 2 |
-| Pincali | Código listo, sin persistence | No | Sprint 2 |
+| Inmuebles24 | ⚠️ Migrando (Apify → Trigger.dev) | No | Sprint 1-2 |
+| FinSA | ✅ Producción (Trigger.dev) | Sí (flyers) | — |
+| CBRE | ✅ Producción (Trigger.dev) | Sí (imágenes + PDFs) | — |
+| Colliers | ✅ Producción (Trigger.dev) | Sí (imágenes + PDFs) | — |
+| Pincali | 🟡 Persist pendiente | No | Sprint 1 |
 | Cushman | Planeado | TBD | Sprint 3+ |
 | Proximity Parks | Planeado | TBD | Sprint 3+ |
 | PDFs developers | Manual → GDrive → Agent → Supabase | Sí | Sprint 3+ |
