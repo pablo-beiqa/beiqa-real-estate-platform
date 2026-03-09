@@ -15,7 +15,7 @@
   - [x] CBRE Mexico (Trigger.dev + Firecrawl, RSC parsing — ✅ producción)
   - [x] Colliers Mexico (Trigger.dev + Firecrawl + Browserbase — ✅ producción)
   - [x] FinSA (Trigger.dev + API directa — ✅ producción)
-  - [ ] Pincali / pincali.com (scraping funciona, persist pendiente Sprint 1)
+  - [x] Pincali / pincali.com (Trigger.dev + Firecrawl + Browserbase — ✅ producción, 1,761 props)
 - **MUST** Extraer campos obligatorios de cada listing: titulo, precio (+ moneda), tipo de operacion (renta/venta), direccion, coordenadas (si disponible), superficie (m²), tipo de inmueble, descripcion, URL original, ID original, fecha de scraping
 - **MUST** Extraer telefono del anunciante y guardarlo directamente en el registro de la propiedad
 - **SHOULD** Extraer campos opcionales: imagenes, caracteristicas/amenidades, fecha de publicacion
@@ -111,7 +111,7 @@
   - [x] CBRE: cron martes 6am UTC (semanal)
   - [x] Colliers: cron lunes 6am UTC (semanal)
   - [x] FINSA: cron día 1 y 15, 5am UTC (bimensual)
-  - [x] Pincali: cron lunes 7am UTC (semanal) — sin persist
+  - [x] Pincali: cron lunes 7am UTC (semanal) — ✅ con persist
   - [ ] Inmuebles24: migrando de Apify a Trigger.dev (Sprint 1-2)
 - **SHOULD** Permitir ejecucion manual bajo demanda desde TriggerDev
 - **MUST** Registrar log de cada ejecucion en el repo (EXECUTION-LOG.md)

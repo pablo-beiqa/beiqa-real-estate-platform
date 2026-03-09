@@ -64,24 +64,24 @@ Opción elegida: "**Supabase**", porque provee PostgreSQL con PostGIS, Auth, Sto
 
 ### Verificación
 
-- [x] PostgreSQL 15 + PostGIS activo en producción
-- [x] 14 migrations implementadas
-- [x] ~60,000 propiedades en tabla `inmuebles24_listings`
-- [x] Trigger `populate_geo` operando
+- [x] PostgreSQL 17 + PostGIS 3.3.7 activo en producción
+- [x] 32 migrations implementadas
+- [x] ~24,700 propiedades en `inmuebles24_listings` + ~3K en otros 4 portales
+- [x] Triggers operando en las 5 tablas de listings (populate_geo, price_per_m2, log_price_change, update_last_seen)
 - [x] RLS configurado
-- [x] RPC functions: `tendencia_precios`, `precio_promedio_m2`
-- [ ] Supabase Storage configurado para imágenes de propiedades
+- [x] 19+ RPC functions: tendencia_precios, precio_promedio_m2, buscar_listings, buscar_por_radio, broker_stats, etc.
+- [x] Supabase Storage configurado (6 buckets: cbre-images, cbre-pdfs, colliers-images, colliers-pdfs, finsa-flyers, pincali-images)
 - [ ] Internal App usando Supabase Auth
 
 ## Pros y Contras por Opción
 
-### Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API)
+### Supabase (PostgreSQL 17 + PostGIS + Auth + Storage + REST API)
 
 * Bien, porque all-in-one: DB + Auth + Storage + REST API en un solo servicio
 * Bien, porque PostGIS incluido — soporte geoespacial completo
 * Bien, porque Row Level Security nativo — control de acceso a nivel DB
 * Bien, porque Free tier → Pro tier ($0 → $25/mo)
-* Bien, porque 14 migrations implementadas en días — setup rápido
+* Bien, porque 32 migrations implementadas — setup rápido y iterativo
 * Mal, porque vendor lock-in parcial en features específicos de Supabase
 
 ### PostgreSQL + PostGIS self-hosted

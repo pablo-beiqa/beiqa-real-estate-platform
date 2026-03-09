@@ -10,11 +10,11 @@
 
 ## Stack de base de datos
 
-- **Motor**: PostgreSQL 15 (vía Supabase)
-- **Extensions**: PostGIS (geography, geometría), uuid-ossp
+- **Motor**: PostgreSQL 17 (vía Supabase)
+- **Extensions**: PostGIS 3.3.7 (geography, geometría), uuid-ossp, pgcrypto, pg_trgm (fuzzy search), pg_stat_statements, pg_graphql, supabase_vault
 - **Auth**: Supabase Auth (Row Level Security habilitado)
 - **API**: Supabase REST automático + RPC functions
-- **Migrations**: 14+ activas (I24 originales + scraper tables)
+- **Migrations**: 32 activas (I24 originales + scrapers + brokers + cache + H3)
 
 ---
 
@@ -166,13 +166,15 @@ Listings que el sistema identificó como posibles duplicados.
 
 ### `cbre_listings`
 
-Staging table para propiedades scrapeadas de CBRE México (`propiedadescbre.net`).
+Staging table para propiedades scrapeadas de CBRE México (`propiedadescbre.net`). ✅ En producción (203 propiedades).
 
 - PK compuesto: `(listing_id, tenant_id)`
 - 40+ columnas: título, precios (renta + venta separados), 5 dimensiones de área, ubicación completa con lat/lng, submarket, building class, delivery condition
 - Campos JSONB: `brokers`, `spaces`, `images`, `features`, `raw_data`
-- Campos de seguimiento: `is_active`, `scraped_at`, `last_seen_at`
+- Campos de seguimiento: `is_active`, `scraped_at`, `last_seen_at`, `scrapes_sin_aparecer`
 - Campos de archivos: `image_storage_urls`, `pdf_storage_urls` (URLs en Supabase Storage)
+- Campos calculados: `price_per_m2` (via trigger), `ubicacion_geo` (geography(POINT) via trigger)
+- Triggers: `trg_cbre_populate_geo`, `trg_cbre_log_price_change`, `trg_cbre_price_per_m2`, `trg_cbre_update_last_seen`
 
 > Para el schema completo de columnas ver `docs/scrapers/cbre.md` en el repo `beiqa-scraper`.
 
@@ -180,12 +182,15 @@ Staging table para propiedades scrapeadas de CBRE México (`propiedadescbre.net`
 
 ### `colliers_listings`
 
-Staging table para propiedades scrapeadas de Colliers México (`colliers.com/en-mx`).
+Staging table para propiedades scrapeadas de Colliers México (`colliers.com/en-mx`). ✅ En producción (240 propiedades).
 
 - PK compuesto: `(listing_id, tenant_id)`
 - Similar a `cbre_listings` con campos específicos: `ceiling_height_m`, `docks`, `certifications` (JSONB)
 - Campos JSONB: `brokers`, `images`, `raw_data`
+- Campos de seguimiento: `is_active`, `scraped_at`, `last_seen_at`, `scrapes_sin_aparecer`
 - Campos de archivos: `image_storage_urls`, `pdf_storage_urls`
+- Campos calculados: `price_per_m2` (via trigger), `ubicacion_geo` (geography(POINT) via trigger)
+- Triggers: `trg_colliers_populate_geo`, `trg_colliers_log_price_change`, `trg_colliers_price_per_m2`, `trg_colliers_update_last_seen`
 
 > Para el schema completo ver `docs/scrapers/colliers.md` en el repo `beiqa-scraper`.
 
@@ -193,15 +198,63 @@ Staging table para propiedades scrapeadas de Colliers México (`colliers.com/en-
 
 ### `finsa_listings`
 
-Staging table para propiedades scrapeadas de FINSA (`finsa.net`). El scraper más maduro, con validación de ciclo de vida y H3 indexing.
+Staging table para propiedades scrapeadas de FINSA (`finsa.net`). ✅ En producción (713 propiedades). El scraper más maduro, con validación de ciclo de vida y H3 indexing.
 
 - PK: `finsa_space_id` (sin `tenant_id`)
 - 35+ columnas: áreas en m² y sqft, specs técnicas (HVAC, fire protection, electrical substation), certificaciones LEED/WELL/EDGE como booleans
 - 7 índices H3: `h3_index_res5` a `h3_index_res11`
 - Validación de ciclo de vida: `scrapes_sin_aparecer` (integer) — después de 2 ausencias consecutivas, `is_active = false`
 - `flyer_url` — URL del PDF/flyer en Supabase Storage
+- Triggers: `trg_finsa_populate_geo`, `trg_finsa_log_price_change`, `trg_finsa_price_per_m2`, `trg_finsa_update_last_seen`, `trg_finsa_generate_posting_id`
 
 > Para el schema completo ver `docs/scrapers/finsa.md` en el repo `beiqa-scraper`.
+
+---
+
+### `pincali_listings`
+
+Staging table para propiedades scrapeadas de Pincali. ✅ En producción (1,761 propiedades).
+
+- PK compuesto: `(listing_id, tenant_id)`
+- 58 columnas: título, descripción, precios (amount, currency, per_m2, period, text), 3 dimensiones de área (total, built, land), ubicación completa (address, neighborhood, municipality, city, state, zip_code)
+- Campos geográficos: `latitude`, `longitude`, `ubicacion_geo` (geography(POINT) via trigger), `google_maps_url`
+- Campos industriales: `ceiling_height_m`, `docks`, `front_m`, `length_m`, `year_built`, `floors`, `parking_spaces`
+- Campos de broker: `publisher_name`, `publisher_company`, `broker_photo_url`, `broker_profile_url`, `broker_id` (FK)
+- Campos JSONB: `images`, `features`, `raw_data`
+- Campos de archivos: `image_storage_urls` (array, URLs en Supabase Storage bucket `pincali-images`)
+- 7 índices H3: `h3_index_res5` a `h3_index_res11`
+- Campos de seguimiento: `is_active`, `scraped_at`, `last_seen_at`, `scrapes_sin_aparecer`, `extraction_method` (default: 'firecrawl')
+- Campos de relación: `busqueda_id` (FK), `hubspot_deal_id`
+- Triggers: `trg_pincali_populate_geo`, `trg_pincali_log_price_change`, `trg_pincali_price_per_m2`, `trg_pincali_update_last_seen`
+
+---
+
+### `cliente_propiedades`
+
+Shortlist de propiedades enviadas a clientes. Tracking de qué propiedades se enviaron a qué contacto de HubSpot.
+
+- `id` — UUID, primary key
+- `tenant_id` — FK a `tenants`
+- `hubspot_contact_id` — ID del contacto en HubSpot al que se envió
+- `posting_id` — ID de la propiedad enviada
+- `status` — Estado: 'enviada' (default), 'vista', 'descartada', etc.
+- `notas` — Notas adicionales sobre la propiedad para este cliente
+- `created_at`, `updated_at`
+
+---
+
+### `cache_api_responses`
+
+Cache de responses de APIs externas (Google Places, INEGI DENUE, Google Geocoding). ✅ Tabla creada (0 rows).
+
+- `id` — UUID, primary key
+- `tenant_id` — FK a `tenants`
+- `api_source` — Origen: 'google_places', 'inegi_denue', 'google_geocoding'
+- `query_key` — Hash de los parámetros de la query
+- `response_data` — JSONB con la respuesta completa
+- `fetched_at` — Timestamp de la consulta
+- `ttl_days` — Días de validez del cache (default: 30)
+- `h3_index` — Para cachear por zona geográfica
 
 ---
 
@@ -228,75 +281,95 @@ El primer precio se inserta manualmente en código (al crear la propiedad). Los 
 | `colliers-images` | Imágenes de propiedades (desde Azure Blob Storage) | Colliers |
 | `colliers-pdfs` | PDFs de propiedades | Colliers |
 | `finsa-flyers` | Flyers PDF (desde documentdeliver.com) | FINSA |
+| `pincali-images` | Imágenes de propiedades | Pincali |
 
 ---
 
 ## Triggers
 
-### `populate_geo`
+Todas las tablas de listings (inmuebles24, cbre, colliers, finsa, pincali) comparten un patrón consistente de triggers:
 
-**Tabla**: `inmuebles24_listings`
-**Evento**: BEFORE INSERT OR UPDATE
-**Función**: Cuando se insertan o actualizan `latitude` y `longitude`, genera automáticamente el campo `geo_point` como `geography(POINT)` usando `ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)`.
+### Trigger functions
 
-Esto permite queries geoespaciales como "propiedades en un radio de X km" sin calcular nada al vuelo.
+| Función | Tipo | Descripción |
+|---------|------|-------------|
+| `populate_geo` | BEFORE INSERT/UPDATE | Genera `geo_point`/`ubicacion_geo` como geography(POINT) desde lat/lng |
+| `calculate_price_per_m2` | BEFORE INSERT/UPDATE | Calcula `price_per_m2` automáticamente desde precio y área |
+| `log_price_change` | BEFORE UPDATE | Inserta registro en `price_history` cuando cambia el precio |
+| `update_last_seen` | BEFORE UPDATE | Actualiza `last_seen_at` en cada upsert |
+| `generate_finsa_posting_id` | BEFORE INSERT | Genera posting_id único para FINSA (solo `finsa_listings`) |
 
-### `price_history_on_update`
+> Nota: Cada portal tiene su propia versión prefijada (ej. `log_cbre_price_change`, `log_colliers_price_change`, etc.) pero la lógica es equivalente.
 
-**Tablas**: `cbre_listings`, `colliers_listings`
-**Evento**: AFTER UPDATE (cuando cambia el precio)
-**Función**: Inserta un registro en `price_history` con el nuevo precio, capturando el historial de cambios automáticamente.
+### Triggers por tabla
+
+| Tabla | populate_geo | price_per_m2 | log_price_change | update_last_seen | generate_posting_id |
+|-------|:---:|:---:|:---:|:---:|:---:|
+| `inmuebles24_listings` | ✅ | ✅ | ✅ (AFTER) | ✅ | — |
+| `cbre_listings` | ✅ | ✅ | ✅ | ✅ | — |
+| `colliers_listings` | ✅ | ✅ | ✅ | ✅ | — |
+| `finsa_listings` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `pincali_listings` | ✅ | ✅ | ✅ | ✅ | — |
 
 ---
 
 ## RPC Functions (funciones de base de datos)
 
-### `tendencia_precios`
+### Funciones de mercado / analytics
 
-Calcula la tendencia de precios para un tipo de propiedad en una zona geográfica.
+| Función | Parámetros | Descripción |
+|---------|-----------|-------------|
+| `tendencia_precios` | `p_zona text, p_tipo_operacion text, p_meses int` | Tendencia de precios por zona y tipo de operación |
+| `precio_promedio_m2` | `p_zona text, p_tipo_operacion text, p_meses int` | Precio promedio por m² en una zona |
+| `resumen_mercado` | `p_zona text` | Resumen de mercado para una zona (precios, inventario, actividad) |
 
-**Parámetros**: `property_type`, `zone`, `period_months`
-**Retorna**: Serie temporal de precio promedio por m2
+### Funciones de búsqueda
 
----
+| Función | Parámetros | Descripción |
+|---------|-----------|-------------|
+| `buscar_listings` | `filtros jsonb` | Búsqueda de listings con filtros dinámicos (tipo, precio, área, etc.) |
+| `buscar_por_radio` | `p_lat, p_lng, p_radio_km, filtros jsonb` | Búsqueda geoespacial por radio + filtros opcionales |
+| `listings_recientes` | `p_dias int, p_tenant_id uuid` | Listings nuevos o actualizados en los últimos N días |
 
-### `increment_scrapes_sin_aparecer_finsa`
+### Funciones de búsquedas (gestión)
 
-Incrementa atómicamente el contador de ausencias para un array de space IDs de FINSA. Usado por el post-scrape task para detectar propiedades que dejaron de aparecer.
+| Función | Parámetros | Descripción |
+|---------|-----------|-------------|
+| `resumen_busquedas` | `p_tenant_id uuid` | Resumen de búsquedas activas para un tenant |
+| `obtener_busquedas_para_rescrape` | — | Busca búsquedas que necesitan re-scraping |
+| `detectar_busquedas_atoradas` | `p_timeout_minutos int` | Detecta búsquedas que llevan demasiado tiempo sin completar |
 
-**Parámetros**: `space_ids text[]` — array de IDs de espacios FINSA ausentes
-**Efecto**: `UPDATE finsa_listings SET scrapes_sin_aparecer = scrapes_sin_aparecer + 1 WHERE finsa_space_id = ANY(space_ids)`
+### Funciones de brokers
 
----
+| Función | Parámetros | Descripción |
+|---------|-----------|-------------|
+| `broker_stats` | `p_broker_id uuid` | Estadísticas de un broker (listings, portales, actividad) |
+| `empresa_broker_stats` | `p_empresa_id uuid` | Estadísticas de una empresa de brokers |
+| `upsert_broker` | `p_publisher_id, p_publisher_name, p_whatsapp, p_portal_source, p_tenant_id` | Crea o actualiza un broker desde datos de scraping |
 
-### `precio_promedio_m2`
+### Funciones de ciclo de vida
 
-Calcula el precio promedio por metro cuadrado para un tipo de propiedad y operación en una zona.
+| Función | Parámetros | Descripción |
+|---------|-----------|-------------|
+| `increment_scrapes_sin_aparecer_finsa` | `space_ids text[]` | Incrementa contador de ausencias para FINSA |
+| `marcar_inactivos` | `p_portal text, p_dias int` | Marca como inactivos listings que no aparecen en N días |
+| `marcar_inactivos_por_scrapes` | `p_umbral int` | Marca inactivos por número de scrapes sin aparecer |
+| `resumen_frescura` | `p_tenant_id uuid` | Resumen de frescura de datos (cuántos listings activos, stale, etc.) |
+| `detectar_duplicados` | `p_posting_id text, p_tenant_id uuid` | Detecta posibles duplicados para un listing |
 
-**Parámetros**: `property_type`, `operation_type`, `geometry_or_zone`
-**Retorna**: `avg_price_per_m2`, `sample_size`, `period`
+### Funciones de utilidad
+
+| Función | Parámetros | Descripción |
+|---------|-----------|-------------|
+| `get_tenant_id` | — | Retorna el tenant_id del usuario autenticado (para RLS) |
+| `n8n_upsert_listing` | `p jsonb` | ⚠️ **Legacy** (n8n deprecado, ADR-019). Upsert de listing desde JSON. Pendiente de eliminar |
 
 ---
 
 ## Lo que está planificado (NO implementado aún)
 
-Estos campos/tablas están en el backlog para Fase 2:
-
-### Campos para H3 (geoespacial avanzado)
-Recomendación de Alex (llamada 23 feb): precalcular dimensiones de búsqueda al momento del scraping.
-
-```sql
--- Campos a agregar en migration futura:
-ALTER TABLE inmuebles24_listings
-ADD COLUMN h3_index_res7 TEXT,
-ADD COLUMN h3_index_res9 TEXT;
-
--- Extensión a habilitar:
-CREATE EXTENSION IF NOT EXISTS h3;
-
--- Trigger a crear:
--- Calcular H3 index al INSERT/UPDATE de geo_point
-```
+### Campos H3 para `inmuebles24_listings`
+Los H3 indices ya existen en `finsa_listings` y `pincali_listings` (res5-11), pero faltan en `inmuebles24_listings`. Pendiente agregar y backfill.
 
 ### Campo para AGEB (INEGI)
 ```sql
@@ -304,21 +377,37 @@ ALTER TABLE inmuebles24_listings ADD COLUMN ageb_id TEXT;
 -- Se popula con spatial join cuando se cargue el shapefile de AGEBs
 ```
 
-### Tabla `cache_api_responses`
-Para cachear responses de Google Places, INEGI DENUE, etc. (Fase 2):
-```sql
-CREATE TABLE cache_api_responses (
-  id UUID DEFAULT uuid_generate_v4(),
-  api_source TEXT, -- 'google_places', 'inegi_denue', 'google_geocoding'
-  query_key TEXT,  -- hash de los parámetros de la query
-  response_data JSONB,
-  fetched_at TIMESTAMPTZ,
-  ttl_days INTEGER DEFAULT 30,
-  h3_index TEXT   -- para cachear por zona geográfica
-);
-```
+### Golden record `properties`
+Tabla consolidada de propiedades deduplicadas (ADR-012). Pendiente de crear junto con el pipeline de normalización (Mastra agent).
+
+### Cleanup legacy
+- Eliminar función `n8n_upsert_listing` (legacy de n8n, ADR-019)
 
 ---
 
-*Documento creado: 2026-02-24 | Actualizado: 2026-03-08 (tablas de scrapers, storage buckets, RPCs)*
+## Resumen de tablas (Marzo 2026)
+
+| Tabla | Rows | Estado | Descripción |
+|-------|------|--------|-------------|
+| `inmuebles24_listings` | ~24,700 | ✅ Producción | Listings I24 (tabla principal) |
+| `pincali_listings` | ~1,760 | ✅ Producción | Listings Pincali |
+| `finsa_listings` | ~710 | ✅ Producción | Listings FINSA |
+| `colliers_listings` | ~240 | ✅ Producción | Listings Colliers |
+| `cbre_listings` | ~200 | ✅ Producción | Listings CBRE |
+| `price_history` | ~2,000 | ✅ Producción | Historial de precios (todos los portales) |
+| `brokers` | 3 | ✅ Producción | Brokers encontrados |
+| `empresas_brokers` | 3 | ✅ Producción | Empresas de brokers |
+| `tenants` | 1 | ✅ Producción | Clientes Beiqa |
+| `usuarios` | 4 | ✅ Producción | Usuarios del sistema |
+| `busquedas` | 1 | ✅ Producción | Búsquedas de propiedades |
+| `busqueda_listings` | 3 | ✅ Producción | Resultados de búsquedas |
+| `cliente_propiedades` | 0 | ✅ Creada | Shortlist de props enviadas a clientes |
+| `cache_api_responses` | 0 | ✅ Creada | Cache de APIs externas |
+| `portales_config` | 2 | ✅ Producción | Config de portales |
+| `possible_duplicates` | 0 | ✅ Creada | Duplicados detectados |
+| `error_logs` | 0 | ✅ Creada | Logs de errores |
+
+---
+
+*Documento creado: 2026-02-24 | Actualizado: 2026-03-09 (sync completo con Supabase: PG 17, 32 migrations, pincali_listings, cliente_propiedades, cache_api_responses, triggers y RPCs expandidos)*
 *Para el SQL completo ver: `supabase/migrations/` en el repo de código*

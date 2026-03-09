@@ -47,7 +47,7 @@ flowchart TB
     end
 
     subgraph DB[Base de Datos — Supabase]
-        PG[(PostgreSQL 15\n+ PostGIS)]
+        PG[(PostgreSQL 17\n+ PostGIS)]
         GoldenRecord[(Golden Record\nproperties)]
         StagingTables[(Staging Tables\ninmuebles24, pincali...)]
         Auth[Supabase Auth]
@@ -178,7 +178,7 @@ flowchart TB
 | `cbre-weekly-scrape` | Scraping + persist CBRE, cron martes 6am UTC ✅ |
 | `colliers-weekly-scrape` | Scraping + persist Colliers, cron lunes 6am UTC ✅ |
 | `finsa-scrape-portfolio` | Scraping + persist FINSA, cron día 1 y 15, 5am UTC ✅ |
-| `pincali-biweekly-scrape` | Scraping Pincali, cron lunes 7am UTC (sin persist) 🟡 |
+| `pincali-biweekly-scrape` | Scraping + persist Pincali, cron lunes 7am UTC ✅ |
 | `sync-hubspot` | Sync one-way Supabase → HubSpot (en migración) |
 | `trigger-mastra` | HTTP POST a Mastra post-scrape (por implementar) |
 
@@ -215,16 +215,16 @@ Ver arquitectura completa de agentes: [Agent-Architecture.md](./Agent-Architectu
 ### Base de datos (Supabase)
 
 - **ADR**: [ADR-001](ADRs/ADR-001-Supabase-Plataforma.md)
-- **Motor**: PostgreSQL 15 + PostGIS
+- **Motor**: PostgreSQL 17 + PostGIS 3.3.7
 - **Auth**: Supabase Auth (JWT, sin Auth0)
-- **Storage**: Supabase Storage (imágenes, documentos)
+- **Storage**: Supabase Storage (6 buckets: imágenes y documentos por portal)
 - **API**: REST automática generada desde el schema
 - **RLS**: Row Level Security configurado
-- **14 migrations** activas
-- **~30,000 propiedades** en `inmuebles24_listings`
+- **32 migrations** activas
+- **~24,700 propiedades** en `inmuebles24_listings` + ~3K en otros 4 portales
 
 **Estructura de datos** ([ADR-012](ADRs/ADR-012-Multi-Portal-Data.md)):
-- **Staging tables**: `inmuebles24_listings`, `pincali_listings`, `cbre_listings`, `colliers_listings` — datos crudos por portal
+- **Staging tables**: `inmuebles24_listings`, `pincali_listings`, `cbre_listings`, `colliers_listings`, `finsa_listings` — datos crudos por portal (5 tablas activas)
 - **Golden record**: `properties` — datos normalizados, deduplicados, enriquecidos por Mastra
 - **Source of truth**: Supabase es source of truth para propiedades, listings, brokers, analytics, geo data
 
@@ -408,4 +408,4 @@ sequenceDiagram
 
 ---
 
-*Documento actualizado: 2026-03-08 | FINSA, CBRE, Colliers en producción. I24 migrando. Volumen I24 corregido a ~30K. Ver [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md).*
+*Documento actualizado: 2026-03-09 | FINSA, CBRE, Colliers, Pincali en producción. PG 17, 32 migrations. I24 migrando. Ver [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md).*

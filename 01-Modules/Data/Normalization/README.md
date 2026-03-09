@@ -1,8 +1,8 @@
 # Data Normalization
 
 **Fase del proyecto**: Fase 1 — MVP
-**Estado**: 🔴 Por iniciar
-**Owner**: Por definir
+**Estado**: 🟡 Parcial — triggers automatizan normalización básica (geo, price_per_m2, price_history, last_seen) en las 5 tablas de staging. Pipeline Mastra de normalización profunda (golden record, dedup) por iniciar.
+**Owner**: Pablo (Mastra agents), Fabrizio (DB/triggers)
 
 ---
 

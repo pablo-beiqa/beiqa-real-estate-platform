@@ -14,12 +14,12 @@
 
 | Componente | Estado | Detalle |
 |-----------|--------|---------|
-| Supabase | ✅ Producción | 14 migrations, PostGIS, RLS, ~30K propiedades I24 |
+| Supabase | ✅ Producción | PostgreSQL 17, 32 migrations, PostGIS, RLS, ~25K propiedades I24 + ~3K otros portales |
 | Scraper I24 (Apify) | ⚠️ Migrando | Apify+Clay → Trigger.dev+Firecrawl (Sprint 1: pruebas, Sprint 2: migración completa) |
 | Scraper FinSA | ✅ Producción | beiqa-scraper, Supabase + PDFs + H3 + validación + Slack |
 | Scraper CBRE | ✅ Producción | Persistencia a Supabase + Storage, cron martes 6am UTC |
 | Scraper Colliers | ✅ Producción | Persistencia a Supabase + Storage, cron lunes 6am UTC |
-| Scraper Pincali | 🟡 Parcial | Scraping funciona, persistencia a Supabase pendiente (Sprint 1) |
+| Scraper Pincali | ✅ Producción | Persistencia a `pincali_listings` (1,761 props), Storage, H3, cron lunes 7am |
 | Frontend (Next.js 15) | 🟡 Phase 0 | Scoring dashboard funcional, scorings en filesystem |
 | Mastra (AI Agents) | 🔴 Por implementar | ADRs aprobados (020, 021), arquitectura diseñada, repo NO existe |
 | Golden record | 🔴 Por implementar | Schema diseñado, sin tablas creadas |
@@ -35,7 +35,7 @@
 | FinSA | ✅ Producción (Trigger.dev) | Sí (flyers) | — |
 | CBRE | ✅ Producción (Trigger.dev) | Sí (imágenes + PDFs) | — |
 | Colliers | ✅ Producción (Trigger.dev) | Sí (imágenes + PDFs) | — |
-| Pincali | 🟡 Persist pendiente | No | Sprint 1 |
+| Pincali | ✅ Producción (Trigger.dev) | Sí (imágenes) | — |
 | Cushman | Planeado | TBD | Sprint 3+ |
 | Proximity Parks | Planeado | TBD | Sprint 3+ |
 | PDFs developers | Manual → GDrive → Agent → Supabase | Sí | Sprint 3+ |
@@ -103,7 +103,7 @@
 | Módulo Slack | [#18](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/18) | Notificación success/error. Portal, #props, duración, errores. |
 | Módulo imágenes → Storage | [#19](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/19) | CBRE images en Supabase Storage. URL en staging. |
 | Detección anomalías | [#20](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/20) | Logs: campos vacíos, coords fuera de rango, precios inválidos. |
-| Pincali: persist a Supabase | — | ~30K props en staging. Batch insert. Cron Mon 7am. |
+| ~~Pincali: persist a Supabase~~ | — | ✅ Completado — 1,761 props en `pincali_listings`. |
 | I24: pruebas de migración a Trigger.dev+Firecrawl | — | Viabilidad técnica y económica validada. Reemplazar Apify+Clay. |
 
 #### Track: Frontend / TP (Pablo)
@@ -115,7 +115,7 @@
 | Middleware protección rutas | [#51](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/51) | middleware.ts valida getUser(). Session refresh. Redirect /login. |
 
 ### Sprint 1 Review (Mar 15)
-**Demo**: Address Enrichment procesando 1 propiedad E2E. CBRE datos en Supabase con cron. Pincali persist. I24 viabilidad de migración. Login magic link. Golden record tables.
+**Demo**: Address Enrichment procesando 1 propiedad E2E. CBRE datos en Supabase con cron. ~~Pincali persist~~ ✅ completado. I24 viabilidad de migración. Login magic link. Golden record tables.
 
 ---
 
@@ -177,7 +177,7 @@
 ## Backlog Sprint 3+ (priorizado, no detallado)
 
 ### Sprint 3 (Mar 30 - Abr 12): Backfill Completo + Dedup + Shortlists
-- Completar backfill I24 (~30K) — backlog MA
+- Completar backfill I24 (~25K) — backlog MA
 - Dedup Agent v1 ([#96](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/96))
 - H3 indexer + AGEB ([#113](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/113), [#114](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/114))
 - Normalization schemas custom portales ([#101](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/101))
@@ -213,4 +213,4 @@
 
 ---
 
-*Documento actualizado: 2026-03-08 | I24 migración adelantada Sprint 1-2. CBRE/Colliers/FINSA en producción. Reemplaza: [archive/Fase-Real-1-Scrapers.md](archive/Fase-Real-1-Scrapers.md), [archive/Phase-1-MVP.md](archive/Phase-1-MVP.md)*
+*Documento actualizado: 2026-03-09 | Pincali persist completado. PG 17, 32 migrations. I24 migración adelantada Sprint 1-2. 5 scrapers en producción. Reemplaza: [archive/Fase-Real-1-Scrapers.md](archive/Fase-Real-1-Scrapers.md), [archive/Phase-1-MVP.md](archive/Phase-1-MVP.md)*

@@ -69,13 +69,14 @@ Portal Sources (staging)          Golden Record
 
 ### Verificación
 
-- [x] `inmuebles24_listings` existente (primera staging table)
+- [x] `inmuebles24_listings` existente (~24,700 rows) — primera staging table
 - [x] `possible_duplicates` existente (mecanismo de dedup)
-- [ ] `pincali_listings` creada con schema apropiado
-- [ ] `cbre_listings` creada con schema apropiado
-- [ ] `colliers_listings` creada con schema apropiado
+- [x] `pincali_listings` creada (1,761 rows, 58 columnas, H3 res5-11, 4 triggers, bucket pincali-images)
+- [x] `cbre_listings` creada (203 rows, schema completo, 4 triggers, buckets cbre-images + cbre-pdfs)
+- [x] `colliers_listings` creada (240 rows, schema completo, 4 triggers, buckets colliers-images + colliers-pdfs)
+- [x] `finsa_listings` creada (713 rows, schema completo, 5 triggers, bucket finsa-flyers)
 - [ ] Tabla `properties` (golden record) creada
-- [ ] Pipeline de normalización staging → golden record en Trigger.dev
+- [ ] Pipeline de normalización staging → golden record (Mastra agent)
 
 ## Información Adicional
 

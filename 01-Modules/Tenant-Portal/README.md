@@ -107,7 +107,7 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 
 ### Necesita (upstream)
 - **Supabase** → Base de datos (propiedades, shortlists, feedback) + Auth (magic link, RLS) + Storage
-- **Scraper** → Datos de propiedades en Supabase (~30K listings)
+- **Scraper** → Datos de propiedades en Supabase (~25K listings I24 + ~3K otros portales)
 - **Mastra Scoring Agent** → Genera scoring de propiedades vs requerimientos de clientes (AI Brain)
 - **HubSpot** → Datos de scoring via pipeline de Circleback
 

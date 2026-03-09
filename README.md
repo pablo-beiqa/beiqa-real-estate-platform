@@ -50,10 +50,10 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 **Estado**: 🟢 En construcción | **Timeline**: ~4-5 semanas desde inicio
 
 #### Lo que ya está funcionando
-- ✅ Base de datos Supabase en producción (14 migrations, PostGIS, RLS)
+- ✅ Base de datos Supabase en producción (PostgreSQL 17, 32 migrations, PostGIS, RLS)
 - ✅ Apify actor para Inmuebles24 contratado y operando
-- ✅ ~30,000 propiedades de I24 en Supabase
-- ✅ CBRE, Colliers y FINSA scrapers en producción (Trigger.dev + Supabase + Storage)
+- ✅ ~25,000 propiedades de I24 en Supabase + ~3K en otros portales
+- ✅ CBRE, Colliers, FINSA y Pincali scrapers en producción (Trigger.dev + Supabase + Storage)
 - ✅ Trigger.dev integrado para scrapers, automatizaciones, sync HubSpot y batch AI extraction
 - ✅ Firecrawl ($99/mo) como motor de scraping para Pincali, CBRE, Colliers
 - ✅ Browserbase ($20/mo) como cloud browser para scraping complejo
@@ -63,9 +63,9 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 - ✅ 22 ADRs documentados cubriendo todas las decisiones de arquitectura
 
 #### Próximas prioridades (Sprint 1-2)
-- Golden record schema + staging tables por portal
+- Golden record schema (`properties` table) + pipeline de normalización
 - Mastra AI agents (Address Enrichment, Data Normalization)
-- CBRE/Colliers/Pincali persistence a Supabase
+- Migración I24 de Apify a Trigger.dev+Firecrawl
 - Tenant Portal auth (magic link + password)
 - Scoring dashboard refactorizado a DB
 
@@ -182,4 +182,4 @@ beiqa-real-estate-platform/
 
 ---
 
-*Última actualización: 2026-03-08*
+*Última actualización: 2026-03-09*

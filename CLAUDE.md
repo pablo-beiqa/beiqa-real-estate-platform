@@ -62,7 +62,7 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 
 | Componente | Tecnología | Estado |
 |-----------|-----------|--------|
-| Base de datos | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | ✅ Producción (~30K props I24) |
+| Base de datos | Supabase (PostgreSQL 17 + PostGIS + Auth + Storage + REST API) | ✅ Producción (~25K props I24) |
 | Scraping (I24) | Apify (actor contratado) — migrando a Trigger.dev+Firecrawl Sprint 1-2 | ⚠️ Migrando |
 | Scraping (FinSA) | beiqa-scraper (`src/trigger/finsa-scraper/`) | ✅ Producción |
 | Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo |
@@ -242,7 +242,7 @@ Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 - [ADRs/README.md](02-Architecture/ADRs/README.md) — índice de 21 ADRs documentados
 - [Agent-Architecture.md](02-Architecture/Agent-Architecture.md) — arquitectura completa de agentes AI (Mastra)
 - [System-Architecture.md](02-Architecture/System-Architecture.md) — diagrama del sistema actual
-- [Schema-Real.md](02-Architecture/Database/Schema-Real.md) — schema implementado (14 migrations)
+- [Schema-Real.md](02-Architecture/Database/Schema-Real.md) — schema implementado (32 migrations)
 - [Vision-and-Goals.md](00-Project/Vision-and-Goals.md) — visión y métricas objetivo
 - [Business-Context.md](00-Project/Business-Context.md) — contexto de negocio
 - [Roadmap.md](03-Roadmap/Roadmap.md) — sprints cross-cutting, milestones, deliverables

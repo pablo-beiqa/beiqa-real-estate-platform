@@ -57,7 +57,7 @@ Opción elegida: "**Apify (I24) + Trigger.dev/Firecrawl (Pincali, CBRE, Colliers
 
 ### Verificación
 
-- [x] Inmuebles24: Apify en producción, ~30K propiedades en Supabase
+- [x] Inmuebles24: Apify en producción, ~25K propiedades en Supabase
 - [x] Pincali: scraper implementado en `beiqa-scraper` (Trigger.dev + Firecrawl)
 - [x] CBRE: scraper implementado en `beiqa-scraper` (Trigger.dev + Firecrawl, RSC parsing)
 - [x] Colliers: scraper implementado en `beiqa-scraper` (Trigger.dev + Firecrawl + Browserbase)
@@ -111,5 +111,5 @@ Opción elegida: "**Apify (I24) + Trigger.dev/Firecrawl (Pincali, CBRE, Colliers
 - CBRE: ✅ Producción (Trigger.dev + Firecrawl, cron martes)
 - Colliers: ✅ Producción (Trigger.dev + Firecrawl + Browserbase, cron lunes)
 - FINSA: ✅ Producción (Trigger.dev + API directa, cron día 1 y 15)
-- Pincali: 🟡 Scraping funciona, persistencia pendiente (Sprint 1)
+- Pincali: ✅ Producción (Trigger.dev + Firecrawl + Browserbase, cron lunes, 1,761 props)
 - I24: ⚠️ Migrando de Apify a Trigger.dev+Firecrawl

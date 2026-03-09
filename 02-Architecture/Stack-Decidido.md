@@ -48,7 +48,7 @@ Portales inmobiliarios
 
 | Componente | Decisión | ADR | Estado | Costo/mes |
 |-----------|---------|-----|--------|-----------|
-| **Plataforma DB** | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | [ADR-001](ADRs/ADR-001-Supabase-Plataforma.md) | ✅ Producción | $25 |
+| **Plataforma DB** | Supabase (PostgreSQL 17 + PostGIS + Auth + Storage + REST API) | [ADR-001](ADRs/ADR-001-Supabase-Plataforma.md) | ✅ Producción | $25 |
 | **Scraping (I24)** | Apify (actor contratado) — en migración a Trigger.dev+Firecrawl (Sprint 1-2) | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) | ⚠️ Migrando | $300 ($150 × 2 corridas/mes) → $0 post-migración |
 | **Scraping (motor)** | Firecrawl (HTTP engine, LLM extraction, stealth proxy) | [ADR-007](ADRs/ADR-007-Firecrawl.md) | ✅ Activo | ~$103 ($1,800 MXN) |
 | **Scraping (browser)** | Browserbase (cloud browser sessions) | [ADR-008](ADRs/ADR-008-Browserbase.md) | ✅ Activo | $0–20 (TBD) |
@@ -89,7 +89,7 @@ Portales inmobiliarios
 | **EasyBroker** | ❌ Descartado como portal | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) — portal no viable |
 | **FastAPI / Express** | ❌ No necesario | Supabase genera REST API automática |
 | **Auth0 / Clerk** | ❌ No necesario | Supabase Auth incluido |
-| **Redis / cache** | ❌ No necesario (hoy) | ~30K listings + 4 usuarios → PostgreSQL aguanta |
+| **Redis / cache** | ❌ No necesario (hoy) | ~25K listings + 4 usuarios → PostgreSQL aguanta |
 | **GraphQL** | ❌ No necesario | REST auto-generado es suficiente |
 | **Scrapy / Python** | ❌ No necesario | Apify + Firecrawl cubren todo |
 | **Sentry / Datadog** | ❌ No necesario (hoy) | Slack + error_logs suficiente |
@@ -120,11 +120,11 @@ Portales inmobiliarios
 
 | Tema | Cuándo implementar | Razón para diferir |
 |------|-------------------|-------------------|
-| Separar DB operativa / analítica | Cuando jobs compitan con búsquedas operativas | ~30K listings + 4 usuarios no lo requieren |
+| Separar DB operativa / analítica | Cuando jobs compitan con búsquedas operativas | ~25K listings + 4 usuarios no lo requieren |
 | Supabase read replica | Cuando haya carga analítica real | Prematuro hoy |
 | Schema `analytics` con materialized views | Cuando haya reportes complejos recurrentes | Prematuro hoy |
-| Redis cache | Cuando el volumen lo justifique | No necesario hoy |
+| Redis cache | Cuando el volumen lo justifique | ~25K listings + 4 usuarios no lo requieren |
 
 ---
 
-*Documento actualizado: 2026-03-08 | Scrapers CBRE/Colliers/FINSA en producción. I24 migrando de Apify a Trigger.dev+Firecrawl (Sprint 1-2). Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*
+*Documento actualizado: 2026-03-09 | Scrapers CBRE/Colliers/FINSA/Pincali en producción. PG 17, 32 migrations. I24 migrando de Apify a Trigger.dev+Firecrawl (Sprint 1-2). Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*
