@@ -103,6 +103,8 @@
 | Módulo Slack | [#18](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/18) | Notificación success/error. Portal, #props, duración, errores. |
 | Módulo imágenes → Storage | [#19](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/19) | CBRE images en Supabase Storage. URL en staging. |
 | Detección anomalías | [#20](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/20) | Logs: campos vacíos, coords fuera de rango, precios inválidos. |
+| Pincali: persist a Supabase | — | ~30K props en staging. Batch insert. Cron Mon 7am. |
+| I24: pruebas de migración a Trigger.dev+Firecrawl | — | Viabilidad técnica y económica validada. Reemplazar Apify+Clay. |
 
 #### Track: Frontend / TP (Pablo)
 
@@ -153,9 +155,9 @@
 | Staging table Colliers | [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | colliers_listings. Schema alineado. RLS. |
 | Staging table Pincali | [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | pincali_listings. Schema alineado. RLS. |
 | Colliers: persist + test | [#22](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/22) + [#25](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/25) | Datos en staging. Cron Mon 6am. PDFs en Storage. |
-| Pincali: persist + test | [#23](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/23) + [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | ~30K props en staging. Batch insert. Cron Mon 7am. |
-| Check de existencia | [#15](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/15) | Update si existe. Marcar unavailable si desaparece. |
+| Check de existencia | [#15](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/15) | Update si existe. Marcar unavailable si desaparece. Validación CBRE/Colliers. |
 | Columnas enrichment en I24 | [#106](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/106) | enrichment_status, confidence, address_corrected, golden_record_id. |
+| I24: migración completa a Trigger.dev | [#27](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/27), [#29](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/29), [#30](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/30) | Config + push a Supabase + gestión de lógica. Eliminar Apify+Clay. |
 
 #### Track: Frontend / TP (Pablo)
 
@@ -168,7 +170,7 @@
 | shadcn/ui components | [#49](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/49) | ~13 componentes instalados. |
 
 ### Sprint 2 Review (Mar 29)
-**Demo**: Backfill ≥10K. Normalization I24→golden record. Colliers/Pincali en Supabase. Scoring de DB. Vercel deploy.
+**Demo**: Backfill ≥10K. Normalization I24→golden record. I24 migrado a Trigger.dev (sin Apify/Clay). Validación CBRE/Colliers. Scoring de DB. Vercel deploy.
 
 ---
 
@@ -204,7 +206,7 @@
 - Evals todos agentes ([#103](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/103))
 - CI/CD ([#119](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/119), [#75](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/75))
 - Performance monitoring ([#120](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/120))
-- I24 migración Clay→TriggerDev ([#27](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/27), [#29](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/29), [#30](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/30))
+- ~~I24 migración Clay→TriggerDev~~ → **Adelantado a Sprint 1-2**
 - Testing mobile + QA ([#72](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/72)-[#74](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/74))
 - HubSpot sync, PDF export, docs ([#76](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/76)-[#78](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/78))
 - Runbook + onboarding ([#121](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/121), [#122](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/122))
