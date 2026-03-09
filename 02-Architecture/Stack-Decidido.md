@@ -13,10 +13,11 @@
 
 ```
 Portales inmobiliarios
-  Inmuebles24 ──→ Apify (actor contratado)
-  Pincali     ──→ Firecrawl + Browserbase ──→ Trigger.dev tasks
-  CBRE        ──→ Firecrawl               ──→ Trigger.dev tasks
-  Colliers    ──→ Firecrawl + Browserbase ──→ Trigger.dev tasks
+  Inmuebles24 ──→ Apify (migrando a Trigger.dev+Firecrawl Sprint 1-2)
+  FinSA       ──→ API directa (sin Firecrawl) ──→ Trigger.dev tasks  ✅ Producción
+  Pincali     ──→ Firecrawl + Browserbase     ──→ Trigger.dev tasks
+  CBRE        ──→ Firecrawl                   ──→ Trigger.dev tasks  ✅ Producción
+  Colliers    ──→ Firecrawl + Browserbase     ──→ Trigger.dev tasks  ✅ Producción
                                                     ↓
                                               Supabase (PostgreSQL + PostGIS)
                                               staging tables ──→ Mastra agents ──→ golden record
@@ -48,7 +49,7 @@ Portales inmobiliarios
 | Componente | Decisión | ADR | Estado | Costo/mes |
 |-----------|---------|-----|--------|-----------|
 | **Plataforma DB** | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | [ADR-001](ADRs/ADR-001-Supabase-Plataforma.md) | ✅ Producción | $25 |
-| **Scraping (I24)** | Apify (actor contratado) | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) | ✅ Activo | $300 ($150 × 2 corridas/mes) |
+| **Scraping (I24)** | Apify (actor contratado) — en migración a Trigger.dev+Firecrawl (Sprint 1-2) | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) | ⚠️ Migrando | $300 ($150 × 2 corridas/mes) → $0 post-migración |
 | **Scraping (motor)** | Firecrawl (HTTP engine, LLM extraction, stealth proxy) | [ADR-007](ADRs/ADR-007-Firecrawl.md) | ✅ Activo | ~$103 ($1,800 MXN) |
 | **Scraping (browser)** | Browserbase (cloud browser sessions) | [ADR-008](ADRs/ADR-008-Browserbase.md) | ✅ Activo | $0–20 (TBD) |
 | **Ejecución Durable** | Trigger.dev (scrapers, persistencia, cron, sync HubSpot — NO AI) | [ADR-003](ADRs/ADR-003-Trigger-dev.md) | ✅ Activo | $50 |
@@ -83,12 +84,12 @@ Portales inmobiliarios
 | Tecnología | Status | ADR / Razón |
 |-----------|--------|-------------|
 | **n8n Cloud** | ❌ Deprecado | [ADR-019](ADRs/ADR-019-n8n-Deprecado.md) — todo migrado a Trigger.dev |
-| **Clay** | ⚠️ Transitorio, saliendo | Lógica se replica en Trigger.dev tasks |
+| **Clay** | ⚠️ Transitorio, migrando Sprint 1-2 | Procesamiento I24 se reemplaza por Trigger.dev + Firecrawl |
 | **Backboard.io** | ❌ Supersedido | [ADR-014](ADRs/ADR-014-Backboard.md) — Mastra memory reemplaza ([ADR-020](ADRs/ADR-020-Mastra.md)) |
 | **EasyBroker** | ❌ Descartado como portal | [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md) — portal no viable |
 | **FastAPI / Express** | ❌ No necesario | Supabase genera REST API automática |
 | **Auth0 / Clerk** | ❌ No necesario | Supabase Auth incluido |
-| **Redis / cache** | ❌ No necesario (hoy) | 60K listings + 4 usuarios → PostgreSQL aguanta |
+| **Redis / cache** | ❌ No necesario (hoy) | ~30K listings + 4 usuarios → PostgreSQL aguanta |
 | **GraphQL** | ❌ No necesario | REST auto-generado es suficiente |
 | **Scrapy / Python** | ❌ No necesario | Apify + Firecrawl cubren todo |
 | **Sentry / Datadog** | ❌ No necesario (hoy) | Slack + error_logs suficiente |
@@ -126,4 +127,4 @@ Portales inmobiliarios
 
 ---
 
-*Documento actualizado: 2026-03-05 | Vercel y Mastra Cloud agregados como hosting ([ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md)). Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*
+*Documento actualizado: 2026-03-08 | Scrapers CBRE/Colliers/FINSA en producción. I24 migrando de Apify a Trigger.dev+Firecrawl (Sprint 1-2). Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para el desglose completo.*

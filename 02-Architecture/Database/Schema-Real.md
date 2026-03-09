@@ -1,8 +1,8 @@
 # Schema Real de la Base de Datos
 
-> **Estado**: ✅ En producción | **Fecha**: Febrero 2026
+> **Estado**: ✅ En producción | **Fecha**: Marzo 2026
 >
-> ⚠️ **Nota**: Este documento describe el schema implementado basado en las 14 migrations activas. Para el SQL exacto con tipos de columna completos, ver las migrations en el repo de código (`supabase/migrations/`).
+> ⚠️ **Nota**: Este documento describe el schema implementado. Para el SQL exacto con tipos de columna completos, ver las migrations en el repo de código (`supabase/migrations/`). Para el detalle de columnas de scrapers, ver `docs/infraestructura/supabase.md` en el repo `beiqa-scraper`.
 >
 > Este documento complementa [Data-Model.md](Data-Model.md), que describe la visión original de discovery. Lo que está aquí es lo que realmente existe.
 
@@ -14,7 +14,7 @@
 - **Extensions**: PostGIS (geography, geometría), uuid-ossp
 - **Auth**: Supabase Auth (Row Level Security habilitado)
 - **API**: Supabase REST automático + RPC functions
-- **Migrations**: 14 activas al 24 feb 2026
+- **Migrations**: 14+ activas (I24 originales + scraper tables)
 
 ---
 
@@ -164,6 +164,73 @@ Listings que el sistema identificó como posibles duplicados.
 
 ---
 
+### `cbre_listings`
+
+Staging table para propiedades scrapeadas de CBRE México (`propiedadescbre.net`).
+
+- PK compuesto: `(listing_id, tenant_id)`
+- 40+ columnas: título, precios (renta + venta separados), 5 dimensiones de área, ubicación completa con lat/lng, submarket, building class, delivery condition
+- Campos JSONB: `brokers`, `spaces`, `images`, `features`, `raw_data`
+- Campos de seguimiento: `is_active`, `scraped_at`, `last_seen_at`
+- Campos de archivos: `image_storage_urls`, `pdf_storage_urls` (URLs en Supabase Storage)
+
+> Para el schema completo de columnas ver `docs/scrapers/cbre.md` en el repo `beiqa-scraper`.
+
+---
+
+### `colliers_listings`
+
+Staging table para propiedades scrapeadas de Colliers México (`colliers.com/en-mx`).
+
+- PK compuesto: `(listing_id, tenant_id)`
+- Similar a `cbre_listings` con campos específicos: `ceiling_height_m`, `docks`, `certifications` (JSONB)
+- Campos JSONB: `brokers`, `images`, `raw_data`
+- Campos de archivos: `image_storage_urls`, `pdf_storage_urls`
+
+> Para el schema completo ver `docs/scrapers/colliers.md` en el repo `beiqa-scraper`.
+
+---
+
+### `finsa_listings`
+
+Staging table para propiedades scrapeadas de FINSA (`finsa.net`). El scraper más maduro, con validación de ciclo de vida y H3 indexing.
+
+- PK: `finsa_space_id` (sin `tenant_id`)
+- 35+ columnas: áreas en m² y sqft, specs técnicas (HVAC, fire protection, electrical substation), certificaciones LEED/WELL/EDGE como booleans
+- 7 índices H3: `h3_index_res5` a `h3_index_res11`
+- Validación de ciclo de vida: `scrapes_sin_aparecer` (integer) — después de 2 ausencias consecutivas, `is_active = false`
+- `flyer_url` — URL del PDF/flyer en Supabase Storage
+
+> Para el schema completo ver `docs/scrapers/finsa.md` en el repo `beiqa-scraper`.
+
+---
+
+### `price_history`
+
+Historial de cambios de precio para propiedades de todos los portales.
+
+- `posting_id` — ID de la propiedad
+- `tenant_id` — Tenant
+- `price_amount` — Monto del precio
+- `price_currency` — Moneda
+- `created_at` — Fecha del registro
+
+El primer precio se inserta manualmente en código (al crear la propiedad). Los cambios subsecuentes se capturan via trigger de DB en UPDATE.
+
+---
+
+## Storage Buckets (Supabase Storage)
+
+| Bucket | Contenido | Scraper |
+|--------|-----------|---------|
+| `cbre-images` | Imágenes de propiedades (desde Google Cloud Storage) | CBRE |
+| `cbre-pdfs` | PDFs/flyers de propiedades | CBRE |
+| `colliers-images` | Imágenes de propiedades (desde Azure Blob Storage) | Colliers |
+| `colliers-pdfs` | PDFs de propiedades | Colliers |
+| `finsa-flyers` | Flyers PDF (desde documentdeliver.com) | FINSA |
+
+---
+
 ## Triggers
 
 ### `populate_geo`
@@ -173,6 +240,12 @@ Listings que el sistema identificó como posibles duplicados.
 **Función**: Cuando se insertan o actualizan `latitude` y `longitude`, genera automáticamente el campo `geo_point` como `geography(POINT)` usando `ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)`.
 
 Esto permite queries geoespaciales como "propiedades en un radio de X km" sin calcular nada al vuelo.
+
+### `price_history_on_update`
+
+**Tablas**: `cbre_listings`, `colliers_listings`
+**Evento**: AFTER UPDATE (cuando cambia el precio)
+**Función**: Inserta un registro en `price_history` con el nuevo precio, capturando el historial de cambios automáticamente.
 
 ---
 
@@ -184,6 +257,15 @@ Calcula la tendencia de precios para un tipo de propiedad en una zona geográfic
 
 **Parámetros**: `property_type`, `zone`, `period_months`
 **Retorna**: Serie temporal de precio promedio por m2
+
+---
+
+### `increment_scrapes_sin_aparecer_finsa`
+
+Incrementa atómicamente el contador de ausencias para un array de space IDs de FINSA. Usado por el post-scrape task para detectar propiedades que dejaron de aparecer.
+
+**Parámetros**: `space_ids text[]` — array de IDs de espacios FINSA ausentes
+**Efecto**: `UPDATE finsa_listings SET scrapes_sin_aparecer = scrapes_sin_aparecer + 1 WHERE finsa_space_id = ANY(space_ids)`
 
 ---
 
@@ -238,5 +320,5 @@ CREATE TABLE cache_api_responses (
 
 ---
 
-*Documento creado: 2026-02-24*
+*Documento creado: 2026-02-24 | Actualizado: 2026-03-08 (tablas de scrapers, storage buckets, RPCs)*
 *Para el SQL completo ver: `supabase/migrations/` en el repo de código*
