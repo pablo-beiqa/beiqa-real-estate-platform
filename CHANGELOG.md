@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-03-08 — Actualización de scrapers, protocolo de cierre de sesión
+
+- **Scrapers CBRE, Colliers y FinSA en producción** — Schema-Real.md actualizado con tablas `cbre_listings`, `colliers_listings`, `finsa_listings`, `price_history`, 5 Storage buckets, trigger `price_history_on_update` y RPC `increment_scrapes_sin_aparecer_finsa`.
+- **Stack-Decidido actualizado** — CBRE/Colliers/FinSA marcados como producción. I24 en migración de Apify+Clay a Trigger.dev+Firecrawl (Sprint 1-2). Clay marcado como migrando.
+- **Roadmap reorganizado** — Pincali persist e I24 migration pruebas movidos a Sprint 1. I24 migración completa movida a Sprint 2. Sprint 7-8 I24 tachado como adelantado. Sprint 1 Review actualizado.
+- **Protocolo automático de cierre de sesión creado** — `tasks/session-protocol.md` con 9 pasos: resumen, commits, propagación, lecciones, issues, presupuesto, MEMORY.md, CHANGELOG/README, próximos pasos. Se ejecuta automáticamente vía MEMORY.md (auto-cargado por Claude Code).
+- **MEMORY.md del proyecto creado** — Trigger automático + contexto de sesión persistente entre conversaciones. Incluye mapa de 5 repos Beiqa.
+
 ## 2026-03-05 — Integración Mastra y reestructuración Sprint-based
 
 - **Hosting Strategy decidido (ADR-022)** — Vercel Pro para frontend ($20/mo), Mastra Cloud (beta, gratis) para agentes AI. DigitalOcean y Railway descartados. Stack-Decidido, Total-Budget, System-Architecture y ADR-015 actualizados.
@@ -66,4 +74,4 @@
 
 ---
 
-*Última actualización: 2026-03-05*
+*Última actualización: 2026-03-08*

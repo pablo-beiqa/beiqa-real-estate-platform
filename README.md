@@ -3,7 +3,7 @@
 > Plataforma tecnológica interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos de Beiqa.
 
 **Fase actual**: 🟢 Desarrollo Activo — Sprint 1: Scrapers, Data & Mastra Agents
-**Última actualización**: 2026-03-05
+**Última actualización**: 2026-03-08
 
 ---
 
@@ -52,7 +52,8 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 #### Lo que ya está funcionando
 - ✅ Base de datos Supabase en producción (14 migrations, PostGIS, RLS)
 - ✅ Apify actor para Inmuebles24 contratado y operando
-- ✅ ~60,000 propiedades en el sistema
+- ✅ ~30,000 propiedades de I24 en Supabase
+- ✅ CBRE, Colliers y FINSA scrapers en producción (Trigger.dev + Supabase + Storage)
 - ✅ Trigger.dev integrado para scrapers, automatizaciones, sync HubSpot y batch AI extraction
 - ✅ Firecrawl ($99/mo) como motor de scraping para Pincali, CBRE, Colliers
 - ✅ Browserbase ($20/mo) como cloud browser para scraping complejo
@@ -93,7 +94,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | Componente | Tecnología | Estado | ADR |
 |-----------|-----------|--------|-----|
 | Base de datos | Supabase (PostgreSQL + PostGIS + Auth + Storage + REST API) | ✅ Producción | [ADR-001](./02-Architecture/ADRs/ADR-001-Supabase-Plataforma.md) |
-| Scraping (I24) | Apify (actor contratado) | ✅ Activo | [ADR-002](./02-Architecture/ADRs/ADR-002-Estrategia-Scraping.md) |
+| Scraping (I24) | Apify (migrando a Trigger.dev+Firecrawl) | ⚠️ Migrando | [ADR-002](./02-Architecture/ADRs/ADR-002-Estrategia-Scraping.md) |
 | Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo | [ADR-007](./02-Architecture/ADRs/ADR-007-Firecrawl.md) |
 | Scraping (browser) | Browserbase (cloud browser sessions) | ✅ Activo | [ADR-008](./02-Architecture/ADRs/ADR-008-Browserbase.md) |
 | Automatización | Trigger.dev (scrapers, sync, cron — ejecución durable) | ✅ Activo | [ADR-003](./02-Architecture/ADRs/ADR-003-Trigger-dev.md) |
@@ -107,7 +108,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | Frontend Hosting | Vercel Pro | 🟡 Por deployar | [ADR-022](./02-Architecture/ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) |
 | AI Agent Hosting | Mastra Cloud (beta) | 🔴 Por implementar | [ADR-022](./02-Architecture/ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) |
 
-> **[Ver todas las decisiones técnicas →](./02-Architecture/Stack-Decidido.md)** | **[Ver los 21 ADRs →](./02-Architecture/ADRs/README.md)**
+> **[Ver todas las decisiones técnicas →](./02-Architecture/Stack-Decidido.md)** | **[Ver los 22 ADRs →](./02-Architecture/ADRs/README.md)**
 
 ---
 
@@ -170,6 +171,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| **2026-03-08** | **Scrapers en producción + Protocolo de cierre** — CBRE/Colliers/FinSA en producción. I24 migrando a Trigger.dev. Protocolo automático de cierre de sesión. MEMORY.md persistente. |
 | **2026-03-05** | **Hosting Strategy + Integración Mastra** — ADR-022: Vercel (frontend) + Mastra Cloud (agents). Mastra adoptado como framework de AI agents (ADR-020, ADR-021). Agent-Architecture.md creado. Roadmap reescrito a sprints. |
 | **2026-03-02** | **Presupuesto operativo reescrito con datos reales** — De $30–50/mes estimados a $747–896/mes verificados. Stack-Decidido.md con costos reales. |
 | **2026-02-28** | **Workflow Boris Cherny implementado** — tasks/, auto-mejora, principios de trabajo, delegación y autonomía en CLAUDE.md. |
@@ -180,4 +182,4 @@ beiqa-real-estate-platform/
 
 ---
 
-*Última actualización: 2026-03-05*
+*Última actualización: 2026-03-08*

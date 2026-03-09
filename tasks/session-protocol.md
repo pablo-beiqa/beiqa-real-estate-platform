@@ -47,7 +47,29 @@ Actualizar el MEMORY.md del proyecto con:
 - Decisiones tomadas
 - Contexto para la proxima sesion
 
-## Paso 8: Proximos pasos
+## Paso 8: CHANGELOG y README (condicional)
+
+Actualizar si la sesion tuvo cambios significativos. Criterios:
+
+**CHANGELOG.md** — actualizar cuando:
+- Se crearon/actualizaron ADRs
+- Cambio el stack (nuevo servicio, servicio removido, cambio de pricing)
+- Se reorganizaron sprints o milestones
+- Se creo infraestructura nueva (tablas, agentes, modulos)
+- Se implementaron cambios de proceso (nuevo workflow, protocolo, reglas)
+
+Formato: entrada por fecha con bullet points descriptivos. Seguir el patron existente.
+
+**README.md** — actualizar cuando:
+- Cambio algo en "Lo que ya esta funcionando" o "Proximas prioridades"
+- La tabla de stack cambio (nuevo componente, nuevo estado)
+- Cambio el estado de un modulo
+- La tabla de changelog summary necesita nueva fila
+- Cambio el conteo de ADRs
+
+Mantener la fecha de "Ultima actualizacion" al final de ambos archivos.
+
+## Paso 9: Proximos pasos
 
 - Proponer 2-3 tareas concretas para la proxima sesion
 - Indicar prioridad y repo donde se ejecutarian
