@@ -115,7 +115,7 @@
 | Middleware protección rutas | [#51](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/51) | middleware.ts valida getUser(). Session refresh. Redirect /login. |
 
 ### Sprint 1 Review (Mar 15)
-**Demo**: Address Enrichment procesando 1 propiedad E2E. CBRE datos en Supabase con cron. Login magic link. Golden record tables.
+**Demo**: Address Enrichment procesando 1 propiedad E2E. CBRE datos en Supabase con cron. Pincali persist. I24 viabilidad de migración. Login magic link. Golden record tables.
 
 ---
 
@@ -213,4 +213,4 @@
 
 ---
 
-*Documento actualizado: 2026-03-05 | Reemplaza: [archive/Fase-Real-1-Scrapers.md](archive/Fase-Real-1-Scrapers.md), [archive/Phase-1-MVP.md](archive/Phase-1-MVP.md)*
+*Documento actualizado: 2026-03-08 | I24 migración adelantada Sprint 1-2. CBRE/Colliers/FINSA en producción. Reemplaza: [archive/Fase-Real-1-Scrapers.md](archive/Fase-Real-1-Scrapers.md), [archive/Phase-1-MVP.md](archive/Phase-1-MVP.md)*
