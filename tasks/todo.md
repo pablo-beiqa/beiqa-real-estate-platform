@@ -36,12 +36,8 @@ gh issue close 33 --repo pablo-beiqa/beiqa-real-estate-platform --comment "Compl
 
 ## Checklist de cierre de sesión
 
-> Antes de cerrar sesión, Claude verifica estos puntos:
-
-- [ ] **Commits**: Los mensajes de commit de esta sesión siguen la convención (`tipo(scope): descripción`)
-- [ ] **Propagación**: Si se modificó un archivo clave → verificar archivos dependientes según `tasks/propagation-rules.md`
-- [ ] **Executive Summary**: Si hubo cambios significativos en costos, roadmap, stack o estado de módulos → actualizar `05-Communication/Executive-Summary.md`
-- [ ] **Lessons**: Si el usuario corrigió algo → proponer lección para `tasks/lessons.md`
+> Claude ejecuta automáticamente el protocolo en [tasks/session-protocol.md](session-protocol.md)
+> antes de cerrar cada sesión. La instrucción viene de MEMORY.md (auto-cargado).
 
 ---
 
