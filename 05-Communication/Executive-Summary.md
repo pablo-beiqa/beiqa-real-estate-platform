@@ -8,7 +8,7 @@
 
 Beiqa es una empresa de **representación de tenants corporativos** en bienes raíces comerciales/industriales (CDMX, EdoMex, Morelos, Puebla). La plataforma tecnológica automatiza la búsqueda de propiedades, centraliza datos de múltiples portales inmobiliarios, y genera inteligencia de mercado para cerrar más deals, más rápido.
 
-**Estado actual**: El equipo de 5 personas (desarrollo 100% interno) ya tiene en producción una base de datos con ~60,000 propiedades, scrapers automatizados de 5+ portales, CRM integrado con HubSpot, y un scoring dashboard funcional. El costo operativo verificado es de **$747–$896 USD/mes** y el desarrollo no tiene costo incremental (equipo interno).
+**Estado actual**: El equipo de 5 personas (desarrollo 100% interno) ya tiene en producción una base de datos con ~30,000 propiedades (I24) + 3 scrapers adicionales activos (CBRE, Colliers, FINSA), CRM integrado con HubSpot, y un scoring dashboard funcional. El costo operativo verificado es de **$747–$896 USD/mes** y el desarrollo no tiene costo incremental (equipo interno).
 
 **Diferenciación**: Mientras brokers tradicionales buscan manualmente, Beiqa cubre el mercado completo a un costo de $0.003–$0.009 USD por propiedad nueva. Con 6 agentes AI en diseño (matching inteligente, deduplicación cross-portal, inteligencia de mercado), la plataforma transforma datos crudos en recomendaciones accionables para clientes corporativos.
 
@@ -19,7 +19,7 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 | Problema Actual | Impacto | Cómo Beiqa lo Resuelve |
 |----------------|---------|------------------------|
 | Búsqueda manual en múltiples portales | Pérdida de tiempo, oportunidades perdidas | Scraper automatizado + búsqueda centralizada |
-| Información dispersa (Excel, HubSpot, emails) | Decisiones con información incompleta | Base de datos unificada (~60K propiedades) |
+| Información dispersa (Excel, HubSpot, emails) | Decisiones con información incompleta | Base de datos unificada (~30K propiedades I24 + CBRE/Colliers/FINSA) |
 | Falta de inteligencia de mercado | Menor valor agregado para clientes | Análisis y reportes automatizados por AI |
 | Sin análisis geoespacial | Análisis de ubicación manual y limitado | Mapas interactivos, H3 indexing, análisis de proximidad |
 | Datos desactualizados | Recomendaciones basadas en info obsoleta | Actualización automática quincenal+ |
@@ -31,9 +31,10 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 | Componente | Estado | Detalle |
 |-----------|--------|---------|
 | Base de datos (Supabase) | ✅ Producción | PostgreSQL + PostGIS, 14 migrations, RLS, ~30K propiedades I24 |
-| Scraper Inmuebles24 | ✅ Producción | Apify, corridas quincenales, 25–30K propiedades/corrida |
-| Scraper FinSA | ✅ Producción | Repo separado, Supabase + PDFs |
-| Scrapers CBRE, Colliers, Pincali | 🟡 Código listo | Trigger.dev, pendiente persistencia a Supabase (Sprint 1-2) |
+| Scraper Inmuebles24 | ⚠️ Migrando | Apify → Trigger.dev+Firecrawl (Sprint 1-2), ~30K propiedades |
+| Scraper FinSA | ✅ Producción | beiqa-scraper, API directa, H3, validación, Slack, flyers |
+| Scrapers CBRE, Colliers | ✅ Producción | Trigger.dev + Firecrawl, persistencia a Supabase + Storage |
+| Scraper Pincali | 🟡 Parcial | Scraping funciona, persistencia pendiente Sprint 1 |
 | CRM | ✅ Activo | HubSpot — clientes, deals, pipeline |
 | Geocodificación | ✅ Activo | Google Maps Platform (Geocoding + Places API) |
 | GIS | ✅ Activo | Atlas.co (2-3 usuarios), H3 indexing en pruebas |
@@ -153,7 +154,7 @@ Ver [Roadmap.md](../03-Roadmap/Roadmap.md) para OKRs, deliverables, y acceptance
 | Beneficio | Impacto esperado |
 |-----------|-----------------|
 | Búsqueda automatizada | Reducir tiempo de búsqueda en 50%+ |
-| Datos consolidados de 5+ portales | Una sola fuente de verdad (~60K propiedades) |
+| Datos consolidados de 5+ portales | Una sola fuente de verdad (~30K propiedades I24 + CBRE/Colliers/FINSA) |
 | AI matching | Shortlists rankeadas en minutos, no días |
 | Inteligencia de mercado | Reportes automatizados por zona/tipo |
 

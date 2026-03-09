@@ -63,11 +63,11 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 | Componente | Tecnología | Estado |
 |-----------|-----------|--------|
 | Base de datos | Supabase (PostgreSQL 15 + PostGIS + Auth + Storage + REST API) | ✅ Producción (~30K props I24) |
-| Scraping (I24) | Apify (actor contratado) | ✅ Activo |
-| Scraping (FinSA) | Repo separado (Supabase + PDFs) | ✅ Activo |
+| Scraping (I24) | Apify (actor contratado) — migrando a Trigger.dev+Firecrawl Sprint 1-2 | ⚠️ Migrando |
+| Scraping (FinSA) | beiqa-scraper (`src/trigger/finsa-scraper/`) | ✅ Producción |
 | Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo |
 | Scraping (browser) | Browserbase (cloud browser sessions) | ✅ Activo |
-| Automatización | Trigger.dev (scrapers, sync, limpieza, cron, AI batch) | ✅ Activo |
+| Automatización | Trigger.dev (scrapers, sync, cron — NO AI) | ✅ Activo |
 | AI Agent Orchestration | Mastra (agents, workflows, tools, memory, MCP) | 🟢 En implementación |
 | AI / NLP | LLMs vía Mastra (modelo TBD por agente) | 🟡 TBD |
 | UI actual | Rube + Claude Desktop (MCP bridge) | ✅ Activo (transitorio) |

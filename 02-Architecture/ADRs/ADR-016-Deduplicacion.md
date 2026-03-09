@@ -19,7 +19,7 @@ El problema es complejo porque:
 
 ## Factores de Decisión
 
-* 60K+ propiedades ya en la base de datos, creciendo con cada portal nuevo
+* ~30K propiedades ya en la base de datos (I24), creciendo con cada portal nuevo
 * No existe un identificador común entre portales
 * Campos clave para matching: dirección, coordenadas (lat/lng), superficie, tipo
 * Precisión importa más que velocidad (batch nocturno, no real-time)

@@ -67,7 +67,7 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 ## Alcance Geográfico
 
 - **Fase 1**: CDMX, Estado de México, Morelos, Puebla
-- **Inventario actual**: ~60,000 propiedades en sistema
+- **Inventario actual**: ~30,000 propiedades I24 en sistema + CBRE, Colliers, FINSA en producción
 - **Expansión futura**: Por definir según crecimiento del negocio
 
 ---

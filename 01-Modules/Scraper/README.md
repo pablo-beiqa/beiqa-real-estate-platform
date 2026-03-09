@@ -20,34 +20,47 @@ El pipeline incluye: extraccion de datos del portal, normalizacion basica de cam
 ## Estado Actual
 
 ### En produccion
-- **Inmuebles24** via Apify: ~30K propiedades en Supabase (I24)
-- **FinSA**: Scraper activo en repo separado (`beiqa-scraper`), trabajando con Supabase + PDFs
+- **CBRE**: scraper completo con persistencia a `cbre_listings`, imágenes y PDFs en Supabase Storage, cron martes 6am UTC. Usa Firecrawl + RSC payload parsing (Next.js)
+- **Colliers**: scraper completo con persistencia a `colliers_listings`, archivos en Storage, cron lunes 6am UTC. Usa Firecrawl + LLM JSON extraction + Browserbase para downloads
+- **FINSA**: scraper más maduro — API directa (sin Firecrawl), persistencia a `finsa_listings` con H3 indexing (res 5-11), validación de ciclo de vida (`scrapes_sin_aparecer`), notificaciones Slack, flyers PDF. Cron día 1 y 15, 5am UTC
+- **Inmuebles24**: ~30K propiedades en Supabase via Apify — **en migración a Trigger.dev+Firecrawl** (Sprint 1-2, eliminar Apify+Clay)
 - **Deduplicacion**: tabla `possible_duplicates` + RPC en progreso
-- **AI extraction**: Trigger.dev + Claude API para poblar `property_features`
 
-### Por desarrollar
-- Scrapers custom para Pincali, CBRE, Colliers y Proximity Parks via **TriggerDev** (TypeScript) con **Firecrawl + Browserbase** como motores de scraping
-- **Proximity Parks**: portal planificado
-- Escritura dual a HubSpot + Supabase
-- Migracion del flujo de Inmuebles24 a TriggerDev
+### En desarrollo (Sprint 1)
+- **Pincali**: scraping funciona (Firecrawl stealth + LLM, cron lunes 7am UTC), persistencia a Supabase **pendiente**
+- **I24 testing**: pruebas de viabilidad técnica y económica para reemplazar Apify con Trigger.dev+Firecrawl
+- **Módulo Slack compartido**: notificaciones reutilizables para todos los scrapers (Issue #18)
+- **Golden record**: tablas `properties` + soporte por crear
+
+### Por desarrollar (Sprint 3+)
+- **Cushman**: scraper planificado
+- **Proximity Parks**: scraper planificado
+- **I24 migración completa**: Sprint 2 — config + push + lógica, eliminar Apify y Clay
+
+### Pain points operativos
+- **Costos impredecibles**: créditos de Firecrawl/Browserbase varían según cambios en portales y volumen
+- **Observabilidad deficiente**: no hay trazabilidad centralizada de ejecuciones de todos los scrapers
+- **Alertas incompletas**: solo FINSA tiene Slack post-scrape; los demás no notifican errores
+- **Timeout planning**: timeouts y fallos necesitan mejor configuración por scraper
 
 ---
 
 ## Portales
 
-| Portal | Extraccion | Motor de scraping | Destino | Frecuencia | Volumen est. | Estado |
-|--------|-----------|-------------------|---------|------------|-------------|--------|
-| Inmuebles24 | Apify (actor pre-construido) | Apify | HubSpot + Supabase | Mensual | ~30K | ✅ Produccion |
-| FinSA | TriggerDev | Firecrawl + Browserbase | Supabase + PDFs | Mensual | TBD | ✅ Activo (repo separado) |
-| Pincali (pincali.com) | TriggerDev | Firecrawl + Browserbase | HubSpot + Supabase | Mensual | ~30-40k | 🔴 Por desarrollar |
-| CBRE (seccion Mexico) | TriggerDev | Firecrawl + Browserbase | HubSpot + Supabase | Semanal | ~cientos | 🔴 Por desarrollar |
-| Colliers (seccion Mexico) | TriggerDev | Firecrawl + Browserbase | HubSpot + Supabase | Semanal | ~cientos | 🔴 Por desarrollar |
-| Proximity Parks | TriggerDev | Firecrawl + Browserbase | HubSpot + Supabase | Semanal | TBD | 🔴 Planificado |
+| Portal | Motor de scraping | Destino | Cron (UTC) | Volumen est. | Estado |
+|--------|-------------------|---------|-----------|-------------|--------|
+| CBRE | Firecrawl (RSC parsing, sin LLM) | Supabase (`cbre_listings`) + Storage | Martes 6am | ~cientos | ✅ Produccion |
+| Colliers | Firecrawl (LLM extraction) + Browserbase | Supabase (`colliers_listings`) + Storage | Lunes 6am | ~cientos | ✅ Produccion |
+| FinSA | API directa (sin Firecrawl, $0 créditos) | Supabase (`finsa_listings`) + Storage | Día 1 y 15, 5am | ~cientos | ✅ Produccion |
+| Inmuebles24 | Apify → migrando a Firecrawl (Sprint 1-2) | Supabase (`inmuebles24_listings`) | Via Apify externo | ~30K | ⚠️ Migrando |
+| Pincali | Firecrawl stealth (~9 créditos/prop) | Supabase (pendiente persist) | Lunes 7am | ~30-40K | 🟡 Persist pendiente |
+| Cushman | Por definir | Supabase | TBD | TBD | 🔴 Sprint 3+ |
+| Proximity Parks | Por definir | Supabase | TBD | TBD | 🔴 Sprint 3+ |
 
 **Tipos de portal**:
 - **Inmuebles24 y Pincali**: Portales inmobiliarios multi-broker. Multiples inmobiliarias y personas fisicas publican propiedades. Paginacion clasica con filtros, paginas de listado y detalle.
 - **CBRE y Colliers**: Sitios corporativos de brokers internacionales. Solo listan sus propias propiedades en la seccion de Mexico (ej. colliers.com/es-mx/properties).
-- **FinSA**: Portal de parques industriales con PDFs de fichas tecnicas. Scraper activo en repo separado con Supabase.
+- **FinSA**: Portal de desarrollador industrial con API interna JSON. Scraper usa API directa (sin Firecrawl), H3 indexing, validación de ciclo de vida y notificaciones Slack.
 - **Proximity Parks**: Portal de parques industriales planificado.
 
 ---
@@ -107,7 +120,7 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 
 | Herramienta | Uso | Estado |
 |-------------|-----|--------|
-| **Apify** | Extraccion de Inmuebles24 (actor pre-construido) | ✅ Produccion |
+| **Apify** | Extraccion de Inmuebles24 (actor pre-construido) — **migrando a Trigger.dev+Firecrawl Sprint 1-2** | ⚠️ Migrando |
 | **TriggerDev** (TypeScript) | Plataforma primaria de ejecucion: scraping, persistencia, cron | ✅ Activo |
 | **Firecrawl** | Motor de scraping HTTP + LLM extraction para portales custom | ✅ Activo |
 | **Browserbase** | Cloud browser sessions para portales que requieren JS rendering | ✅ Activo |
@@ -116,7 +129,7 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 | **Google Geocoding API** | Coordenadas a partir de direcciones (via Mastra tool) | ✅ En uso |
 | **LLM API** (via Mastra) | Parsing de descripciones y deteccion de anomalias | 🟡 En implementacion |
 | **Supabase** (PostgreSQL + PostGIS) | Base de datos operativa principal | ✅ ~30K registros (I24) |
-| **Supabase Storage** | Almacenamiento de imagenes de propiedades | 🔴 Por configurar |
+| **Supabase Storage** | Almacenamiento de imágenes y PDFs (5 buckets: cbre-images, cbre-pdfs, colliers-images, colliers-pdfs, finsa-flyers) | ✅ Activo |
 | **HubSpot** | CRM — custom object "Propiedad", Contacts, Companies | ✅ En uso |
 | **Slack** | Notificaciones de errores e intervencion humana | ✅ Canal existente |
 
@@ -124,23 +137,30 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 
 ## Roadmap
 
-### Sprint 1 — Actual
-- ✅ Inmuebles24 via Apify en produccion
-- ✅ ~30K propiedades en I24 (Supabase)
-- ✅ FinSA activo en repo separado (beiqa-scraper)
+### Completado
+- ✅ Inmuebles24 via Apify: ~30K propiedades en Supabase
+- ✅ CBRE: scraper completo con persistencia + Storage + cron
+- ✅ Colliers: scraper completo con persistencia + Storage + cron
+- ✅ FINSA: scraper completo con H3, validación, Slack, flyers
 - ✅ Escritura a HubSpot
-- 🟡 Deduplicacion activa (`possible_duplicates` + RPC)
-- 🟡 AI extraction (Trigger.dev + Claude) para `property_features`
+- 🟡 Deduplicacion (`possible_duplicates` + RPC en progreso)
 
-### Sprint 2 — En progreso
-- 🔴 Investigacion de portales (CBRE, Colliers, Pincali, Proximity Parks)
-- 🔴 Infraestructura compartida de TriggerDev (modulos de escritura, check existencia, Slack, etc.)
-- 🔴 Desarrollo de scrapers custom con Firecrawl + Browserbase
-- 🔴 Escritura dual HubSpot + Supabase
+### Sprint 1 — Actual (Mar 2-15)
+- 🟡 Pincali: persistencia a Supabase
+- 🟡 I24: pruebas de migración a Trigger.dev+Firecrawl
+- 🟡 Módulo Slack compartido (Issue #18)
+- 🟡 Golden record migrations (5 tablas)
+- 🟡 Detección de anomalías
+
+### Sprint 2 (Mar 16-29)
+- I24: migración completa (config + push + lógica) — eliminar Apify+Clay
+- Validación/desactivación para CBRE y Colliers (Issue #15)
+- Staging tables Colliers y Pincali (si no se completaron en Sprint 1)
 
 ### Sprint 3+ — Futuro
-- Migracion de Inmuebles24 a TriggerDev
-- Dashboard de ejecucion
+- Cushman scraper
+- Proximity Parks scraper
+- Dashboard de ejecución y observabilidad
 
 ---
 
@@ -158,7 +178,7 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 | Metrica | Target | Estado actual |
 |---------|--------|--------------|
 | Propiedades en base de datos | >30,000 listados activos | ✅ ~30K en I24 al 24 feb |
-| Portales soportados | 6 portales en produccion | 🟡 2 activos (Inmuebles24, FinSA) |
+| Portales soportados | 6 portales en produccion | 🟡 4 activos (I24, CBRE, Colliers, FINSA) + 1 parcial (Pincali) |
 | Tasa de exito de ejecucion | >=95% sin error critico | ✅ Monitoreado via Slack + error_logs |
 | Consistencia dual-write | 100% propiedades en ambos destinos | 🔴 Por implementar |
 | Anomalias detectadas | <5% de propiedades con anomalias sin resolver | 🔴 Por implementar |
@@ -172,16 +192,18 @@ Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job
 | Entregable | Descripcion | Estado |
 |-----------|-------------|--------|
 | Apify actor Inmuebles24 | Extraccion de propiedades comerciales/industriales | ✅ Activo |
-| FinSA scraper | Scraper activo en repo separado (beiqa-scraper) con Supabase + PDFs | ✅ Activo |
+| FinSA scraper | API directa + H3 + validación + Slack + flyers en Storage | ✅ Producción |
 | Cron + Slack trigger | Ejecucion automatica semanal + manual desde Slack | ✅ Activo |
 | Deduplicacion | `possible_duplicates` + RPC + reviews | 🟡 En progreso |
 | AI extraction | Trigger.dev extrae `property_features` de descripciones | 🟡 En progreso |
-| Infraestructura TriggerDev | Modulos compartidos: escritura Supabase/HS, Firecrawl, Browserbase, Slack, imagenes | 🔴 |
-| Scraper CBRE | Job TriggerDev con Firecrawl + Browserbase, cron semanal | 🔴 |
-| Scraper Colliers | Job TriggerDev con Firecrawl + Browserbase, cron semanal | 🔴 |
-| Scraper Pincali | Job TriggerDev con Firecrawl + Browserbase, cron mensual | 🔴 |
-| Scraper Proximity Parks | Job TriggerDev con Firecrawl + Browserbase | 🔴 Planificado |
-| Migracion I24 a TriggerDev | Replicar logica actual en TriggerDev | 🔴 |
+| Infraestructura TriggerDev | Módulos compartidos: Supabase client, Browserbase sessions | ✅ Activo |
+| Scraper CBRE | Firecrawl + RSC parsing, cron martes 6am, Storage | ✅ Producción |
+| Scraper Colliers | Firecrawl + LLM + Browserbase, cron lunes 6am, Storage | ✅ Producción |
+| Scraper Pincali | Firecrawl stealth, cron lunes 7am. Persist pendiente Sprint 1 | 🟡 Parcial |
+| Módulo Slack compartido | Notificaciones reutilizables (success/error/anomalías) | 🔴 Sprint 1 |
+| Migracion I24 a TriggerDev | Reemplazar Apify+Clay por Trigger.dev+Firecrawl | 🟡 Sprint 1-2 |
+| Scraper Cushman | Por desarrollar | 🔴 Sprint 3+ |
+| Scraper Proximity Parks | Por desarrollar | 🔴 Sprint 3+ |
 
 ---
 

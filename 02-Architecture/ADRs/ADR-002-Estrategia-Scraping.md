@@ -57,7 +57,7 @@ Opción elegida: "**Apify (I24) + Trigger.dev/Firecrawl (Pincali, CBRE, Colliers
 
 ### Verificación
 
-- [x] Inmuebles24: Apify en producción, ~60K propiedades en Supabase
+- [x] Inmuebles24: Apify en producción, ~30K propiedades en Supabase
 - [x] Pincali: scraper implementado en `beiqa-scraper` (Trigger.dev + Firecrawl)
 - [x] CBRE: scraper implementado en `beiqa-scraper` (Trigger.dev + Firecrawl, RSC parsing)
 - [x] Colliers: scraper implementado en `beiqa-scraper` (Trigger.dev + Firecrawl + Browserbase)
@@ -97,3 +97,19 @@ Opción elegida: "**Apify (I24) + Trigger.dev/Firecrawl (Pincali, CBRE, Colliers
 - EasyBroker fue evaluado y **descartado** en favor de los 4 portales actuales
 - Portales descartados documentados en Acquisition-Strategy.md (Vivanuncios, Lamudi, Metros Cúbicos, Propiedades.com, Solili, LoopNet)
 - Relacionado con: [ADR-003](ADR-003-Trigger-dev.md) (plataforma de ejecución), [ADR-007](ADR-007-Firecrawl.md) (motor de scraping), [ADR-008](ADR-008-Browserbase.md) (cloud browser)
+
+---
+
+## Actualización (Marzo 2026)
+
+**Cambio de estrategia I24**: La migración de Inmuebles24 de Apify+Clay a Trigger.dev+Firecrawl se adelantó de Sprint 7-8 a **Sprint 1-2** (Mar 2-29). Esto eliminará la dependencia de Apify ($300/mes) y Clay, unificando todos los portales bajo Trigger.dev+Firecrawl.
+
+- **Sprint 1**: pruebas de viabilidad técnica y económica
+- **Sprint 2**: migración completa — config + push a Supabase + gestión de lógica
+
+**Estado actual de scrapers** (mar 2026):
+- CBRE: ✅ Producción (Trigger.dev + Firecrawl, cron martes)
+- Colliers: ✅ Producción (Trigger.dev + Firecrawl + Browserbase, cron lunes)
+- FINSA: ✅ Producción (Trigger.dev + API directa, cron día 1 y 15)
+- Pincali: 🟡 Scraping funciona, persistencia pendiente (Sprint 1)
+- I24: ⚠️ Migrando de Apify a Trigger.dev+Firecrawl

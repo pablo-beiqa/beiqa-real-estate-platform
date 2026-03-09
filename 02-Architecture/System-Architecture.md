@@ -14,6 +14,7 @@
 flowchart TB
     subgraph Portales[Portales Inmobiliarios]
         I24[Inmuebles24]
+        FinSA[FinSA]
         Pincali[Pincali]
         CBRE[CBRE]
         Colliers[Colliers]
@@ -29,7 +30,7 @@ flowchart TB
     end
 
     subgraph Automation[Ejecución Durable — Trigger.dev]
-        ScraperTasks[Scraper tasks\nPincali, CBRE, Colliers]
+        ScraperTasks[Scraper tasks\nFinSA, Pincali, CBRE, Colliers]
         Persistence[Persistencia\nupsert a staging tables]
         HubspotSync[Sync HubSpot\none-way]
         CronJobs[Cron jobs\nscheduled runs]
@@ -83,6 +84,7 @@ flowchart TB
 
     %% Scraping flow
     I24 --> Apify
+    FinSA -->|API directa| ScraperTasks
     Pincali --> Firecrawl
     Pincali --> Browserbase
     CBRE --> Firecrawl
@@ -142,11 +144,18 @@ flowchart TB
 
 ### Capa de scraping
 
-#### Inmuebles24 — Apify
+#### Inmuebles24 — Apify (en migración)
 - **ADR**: [ADR-002](ADRs/ADR-002-Estrategia-Scraping.md)
 - **Responsabilidad**: Extracción de propiedades de Inmuebles24
-- **Implementación**: Actor contratado, maneja rate limiting, proxies, anti-bot internamente
+- **Implementación actual**: Actor contratado, maneja rate limiting, proxies, anti-bot internamente
 - **Output**: JSON con datos del listing → webhook a Trigger.dev
+- **Migración**: Sprint 1-2 — se reemplazará Apify+Clay por Trigger.dev+Firecrawl
+
+#### FinSA — API directa
+- **Responsabilidad**: Extracción de propiedades de parques industriales FINSA
+- **Implementación**: API JSON interna de finsa.net (sin Firecrawl, $0 créditos). Autenticación via cookie `ci_session` + CSRF
+- **Features**: H3 indexing (res 5-11), validación de ciclo de vida (2 ausencias → desactivación), notificaciones Slack, descarga de flyers PDF
+- **Estado**: ✅ Producción
 
 #### Pincali, CBRE, Colliers — Firecrawl + Browserbase
 - **ADRs**: [ADR-007](ADRs/ADR-007-Firecrawl.md), [ADR-008](ADRs/ADR-008-Browserbase.md)
@@ -166,10 +175,10 @@ flowchart TB
 **Tasks activos**:
 | Task | Función |
 |------|---------|
-| `pincali-scraper` | Scraping de Pincali via Firecrawl |
-| `cbre-scraper` | Scraping de CBRE via Firecrawl |
-| `colliers-scraper` | Scraping de Colliers via Firecrawl + Browserbase |
-| `persist-to-supabase` | Upsert de datos scrapeados a staging tables |
+| `cbre-weekly-scrape` | Scraping + persist CBRE, cron martes 6am UTC ✅ |
+| `colliers-weekly-scrape` | Scraping + persist Colliers, cron lunes 6am UTC ✅ |
+| `finsa-scrape-portfolio` | Scraping + persist FINSA, cron día 1 y 15, 5am UTC ✅ |
+| `pincali-biweekly-scrape` | Scraping Pincali, cron lunes 7am UTC (sin persist) 🟡 |
 | `sync-hubspot` | Sync one-way Supabase → HubSpot (en migración) |
 | `trigger-mastra` | HTTP POST a Mastra post-scrape (por implementar) |
 
@@ -212,7 +221,7 @@ Ver arquitectura completa de agentes: [Agent-Architecture.md](./Agent-Architectu
 - **API**: REST automática generada desde el schema
 - **RLS**: Row Level Security configurado
 - **14 migrations** activas
-- **~60,000 propiedades** en `inmuebles24_listings`
+- **~30,000 propiedades** en `inmuebles24_listings`
 
 **Estructura de datos** ([ADR-012](ADRs/ADR-012-Multi-Portal-Data.md)):
 - **Staging tables**: `inmuebles24_listings`, `pincali_listings`, `cbre_listings`, `colliers_listings` — datos crudos por portal
@@ -399,4 +408,4 @@ sequenceDiagram
 
 ---
 
-*Documento actualizado: 2026-03-05 | Hosting de Frontend (Vercel) y Mastra (Mastra Cloud) documentado. Ver [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md).*
+*Documento actualizado: 2026-03-08 | FINSA, CBRE, Colliers en producción. I24 migrando. Volumen I24 corregido a ~30K. Ver [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md).*

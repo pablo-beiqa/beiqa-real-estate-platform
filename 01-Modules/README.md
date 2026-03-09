@@ -8,7 +8,7 @@
 
 | Módulo | Descripción | Sprint | Estado |
 |--------|-------------|--------|--------|
-| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Apify + Trigger.dev + Firecrawl) | Sprint 1+ | 🟢 En desarrollo |
+| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Trigger.dev + Firecrawl). CBRE/Colliers/FINSA en producción. I24 migrando de Apify | Sprint 1+ | 🟢 En desarrollo |
 | [Data](./Data/) | Normalización (Mastra agents), integración de fuentes externas | Sprint 1-2 | 🟢 En desarrollo |
 | [AI Brain](./AI-Brain/) | Agentes AI con Mastra (enrichment, normalization, matching) | Sprint 1+ | 🟢 En desarrollo |
 | [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Sprint 3+ | 🟡 En pruebas |
@@ -28,7 +28,7 @@
 
 | Módulo | Alcance |
 |--------|---------|
-| **Scraper** | Apify I24 ✅, CBRE/Colliers/Pincali persistence a Supabase, golden record staging |
+| **Scraper** | CBRE/Colliers/FINSA ✅ producción. Pincali persist Sprint 1. I24 migración Apify→Trigger.dev Sprint 1-2. Golden record staging |
 | **Data** | Golden record schema, normalización vía Mastra agents |
 | **AI Brain** | Address Enrichment Agent, Data Normalization Agent, LLM eval |
 | **Tenant Portal** | Supabase Auth (magic link + password), scoring desde DB |
@@ -133,4 +133,4 @@ Módulo/
 
 ---
 
-*Última actualización: 2026-03-05*
+*Última actualización: 2026-03-08*

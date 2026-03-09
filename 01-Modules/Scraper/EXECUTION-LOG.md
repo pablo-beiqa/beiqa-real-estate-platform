@@ -1,7 +1,8 @@
 # Scraper — Log de Ejecuciones
 
-> Este archivo se actualiza automaticamente despues de cada ejecucion del scraper.
-> Cada entrada registra las metricas clave de la corrida para tracking y debugging.
+> ⚠️ **Nota**: La trazabilidad de ejecuciones vive en el **dashboard de Trigger.dev** (runs, logs, duración, errores). Este archivo es un complemento manual para registrar métricas agregadas o incidentes notables.
+>
+> FINSA envía notificaciones Slack post-scrape con conteos de nuevas/removidas/desactivadas. Los demás scrapers tendrán Slack cuando se implemente el módulo compartido (Issue #18).
 
 ---
 

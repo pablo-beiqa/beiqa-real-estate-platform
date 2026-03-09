@@ -10,11 +10,12 @@
 
 ### Extraccion de Datos
 
-- **MUST** Extraer listings de 4 portales inmobiliarios
-  - [x] Inmuebles24 (via Apify — en produccion)
-  - [ ] Pincali / pincali.com (via TriggerDev)
-  - [ ] CBRE Mexico (via TriggerDev)
-  - [ ] Colliers Mexico (via TriggerDev)
+- **MUST** Extraer listings de 4+ portales inmobiliarios
+  - [x] Inmuebles24 (via Apify — migrando a Trigger.dev+Firecrawl Sprint 1-2)
+  - [x] CBRE Mexico (Trigger.dev + Firecrawl, RSC parsing — ✅ producción)
+  - [x] Colliers Mexico (Trigger.dev + Firecrawl + Browserbase — ✅ producción)
+  - [x] FinSA (Trigger.dev + API directa — ✅ producción)
+  - [ ] Pincali / pincali.com (scraping funciona, persist pendiente Sprint 1)
 - **MUST** Extraer campos obligatorios de cada listing: titulo, precio (+ moneda), tipo de operacion (renta/venta), direccion, coordenadas (si disponible), superficie (m²), tipo de inmueble, descripcion, URL original, ID original, fecha de scraping
 - **MUST** Extraer telefono del anunciante y guardarlo directamente en el registro de la propiedad
 - **SHOULD** Extraer campos opcionales: imagenes, caracteristicas/amenidades, fecha de publicacion
@@ -100,17 +101,18 @@
 ### Imagenes
 
 - **MUST** Descargar imagenes de cada propiedad
-  - [ ] Upload a Supabase Storage
-  - [ ] Asociar URLs de storage a la propiedad en Supabase
+  - [x] Upload a Supabase Storage (CBRE: cbre-images/cbre-pdfs, Colliers: colliers-images/colliers-pdfs, FINSA: finsa-flyers)
+  - [x] Asociar URLs de storage a la propiedad en Supabase (image_storage_urls, pdf_storage_urls, flyer_url)
 - **SHOULD** Mantener referencia a URL original como fallback
 
 ### Ejecucion y Programacion
 
 - **MUST** Ejecutarse automaticamente via TriggerDev cron
-  - [ ] CBRE: cron semanal
-  - [ ] Colliers: cron semanal
-  - [ ] Pincali: cron mensual
-  - [ ] Inmuebles24 (Apify): cron mensual
+  - [x] CBRE: cron martes 6am UTC (semanal)
+  - [x] Colliers: cron lunes 6am UTC (semanal)
+  - [x] FINSA: cron día 1 y 15, 5am UTC (bimensual)
+  - [x] Pincali: cron lunes 7am UTC (semanal) — sin persist
+  - [ ] Inmuebles24: migrando de Apify a Trigger.dev (Sprint 1-2)
 - **SHOULD** Permitir ejecucion manual bajo demanda desde TriggerDev
 - **MUST** Registrar log de cada ejecucion en el repo (EXECUTION-LOG.md)
 
@@ -127,7 +129,7 @@
 - **MUST** Manejar errores sin detener la ejecucion completa
   - [ ] Si falla un listing, continua con los demas
   - [ ] Registra errores con detalle suficiente para debug
-- **MUST** TriggerDev maneja retries con backoff exponencial
+- **MUST** TriggerDev maneja retries con backoff exponencial (✅ configurado: max 3 intentos, 1-10s con jitter. FINSA: 10-60s)
 - **MUST** Pausar ejecucion y solicitar intervencion humana cuando hay cambios de estructura
 - **SHOULD** Respetar limites de velocidad de los portales
   - [ ] Delay configurable entre requests
@@ -137,7 +139,7 @@
 
 - **SHOULD** Procesar portales grandes (30-40k en Pincali/I24) en lotes manejables
 - **SHOULD** Completar portales pequenos (CBRE/Colliers, cientos) en menos de 30 minutos
-- **MUST** Poder re-ejecutarse sin generar duplicados si falla a mitad
+- **MUST** Poder re-ejecutarse sin generar duplicados si falla a mitad (✅ idempotencyKey basado en fecha: `{slug}-{YYYY-MM-DD}`)
 
 ---
 

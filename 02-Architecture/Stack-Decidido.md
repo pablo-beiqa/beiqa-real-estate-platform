@@ -120,7 +120,7 @@ Portales inmobiliarios
 
 | Tema | Cuándo implementar | Razón para diferir |
 |------|-------------------|-------------------|
-| Separar DB operativa / analítica | Cuando jobs compitan con búsquedas operativas | 60K listings + 4 usuarios no lo requieren |
+| Separar DB operativa / analítica | Cuando jobs compitan con búsquedas operativas | ~30K listings + 4 usuarios no lo requieren |
 | Supabase read replica | Cuando haya carga analítica real | Prematuro hoy |
 | Schema `analytics` con materialized views | Cuando haya reportes complejos recurrentes | Prematuro hoy |
 | Redis cache | Cuando el volumen lo justifique | No necesario hoy |
