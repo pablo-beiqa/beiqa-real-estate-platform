@@ -5,6 +5,13 @@
 
 ---
 
+## 2026-03-09 — Pincali scraper pipeline completo
+
+- **Pincali scraper completado end-to-end** — Nuevos archivos: `download-files.ts` (descarga imágenes de EasyBroker CDN → Supabase Storage), `save-to-supabase.ts` (upsert a `pincali_listings`, `price_history`, `touchLastSeen`, `updateStorageUrls`). Pipeline completo: discover → scrape → save → download images → update storage URLs.
+- **Optimización de créditos Firecrawl** — Skip re-scraping de propiedades existentes (solo actualiza `last_seen_at`). Batch processing con idempotency keys (`pincali-{id}-{date}`).
+- **Pipeline de datos corregido en Scraper/README.md** — Flujo genérico ya no menciona HubSpot (era legacy de I24/Apify). Documentado flujo real por portal con tabla de destinos (Supabase vs HubSpot vs Storage).
+- **discover-urls y scheduled-scrape actualizados** — `discover-urls` genera `discovered-urls.json`; `scheduled-scrape` lee el archivo, separa nuevas vs existentes, y orquesta el pipeline completo con batches de 10.
+
 ## 2026-03-08 — Actualización de scrapers, protocolo de cierre de sesión
 
 - **Scrapers CBRE, Colliers y FinSA en producción** — Schema-Real.md actualizado con tablas `cbre_listings`, `colliers_listings`, `finsa_listings`, `price_history`, 5 Storage buckets, trigger `price_history_on_update` y RPC `increment_scrapes_sin_aparecer_finsa`.
@@ -74,4 +81,4 @@
 
 ---
 
-*Última actualización: 2026-03-08*
+*Última actualización: 2026-03-09*

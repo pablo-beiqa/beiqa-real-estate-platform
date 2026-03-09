@@ -3,7 +3,7 @@
 > Plataforma tecnológica interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos de Beiqa.
 
 **Fase actual**: 🟢 Desarrollo Activo — Sprint 1: Scrapers, Data & Mastra Agents
-**Última actualización**: 2026-03-08
+**Última actualización**: 2026-03-09
 
 ---
 
@@ -171,6 +171,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| **2026-03-09** | **Pincali pipeline completo** — download-files.ts + save-to-supabase.ts. Pipeline end-to-end: discover → scrape → save → download images → update storage URLs. Optimización de créditos Firecrawl. Pipeline docs corregido (sin HubSpot). |
 | **2026-03-08** | **Scrapers en producción + Protocolo de cierre** — CBRE/Colliers/FinSA en producción. I24 migrando a Trigger.dev. Protocolo automático de cierre de sesión. MEMORY.md persistente. |
 | **2026-03-05** | **Hosting Strategy + Integración Mastra** — ADR-022: Vercel (frontend) + Mastra Cloud (agents). Mastra adoptado como framework de AI agents (ADR-020, ADR-021). Agent-Architecture.md creado. Roadmap reescrito a sprints. |
 | **2026-03-02** | **Presupuesto operativo reescrito con datos reales** — De $30–50/mes estimados a $747–896/mes verificados. Stack-Decidido.md con costos reales. |
@@ -183,3 +184,4 @@ beiqa-real-estate-platform/
 ---
 
 *Última actualización: 2026-03-09*
+

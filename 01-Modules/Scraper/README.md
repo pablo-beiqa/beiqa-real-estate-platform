@@ -67,52 +67,58 @@ El pipeline incluye: extraccion de datos del portal, normalizacion basica de cam
 
 ## Pipeline de Datos (TriggerDev)
 
-Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job se enfoca en scraping y persistencia:
+Cada portal tiene su propio job independiente en TriggerDev. El pipeline por job se enfoca en scraping y persistencia directa a Supabase:
 
 ```
-1. Extraccion          → Scraping del portal via Firecrawl + Browserbase
-                          (paginacion, listados, detalle)
-2. Normalizacion       → Precios→MXN, superficies→m², tipos→catalogo interno
-                          (normalizacion basica pre-guardado)
-3. Check existencia    → Verificar en HubSpot + Supabase si propiedad y broker ya existen
-4. Push propiedades    → Crear/actualizar en Supabase + HubSpot (custom object "Propiedad")
-                          Telefono del anunciante SIEMPRE en el registro de propiedad
-5. Push broker/inmob   → Logica diferenciada por tipo de portal (ver abajo)
-6. Logica de estados   → Alta / actualizacion / baja de propiedades
-7. Imagenes            → Descarga y almacenamiento en Supabase Storage
-8. Notificaciones      → Alertas a Slack en caso de errores o intervencion humana
+1. Discovery           → Paginar URLs de categorías del portal
+                          Guardar en discovered-urls.json (Pincali) o en memoria
+2. Check existencia    → Cargar listing IDs existentes desde Supabase
+                          Separar: nuevas (scrape) vs existentes (solo touchLastSeen)
+3. Scrape nuevas       → Firecrawl stealth + LLM JSON extraction (9 créditos/prop)
+                          Batch de 10 propiedades con idempotency keys
+4. Upsert a Supabase   → Crear/actualizar en tabla de staging del portal
+                          Insertar precio inicial en price_history (solo primer insert)
+5. Download archivos   → Descargar imágenes/PDFs → Supabase Storage (bucket por portal)
+6. Update storage URLs → Actualizar image_storage_urls / pdf_storage_urls en DB
+7. Notificaciones      → Alertas a Slack en caso de errores (solo FINSA por ahora)
 ```
 
-> **Enriquecimiento AI (Mastra)**: Los pasos de parsing LLM, geocodificacion, asignacion H3/AGEB, extraccion de broker avanzada y deteccion de anomalias se ejecutan como agentes de Mastra independientes, no dentro del job de TriggerDev. Ver [Agent-Architecture.md](../../02-Architecture/Agent-Architecture.md).
+> **Enriquecimiento AI (Mastra)**: Los pasos de parsing LLM avanzado, geocodificación, asignación H3/AGEB, y detección de anomalías se ejecutan como agentes de Mastra independientes, no dentro del job de TriggerDev. Ver [Agent-Architecture.md](../../02-Architecture/Agent-Architecture.md).
 
-### Logica de estados de propiedades
+### Destino de datos por portal
 
-| Escenario | Accion |
+| Portal | Supabase (staging) | Supabase Storage | HubSpot |
+|--------|-------------------|------------------|---------|
+| Pincali | `pincali_listings` (upsert) | `pincali-images` | No |
+| CBRE | `cbre_listings` (upsert) | `cbre-files` (imgs + PDFs) | No |
+| Colliers | `colliers_listings` (upsert) | `colliers-files` (imgs + PDFs) | No |
+| FINSA | `finsa_listings` (upsert) | `finsa-flyers` (PDFs) | No |
+| I24 (Apify) | `inmuebles24_listings` | — | Sí (legacy via Clay) |
+
+> **Nota**: La integración con HubSpot es legacy del pipeline I24/Apify+Clay. Los scrapers de Trigger.dev escriben **exclusivamente a Supabase**. La sincronización a HubSpot se manejará como paso separado cuando se implemente.
+
+### Lógica de estados de propiedades
+
+| Escenario | Acción |
 |-----------|--------|
-| Nueva propiedad | Crear en Supabase + HubSpot, asociar a inmobiliaria/contacto segun portal |
-| Propiedad existente sin cambios | Actualizar solo fecha de scraping |
-| Propiedad existente con cambios | Actualizar campos modificados en ambos destinos |
-| Propiedad no encontrada | Marcar como no disponible de inmediato en ambos destinos |
+| Nueva propiedad | Upsert en tabla de staging + insertar precio inicial en `price_history` |
+| Propiedad existente (re-encontrada) | Solo actualizar `last_seen_at` (touchLastSeen — 0 créditos Firecrawl) |
+| Propiedad existente con cambio de precio | Trigger de DB inserta automáticamente en `price_history` |
+| Propiedad no encontrada en N scrapes | `scrapes_sin_aparecer` incrementa. FINSA: 2 ausencias → `is_active = false`. Otros portales: pendiente |
 
-### Logica de brokers/inmobiliarias (diferente por tipo de portal)
+### Lógica de brokers/inmobiliarias
 
-**Inmuebles24 y Pincali** (portales multi-broker):
-- Se extrae: nombre de la empresa/inmobiliaria anunciante + telefono
-- El telefono se guarda directamente EN la propiedad (campo del listing)
-- La empresa se registra como Company en HubSpot y se asocia a la propiedad
-- **NO se crean Contacts individuales** — solo Company
-- **NO se guardan brokers individuales en Supabase** — solo referencia a la empresa
+**Pincali** (portal multi-broker):
+- Se extrae: nombre del broker + company via regex HTML (más confiable que LLM)
+- Se guardan en `publisher_name`, `publisher_company`, `broker_photo_url`, `broker_profile_url` directamente en `pincali_listings`
+- **No se crean registros separados en `brokers`** — datos inline en el listing
 
 **CBRE y Colliers** (portales corporativos):
-- La inmobiliaria siempre es la misma (CBRE o Colliers)
-- Se extrae: nombre del agente/contacto individual + telefono + datos de contacto
-- Se crea/actualiza Contact en HubSpot asociado a la Company (CBRE o Colliers)
-- Se asocia la propiedad al Contact individual
-- El telefono del contacto tambien se guarda en la propiedad directamente
+- Se extrae: array de brokers como JSONB en el listing
+- Datos de contacto (nombre, email, teléfono) almacenados en campo `brokers` JSONB
 
-**En todos los casos**:
-- El telefono esta SIEMPRE en el registro de la propiedad (para acceso rapido)
-- Asociaciones en HubSpot: Propiedad ↔ Company (siempre), Propiedad ↔ Contact (solo CBRE/Colliers)
+**FINSA** (API directa):
+- No extrae datos de broker (portal de desarrollador, no hay agentes individuales)
 
 ---
 
