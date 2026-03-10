@@ -29,7 +29,6 @@ Eres un **co-founder técnico y consultor estratégico** del equipo Beiqa. Esto 
 | **Fabrizio** | Tech Lead | Scraper, Supabase, Trigger.dev, H3, arquitectura. Construye frontend + agentes AI con Pablo |
 | **Pamela** | Frontend Design | Diseño de Internal App y Tenant Portal (solo diseño, no código) |
 | **Jerónimo** | Ops | Llamadas, operación con clientes, feedback de campo |
-| **Alex** | Advisor externo | Consultoría técnica estratégica |
 
 ---
 
@@ -56,6 +55,21 @@ Módulo/
 
 ---
 
+## Repositorios del proyecto
+
+La plataforma vive en múltiples repos. Este es el hub de documentación:
+
+| Repo | Propósito | Stack | Owner |
+|------|-----------|-------|-------|
+| `beiqa-real-estate-platform` | Documentación y planeación (ESTE REPO) | Markdown | Todo el equipo |
+| `beiqa-scraper` | Scrapers de portales inmobiliarios | Trigger.dev + Firecrawl + TypeScript | Fabrizio |
+| `beiqa-frontend` | Tenant Portal (scoring dashboard) | Next.js 15 + Supabase | Pablo |
+| `beiqa-agents` | AI agents (por inicializar) | Mastra + TypeScript | Pablo, Fabrizio |
+
+**GitHub Issues**: centralizados en `beiqa-real-estate-platform`. Para cross-repo usar `gh --repo pablo-beiqa/beiqa-real-estate-platform`.
+
+---
+
 ## Stack tecnológico
 
 La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack-Decidido.md). Cada decisión tiene su ADR en [02-Architecture/ADRs/](02-Architecture/ADRs/README.md). Resumen:
@@ -64,9 +78,7 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 |-----------|-----------|--------|
 | Base de datos | Supabase (PostgreSQL 17 + PostGIS + Auth + Storage + REST API) | ✅ Producción (~25K props I24) |
 | Scraping (I24) | Apify (actor contratado) — migrando a Trigger.dev+Firecrawl Sprint 1-2 | ⚠️ Migrando |
-| Scraping (FinSA) | beiqa-scraper (`src/trigger/finsa-scraper/`) | ✅ Producción |
-| Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo |
-| Scraping (browser) | Browserbase (cloud browser sessions) | ✅ Activo |
+| Scraping (FinSA/CBRE/Colliers/Pincali) | beiqa-scraper (Trigger.dev + Firecrawl + Browserbase) | ✅ Producción |
 | Automatización | Trigger.dev (scrapers, sync, cron — NO AI) | ✅ Activo |
 | AI Agent Orchestration | Mastra (agents, workflows, tools, memory, MCP) | 🟢 En implementación |
 | AI / NLP | LLMs vía Mastra (modelo TBD por agente) | 🟡 TBD |
@@ -75,17 +87,9 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 | Geocodificación | Google Maps Platform (Geocoding + Places API) | ✅ Activo |
 | Geoespacial | H3 indexing (h3-js, capas 5-11) | 🟡 En pruebas |
 | GIS (mapas) | Atlas.co (API + embed, 2-3 usuarios) | ✅ Activo |
-| Frontend | Next.js | 🟡 Fase 2-3 |
+| Frontend | Next.js 15 (App Router + Supabase SSR) | 🟡 Fase 2-3 |
 
-**Tecnologías explícitamente descartadas** (no proponer como alternativa):
-- No Redis, no cache (volumen actual no lo requiere)
-- No backend custom (FastAPI, Express) — Supabase genera la API
-- No Auth0/Clerk — se usa Supabase Auth
-- No GraphQL — REST auto-generado es suficiente
-- No Scrapy/Python para scraping — se usa Apify + Firecrawl
-- No n8n — todo migrado a Trigger.dev ([ADR-019](02-Architecture/ADRs/ADR-019-n8n-Deprecado.md))
-- No Sentry/Datadog — Slack + error_logs suficiente para el volumen actual
-- No Backboard.io — supersedido por Mastra memory ([ADR-014](02-Architecture/ADRs/ADR-014-Backboard.md))
+**Tecnologías explícitamente descartadas** (no proponer): Redis/cache, FastAPI/Express, Auth0/Clerk, GraphQL, Scrapy/Python, n8n ([ADR-019](02-Architecture/ADRs/ADR-019-n8n-Deprecado.md)), Sentry/Datadog, Backboard.io ([ADR-014](02-Architecture/ADRs/ADR-014-Backboard.md)).
 
 ---
 
@@ -144,13 +148,30 @@ Ejemplo: `docs(roadmap): agregar Sprint 3 con deliverables de dedup y H3`
 4. **NUNCA modificar la estructura de carpetas** (00- a 05-) sin permiso explícito del equipo.
 5. **Source of truth**: Supabase para propiedades/listings/brokers. HubSpot para clientes/deals. Respetar esta separación.
 6. **Después de cada corrección, actualizar `tasks/lessons.md`** — cuando el usuario corrija un error o ajuste un comportamiento, Claude propone una lección para agregar al archivo. Esto previene que el mismo error se repita.
-7. **Propagar cambios** — al modificar un archivo clave (Roadmap, Budget, Stack, Architecture, módulos), verificar y actualizar los archivos dependientes según [tasks/propagation-rules.md](tasks/propagation-rules.md).
+7. **Propagar cambios** — al modificar un archivo clave, verificar y actualizar dependientes ([detalle completo](tasks/propagation-rules.md)):
+
+| Si cambia... | Actualizar... |
+|-------------|--------------|
+| Roadmap.md | Executive-Summary, README, 01-Modules/README |
+| Total-Budget.md | Executive-Summary, Stack-Decidido, README |
+| Agent-Architecture.md | Executive-Summary, AI-Brain/README, System-Architecture |
+| Stack-Decidido.md | CLAUDE.md (stack table), README, Executive-Summary |
+| ADRs/README.md (nuevo ADR) | CLAUDE.md, README, Executive-Summary (count) |
+| Estado de módulo | 01-Modules/README, CLAUDE.md, README |
 
 ---
 
 ## Workflow de tareas
 
 Claude sigue un proceso estructurado para cualquier tarea de **3 o más pasos**. Las tareas simples (preguntas, ediciones puntuales) no requieren este proceso.
+
+### Antes de empezar una tarea
+
+1. **¿Cuál es el scope?** — Qué módulo(s) afecta, qué archivos tocar
+2. **¿Hay GitHub Issue?** — Buscar con `gh issue list` antes de crear duplicados
+3. **¿Requiere propagación?** — Ver tabla de impacto en Reglas estrictas (regla 7)
+4. **¿Es cross-repo?** — Si toca código, identificar en qué repo vive (ver tabla de repos arriba)
+5. **¿Quién decide?** — Si implica costo o compromiso a largo plazo, confirmar con el equipo
 
 ### Modo plan (obligatorio antes de ejecutar)
 
@@ -190,22 +211,9 @@ Cuando el usuario corrija un error, Claude:
 
 ## Principios de trabajo
 
-Estos principios aplican a **todo** lo que Claude produce en este repositorio, sea documentación o código:
-
-### Simplicidad primero
-- Impacto mínimo: solo tocar lo necesario, nunca introducir complejidad innecesaria
-- Preferir editar archivos existentes antes de crear nuevos
-- Si algo se puede resolver en 1 archivo, no crear 3
-
-### Estándar senior
-- No parches temporales: buscar la causa raíz, no workarounds
-- Cada entregable debe ser de calidad de producción
-- Cuestionar si una tarea realmente necesita hacerse antes de ejecutarla
-
-### Solo lo necesario
-- No cambiar archivos fuera del scope de la tarea
-- No "mejorar" cosas que nadie pidió
-- Dejar el repositorio mejor de como lo encontraste, pero sin desviarte
+- **Simplicidad primero**: impacto mínimo, preferir editar sobre crear, 1 archivo > 3
+- **Estándar senior**: causa raíz no workarounds, calidad de producción, cuestionar si la tarea es necesaria
+- **Solo lo necesario**: no cambiar archivos fuera del scope, no "mejorar" sin pedir, dejar mejor sin desviarte
 
 ---
 
@@ -213,25 +221,67 @@ Estos principios aplican a **todo** lo que Claude produce en este repositorio, s
 
 Claude puede resolver ciertos tipos de problemas de forma **autónoma** (sin preguntar paso a paso), siempre respetando las reglas estrictas:
 
-### Tipos de tarea autónoma
-
 | Tipo | Qué puede hacer Claude solo | Cuándo preguntar |
 |------|----------------------------|------------------|
-| **Consultas SQL** | Ejecutar queries de lectura contra Supabase vía CLI o MCP | Queries de escritura (INSERT/UPDATE/DELETE) |
+| **Consultas SQL** | Ejecutar queries de lectura contra Supabase vía MCP | Queries de escritura (INSERT/UPDATE/DELETE) |
 | **Investigación** | Buscar información, comparar opciones, sintetizar fuentes | Cuando la decisión implica costo o compromiso a largo plazo |
 | **Corrección de docs** | Arreglar errores, inconsistencias, links rotos, typos | Cuando el cambio modifica el significado o la estructura |
-| **Fixing de bugs** | Diagnosticar y corregir errores en código (cuando haya repos de código) | Cuando el fix implica cambio de arquitectura |
-| **CI/CD** | Corregir tests o pipelines que fallan (cuando se implemente CI/CD) | Cuando el fix requiere cambiar la estrategia de testing |
+| **Fixing de bugs** | Diagnosticar y corregir errores en código | Cuando el fix implica cambio de arquitectura |
+| **CI/CD** | Corregir tests o pipelines que fallan | Cuando el fix requiere cambiar la estrategia de testing |
 | **GitHub Issues** | Comentar progreso, cerrar al completar | Crear issues nuevos, reasignar |
 
-### Subagentes y paralelismo
+---
 
-Cuando una tarea involucre múltiples investigaciones independientes, Claude puede:
-- Usar subagentes para explorar en paralelo (research, análisis de opciones)
-- Consolidar resultados en una recomendación única
-- Presentar la recomendación al usuario para decisión final
+## Herramientas MCP disponibles
 
-> **Nota**: Los ítems de SQL, bug fixing y CI/CD son aspiracionales — se activarán cuando existan repos de código y pipelines. Por ahora aplican principalmente investigación y corrección de docs.
+| Necesitas... | Usa... |
+|-------------|--------|
+| Consultar datos de propiedades | Supabase MCP (`execute_sql`) — queries de lectura |
+| Ver schema, tablas, extensiones | Supabase MCP (`list_tables`, `list_extensions`) |
+| Aplicar migraciones | Supabase MCP (`apply_migration`) — confirmar con usuario |
+| Ver estado de scrapers | Trigger.dev MCP (`list_runs`, `get_run_details`) |
+| Disparar scraper manualmente | Trigger.dev MCP (`trigger_task`) |
+| Deploy de scrapers | Trigger.dev MCP (`deploy`) — confirmar con usuario |
+| Gestionar issues/proyectos | Linear MCP (`list_issues`, `save_issue`) |
+| Buscar meetings/transcripts | Circleback MCP (`SearchMeetings`, `SearchTranscripts`) |
+
+---
+
+## Skills disponibles
+
+| Skill | Invocación | Qué hace |
+|-------|-----------|---------|
+| Auditoría de consistencia | `/audit-consistency` | 11 checks cross-file: links, sprints, status, stack, ADRs, emojis. Solo lectura |
+| Contenido BEIQA | `/beiqa-content` | Parrillas de contenido y copys para LinkedIn, Reddit, Substack, Blog |
+
+---
+
+## Errores comunes
+
+| Error | Causa | Fix |
+|-------|-------|-----|
+| Dato desactualizado en README/CLAUDE.md | Se actualizó source of truth pero no los derivados | Usar tabla de propagación (regla 7); correr `/audit-consistency` |
+| Link roto después de mover archivo | Path relativo no actualizado | Grep `](` en archivos afectados |
+| ADR count drift | Se creó ADR pero no se actualizó count en 3+ archivos | Verificar CLAUDE.md, README, Executive-Summary |
+| Tecnología descartada mencionada como activa | Archivo no actualizado post-ADR de deprecación | Grep nombre de tech en archivos activos (excluir archive/) |
+| Scraper/módulo con estado incorrecto | Se completó en código pero no se actualizó docs | Verificar contra repo de código antes de documentar |
+
+---
+
+## Protocolo de cierre de sesión (obligatorio)
+
+Antes de cerrar cualquier sesión, ejecutar estos pasos:
+
+1. **Resumen**: qué se hizo, qué quedó pendiente, bloqueantes
+2. **Commits**: cambios committeados con convención, nada sin trackear
+3. **Propagación**: verificar dependientes si se tocó archivo clave (ver regla 7)
+4. **Lecciones**: proponer lección si hubo corrección (`tasks/lessons.md`)
+5. **GitHub Issues**: comentar/cerrar issues trabajados vía `gh` CLI
+6. **Presupuesto**: actualizar `Total-Budget.md` si cambió el stack
+7. **CHANGELOG/README**: actualizar si hubo cambios significativos
+8. **Próximos pasos**: proponer 2-3 tareas concretas para la siguiente sesión
+
+Ver detalle completo en [tasks/session-protocol.md](tasks/session-protocol.md).
 
 ---
 
@@ -249,4 +299,4 @@ Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 - [Roadmap.md](03-Roadmap/Roadmap.md) — sprints cross-cutting, milestones, deliverables
 - [tasks/todo.md](tasks/todo.md) — scratchpad de sesión y sync con GitHub Issues
 - [tasks/lessons.md](tasks/lessons.md) — lecciones aprendidas (loop de auto-mejora)
-- [tasks/session-protocol.md](tasks/session-protocol.md) — protocolo de cierre de sesión (obligatorio)
+- [tasks/propagation-rules.md](tasks/propagation-rules.md) — reglas de propagación cross-file
