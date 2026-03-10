@@ -36,8 +36,8 @@ gh issue close 33 --repo pablo-beiqa/beiqa-real-estate-platform --comment "Compl
 
 ## Checklist de cierre de sesión
 
-> Claude ejecuta automáticamente el protocolo en [tasks/session-protocol.md](session-protocol.md)
-> antes de cerrar cada sesión. La instrucción viene de MEMORY.md (auto-cargado).
+> Claude ejecuta automáticamente el protocolo de cierre via el plugin `beiqa-session`
+> (skill auto-trigger o comando `/cierre-sesion`). La instrucción viene de MEMORY.md.
 
 ---
 

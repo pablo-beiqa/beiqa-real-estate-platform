@@ -1,7 +1,14 @@
 # Protocolo de Cierre de Sesion
 
-> Claude ejecuta este protocolo **ANTES** de cerrar cualquier sesion.
-> La instruccion de ejecutarlo viene de MEMORY.md (auto-cargado).
+> **DEPRECATED (2026-03-09)**: Este protocolo ha sido reemplazado por el plugin `beiqa-session`.
+> Ubicacion del plugin: `~/.claude/plugins/local/beiqa-session/`
+> Comando: `/cierre-sesion` | Skill: `session-close` (auto-trigger)
+> Este archivo se mantiene como referencia historica y sera eliminado en 2 semanas.
+
+---
+
+> ~~Claude ejecuta este protocolo **ANTES** de cerrar cualquier sesion.~~
+> ~~La instruccion de ejecutarlo viene de MEMORY.md (auto-cargado).~~
 
 ---
 
