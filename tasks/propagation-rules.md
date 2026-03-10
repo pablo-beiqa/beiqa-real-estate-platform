@@ -17,6 +17,8 @@
 | **Estado de un módulo** (sprint, estado, owner) | 01-Modules/README.md, CLAUDE.md, README.md |
 | **Equipo** (persona entra/sale, cambio de rol) | CLAUDE.md, README.md, Executive-Summary.md, Roadmap.md (capacidad) |
 | **Schema-Real.md** (nueva migration) | README.md, Executive-Summary.md, Roadmap.md (count de migrations) |
+| **session-protocol.md** (nuevo paso, cambio de proceso) | CLAUDE.md (referencia), tasks/todo.md (checklist) |
+| **lessons.md** (nueva lección que afecta regla estricta) | CLAUDE.md (si modifica comportamiento) |
 
 ---
 
@@ -42,7 +44,7 @@ Cada dato tiene **una sola fuente de verdad**. Los demás archivos solo resumen 
 1. **Tabla de módulos** (sprint, estado, owner) — aparece en: CLAUDE.md, README.md, 01-Modules/README.md
 2. **Stack table** — aparece en: CLAUDE.md, README.md, Executive-Summary.md, Stack-Decidido.md
 3. **Presupuesto** ($xxx–$yyy/mes) — aparece en: Total-Budget.md, Executive-Summary.md, README.md
-4. **Count de ADRs** ("21 ADRs") — aparece en: CLAUDE.md, README.md, Executive-Summary.md
+4. **Count de ADRs** ("22 ADRs") — aparece en: CLAUDE.md, README.md, Executive-Summary.md
 5. **Milestones y fechas** (M1-M4) — aparece en: Roadmap.md, Executive-Summary.md
 
 ---

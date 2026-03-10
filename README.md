@@ -54,7 +54,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 - ✅ Apify actor para Inmuebles24 contratado y operando
 - ✅ ~25,000 propiedades de I24 en Supabase + ~3K en otros portales
 - ✅ CBRE, Colliers, FINSA y Pincali scrapers en producción (Trigger.dev + Supabase + Storage)
-- ✅ Trigger.dev integrado para scrapers, automatizaciones, sync HubSpot y batch AI extraction
+- ✅ Trigger.dev integrado para scrapers, automatizaciones, sync HubSpot (AI migrado a Mastra — ADR-021)
 - ✅ Firecrawl ($99/mo) como motor de scraping para Pincali, CBRE, Colliers
 - ✅ Browserbase ($20/mo) como cloud browser para scraping complejo
 - ✅ Claude API para procesamiento de descripciones
@@ -140,7 +140,7 @@ beiqa-real-estate-platform/
 │   ├── AI-Brain/        # IA, matching, procesamiento de llamadas
 │   └── Tenant-Portal/   # Portal para clientes
 ├── 02-Architecture/     # ADRs, stack decidido, arquitectura, DB schema
-│   ├── ADRs/            # 21 Architecture Decision Records
+│   ├── ADRs/            # 22 Architecture Decision Records
 │   ├── Database/        # Schema implementado
 │   └── archive/         # Documentos legacy (referencia histórica)
 ├── 03-Roadmap/          # Sprints y milestones del proyecto

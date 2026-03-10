@@ -1,6 +1,6 @@
 # Data Normalization
 
-**Fase del proyecto**: Fase 1 — MVP
+**Sprint del proyecto**: Sprint 1+
 **Estado**: 🟡 Parcial — triggers automatizan normalización básica (geo, price_per_m2, price_history, last_seen) en las 5 tablas de staging. Pipeline Mastra de normalización profunda (golden record, dedup) por iniciar.
 **Owner**: Pablo (Mastra agents), Fabrizio (DB/triggers)
 
@@ -54,7 +54,7 @@ Sub-modulo de limpieza profunda y normalizacion avanzada de datos que opera sobr
 
 ## Modelo de Deduplicacion
 
-> Basado en la estrategia documentada en [Deduplication-Strategy.md](../../../02-Architecture/Deduplication-Strategy.md)
+> Basado en la estrategia documentada en [Deduplication-Strategy.md](../../../02-Architecture/archive/Deduplication-Strategy.md) (archivo histórico — ver ADR-016)
 
 ```
 PROPERTY (registro maestro / golden record)
@@ -88,6 +88,6 @@ PROPERTY_SOURCE (tracking de fuentes - 1:N con PROPERTY)
 
 ## Documentos Relacionados
 
-- [Deduplication-Strategy.md](../../../02-Architecture/Deduplication-Strategy.md) — Algoritmos y reglas de deduplicacion
+- [Deduplication-Strategy.md](../../../02-Architecture/archive/Deduplication-Strategy.md) — Algoritmos y reglas de deduplicacion (archivo histórico — ver ADR-016)
 - [Data-Model.md](../../../02-Architecture/Database/Data-Model.md) — Esquema de base de datos
 - [Scraper README](../../Scraper/README.md) — Pipeline de normalizacion basica del scraper

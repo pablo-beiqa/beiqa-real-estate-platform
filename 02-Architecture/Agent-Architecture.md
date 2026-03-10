@@ -1,6 +1,6 @@
 # Arquitectura de Agentes AI — BEIQA Platform
 
-> **Estado**: 🟢 En diseño | **Actualizado**: 2026-03-05
+> **Estado**: 🟢 En implementación | **Actualizado**: 2026-03-09
 >
 > Framework: [Mastra](https://mastra.ai) (ADR-020) | Repo: `beiqa-agents`
 > Separación de responsabilidades: [ADR-021](ADRs/ADR-021-Separacion-Trigger-Mastra.md)
@@ -346,7 +346,7 @@ En `inmuebles24_listings` (y futuras staging tables):
 ### Fase 2: Core Intelligence (Sprints 3-4)
 - Deduplication Agent (P1)
 - Scoring/Matching Agent (P1, migración de frontend)
-- Backfill completo de 60K propiedades
+- Backfill completo de ~30K propiedades (I24 + portales custom)
 
 ### Fase 3: Advanced (Sprints 5-6)
 - Market Intelligence Agent (P2)

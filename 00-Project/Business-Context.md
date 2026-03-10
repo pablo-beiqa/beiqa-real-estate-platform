@@ -76,7 +76,7 @@ Beiqa representa a empresas (tenants) que buscan espacios comerciales, industria
 
 ### Fuentes de Información Actuales
 
-- Easy Brokers, Spot2, Inmuebles24, Vivanuncios, otros portales
+- Inmuebles24, Easy Brokers, Spot2, Vivanuncios, otros portales (consultados manualmente, pre-plataforma — la plataforma automatiza I24, CBRE, Colliers, FINSA, Pincali)
 - Red de brokers y desarrolladores
 - Contactos directos con propietarios
 - Noticias del sector

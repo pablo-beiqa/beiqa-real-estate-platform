@@ -43,7 +43,7 @@ Estos costos no cambian con el volumen de propiedades extraídas.
 |----------|---------|---------|------------------|
 | Atlas.co | $178 – $267 | Mapas, GIS, análisis geoespacial con AI | 2–3 usuarios × $89 |
 | Claude Desktop | $50 – $75 | AI workspace para consultas del equipo | 2–3 usuarios × $25 |
-| Trigger.dev | $50 | Orquestación de scrapers, cron, batch AI, sync | Plan pagado |
+| Trigger.dev | $50 | Orquestación de scrapers, cron, sync (sin AI — per ADR-021) | Plan pagado |
 | Rube | $25 | MCP bridge para conectar Claude Desktop con Supabase | 1 suscripción |
 | Supabase Pro | $25 | PostgreSQL + PostGIS + Auth + Storage + REST API | 1 proyecto |
 | Dominio | ~$1.25 | beiqa.com | $15/año |

@@ -1,6 +1,6 @@
 # Geospatial
 
-**Sprint del proyecto**: Sprint 2+ — Post-MVP
+**Sprint del proyecto**: Sprint 3+
 **Estado**: 🟡 En pruebas
 **Owner**: Por definir
 

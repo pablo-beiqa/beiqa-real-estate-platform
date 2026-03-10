@@ -176,4 +176,4 @@ Los siguientes portales se evaluaron pero no se incluyen en esta fase:
 - [README del Scraper](../README.md) — Estado actual y roadmap
 - [Requirements](../Requirements.md) — Capacidades detalladas
 - [Data Model](../../../02-Architecture/Database/Data-Model.md) — Esquema de base de datos
-- [Deduplication Strategy](../../../02-Architecture/Deduplication-Strategy.md) — Estrategia de deduplicacion
+- [Deduplication Strategy](../../../02-Architecture/archive/Deduplication-Strategy.md) — Estrategia de deduplicacion (archivo histórico — ver ADR-016)

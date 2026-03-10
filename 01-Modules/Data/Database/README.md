@@ -1,7 +1,7 @@
 # Database (Supabase)
 
-**Estado**: 🔴 Por iniciar
-**Owner**: Por definir
+**Estado**: ✅ Producción (~30K propiedades, 14+ migrations)
+**Owner**: Fabrizio
 
 ---
 
@@ -17,9 +17,10 @@ entorno Supabase que soporta toda la plataforma BEIQA.
 
 ### PostgreSQL + PostGIS
 - Base de datos relacional con extension PostGIS para queries geoespaciales
-- Tablas core: PROPERTY, PROPERTY_SOURCE, PROPERTY_IMAGE, PROPERTY_TYPE
-- Tablas de clientes: CLIENT, SEARCH_REQUEST, SEARCH_PROPERTY, COMMUNICATION
-- Tablas de zona: ZONE, ZONE_DATA, MARKET_PRICE, VACANCY_RATE
+- Tablas staging: `inmuebles24_listings`, `cbre_listings`, `colliers_listings`, `finsa_listings`, `pincali_listings`
+- Tablas core: `properties` (golden record), `possible_duplicates`, `property_images`
+- Config: `portales_config`, `scraper_runs`
+- Ver [Schema-Real.md](../../../02-Architecture/Database/Schema-Real.md) para detalle completo
 - Indices GIST en columnas Geography para busquedas espaciales
 
 ### Supabase Storage
@@ -59,5 +60,6 @@ Este sub-modulo documenta la **implementacion** en Supabase de ese diseno.
 ## Documentos Relacionados
 
 - [Data-Model.md](../../../02-Architecture/Database/Data-Model.md) — Esquema de base de datos
-- [ADR-001-Database-Choice.md](../../../02-Architecture/ADRs/ADR-001-Database-Choice.md) — Decision PostgreSQL + PostGIS
+- [ADR-001-Supabase-Plataforma.md](../../../02-Architecture/ADRs/ADR-001-Supabase-Plataforma.md) — Decision PostgreSQL + PostGIS
+- [Schema-Real.md](../../../02-Architecture/Database/Schema-Real.md) — Schema implementado (14+ migrations)
 - [Normalization README](../Normalization/README.md) — Pipeline que opera sobre estos datos

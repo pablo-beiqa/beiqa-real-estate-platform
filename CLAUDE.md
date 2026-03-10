@@ -74,6 +74,7 @@ La fuente de verdad es [02-Architecture/Stack-Decidido.md](02-Architecture/Stack
 | CRM | HubSpot | ✅ Activo |
 | Geocodificación | Google Maps Platform (Geocoding + Places API) | ✅ Activo |
 | Geoespacial | H3 indexing (h3-js, capas 5-11) | 🟡 En pruebas |
+| GIS (mapas) | Atlas.co (API + embed, 2-3 usuarios) | ✅ Activo |
 | Frontend | Next.js | 🟡 Fase 2-3 |
 
 **Tecnologías explícitamente descartadas** (no proponer como alternativa):
@@ -239,7 +240,7 @@ Cuando una tarea involucre múltiples investigaciones independientes, Claude pue
 Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 
 - [Stack-Decidido.md](02-Architecture/Stack-Decidido.md) — dashboard de decisiones con costos y links a ADRs
-- [ADRs/README.md](02-Architecture/ADRs/README.md) — índice de 21 ADRs documentados
+- [ADRs/README.md](02-Architecture/ADRs/README.md) — índice de 22 ADRs documentados
 - [Agent-Architecture.md](02-Architecture/Agent-Architecture.md) — arquitectura completa de agentes AI (Mastra)
 - [System-Architecture.md](02-Architecture/System-Architecture.md) — diagrama del sistema actual
 - [Schema-Real.md](02-Architecture/Database/Schema-Real.md) — schema implementado (32 migrations)
@@ -248,3 +249,4 @@ Antes de tomar decisiones o responder preguntas de arquitectura, consultar:
 - [Roadmap.md](03-Roadmap/Roadmap.md) — sprints cross-cutting, milestones, deliverables
 - [tasks/todo.md](tasks/todo.md) — scratchpad de sesión y sync con GitHub Issues
 - [tasks/lessons.md](tasks/lessons.md) — lecciones aprendidas (loop de auto-mejora)
+- [tasks/session-protocol.md](tasks/session-protocol.md) — protocolo de cierre de sesión (obligatorio)

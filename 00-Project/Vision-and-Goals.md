@@ -2,7 +2,7 @@
 
 ## Visión del Producto
 
-BEIQA es una plataforma interna que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo de representación de tenants corporativos.
+BEIQA es una plataforma que centraliza la búsqueda de inmuebles comerciales/industriales, inteligencia de mercado y gestión de clientes para el equipo interno de Beiqa, y proporciona un portal dedicado a clientes corporativos (Tenant Portal).
 
 ## Problema que Resuelve
 
@@ -76,5 +76,5 @@ Reducir el tiempo de búsqueda de propiedades y aumentar la calidad de las recom
 
 - [Contexto de Negocio](./Business-Context.md)
 - [Pain Points Detallados](./Pain-Points.md)
-- [Definición del MVP](../03-Roadmap/Phase-1-MVP.md)
+- [Roadmap de Sprints](../03-Roadmap/Roadmap.md)
 

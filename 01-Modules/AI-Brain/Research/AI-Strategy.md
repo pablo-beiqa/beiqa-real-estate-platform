@@ -35,7 +35,7 @@ Definir dónde la IA agrega valor real vs. donde reglas simples son suficientes.
 
 ### 1. Deduplicación con IA (MVP)
 
-> Detalle completo en [Deduplication-Strategy.md](../../../02-Architecture/Deduplication-Strategy.md)
+> Detalle completo en [Deduplication-Strategy.md](../../../02-Architecture/archive/Deduplication-Strategy.md) (archivo histórico — ver ADR-016)
 
 | Aspecto | Investigación |
 |---------|---------------|

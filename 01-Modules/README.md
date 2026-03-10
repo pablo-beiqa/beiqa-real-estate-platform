@@ -34,14 +34,14 @@
 | **Tenant Portal** | Supabase Auth (magic link + password), scoring desde DB |
 | **Database** *(Arquitectura)* | Supabase activo ✅, PG 17, 32 migrations ✅, ~25K propiedades I24 + ~3K otros portales ✅ |
 
-### Sprint 3-4 — Inteligencia: Dedup, Scoring AI, Geospatial
+### Sprint 3-4 — Inteligencia: Dedup, Scoring AI, Geospatial, Market Intel
 
 | Módulo | Alcance |
 |--------|---------|
 | **Data** | Deduplication Agent, backfill completo |
 | **AI Brain** | Scoring/Matching Agent (migra de frontend) |
 | **Geospatial** | H3 indexer, AGEB lookup, GIS Analysis Agent |
-| **Market Intelligence** | Market Intelligence Agent, reportes por zona |
+| **Market Intelligence** | Market Intelligence Agent, reportes por zona (Sprint 4+) |
 | **Tenant Portal** | Shortlists UI, feedback, mapa de opciones |
 
 ### Sprint 5+ — Experiencia y Operaciones

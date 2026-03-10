@@ -38,7 +38,7 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 | CRM | ✅ Activo | HubSpot — clientes, deals, pipeline |
 | Geocodificación | ✅ Activo | Google Maps Platform (Geocoding + Places API) |
 | GIS | ✅ Activo | Atlas.co (2-3 usuarios), H3 indexing en pruebas |
-| Orquestación | ✅ Activo | Trigger.dev — scrapers, cron, sync, batch AI |
+| Orquestación | ✅ Activo | Trigger.dev — scrapers, cron, sync (sin AI — per ADR-021) |
 | Frontend | 🟡 Phase 0 | Next.js 15, scoring dashboard funcional |
 | UI interim | ✅ Activo | Rube + Claude Desktop (MCP bridge) — transitorio |
 
@@ -50,13 +50,13 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 |------|-----------|---------|
 | Base de datos | Supabase (PostgreSQL 17 + PostGIS + Auth + Storage + REST API) | Source of truth de propiedades |
 | Scraping | Apify + Firecrawl + Browserbase | Extracción multi-portal |
-| Orquestación | Trigger.dev | Scrapers, cron, sync, batch AI |
+| Orquestación | Trigger.dev | Scrapers, cron, sync (sin AI — per ADR-021) |
 | AI Agents | Mastra (en implementación) | Enrichment, normalization, dedup, scoring, market intel |
 | Frontend | Next.js 15 | Tenant Portal + Internal App (Fase 2-3) |
 | CRM | HubSpot | Clientes y deals |
 | GIS | Google Maps Platform + H3 + Atlas.co | Geocodificación + análisis geoespacial |
 
-Todas las decisiones de arquitectura están documentadas en 21 ADRs (14 aceptados, 5 propuestos, 2 deprecados). Ver [Stack-Decidido.md](../02-Architecture/Stack-Decidido.md) para el detalle completo.
+Todas las decisiones de arquitectura están documentadas en 22 ADRs (15 aceptados, 5 propuestos, 2 deprecados). Ver [Stack-Decidido.md](../02-Architecture/Stack-Decidido.md) para el detalle completo.
 
 ---
 
@@ -70,8 +70,8 @@ La capa de inteligencia artificial es transversal a toda la plataforma. Framewor
 | Data Normalization | Normaliza datos de múltiples portales a un golden record unificado | P0 | 1-2 |
 | Deduplication | Detecta misma propiedad en diferentes portales (híbrido: determinístico + LLM) | P1 | 3 |
 | Scoring / Matching | Cruza requerimientos de clientes con propiedades para generar shortlists rankeadas | P1 | 3-4 |
-| Market Intelligence | Tendencias de precio, oferta/demanda, comparables por zona | P2 | 5-6 |
-| GIS Analysis | H3 indexing, AGEB lookup, proximidad, calidad de zona | P2 | 5-6 |
+| Market Intelligence | Tendencias de precio, oferta/demanda, comparables por zona | P2 | 4 |
+| GIS Analysis | H3 indexing, AGEB lookup, proximidad, calidad de zona | P2 | 4 |
 
 Ver [Agent-Architecture.md](../02-Architecture/Agent-Architecture.md) para la arquitectura completa con tools, métricas de evaluación, y diagramas de secuencia.
 

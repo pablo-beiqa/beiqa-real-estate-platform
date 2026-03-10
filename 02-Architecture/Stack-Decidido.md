@@ -65,6 +65,7 @@ Portales inmobiliarios
 | **Frontend** | Next.js 15 + App Router + TypeScript + Tailwind + shadcn/ui | [ADR-015](ADRs/ADR-015-Frontend-Next-js.md) | 🟡 Phase 0 completo | — |
 | **Frontend Hosting** | Vercel Pro (portal.beiqa.com + app.beiqa.com) | [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) | 🟡 Por deployar | $20 |
 | **AI Agent Hosting** | Mastra Cloud (beta — observabilidad, Studio, deploy) | [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) | 🔴 Por implementar | $0 (beta, pricing TBD) |
+| **Mapas GIS** | Atlas.co (API + embed) — $89/usuario | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | ✅ Activo (2–3 usuarios) | $178–267 |
 
 ---
 
@@ -74,7 +75,6 @@ Portales inmobiliarios
 |-----------|---------|-----|---------------|
 | **AI Routing** | OpenRouter (multi-modelo) | [ADR-013](ADRs/ADR-013-OpenRouter.md) | Con Mastra activo — evaluar si OpenRouter o API directa |
 | **Deduplicación** | Scoring + LLM-assisted (híbrido) vía Mastra agent | [ADR-016](ADRs/ADR-016-Deduplicacion.md) | Con ≥2 portales en staging |
-| **Mapas GIS** | Atlas.co (API + embed) — $89/usuario | [ADR-017](ADRs/ADR-017-Plataforma-GIS.md) | ✅ Activo (2–3 usuarios, $178–267/mes) |
 | **CI/CD** | GitHub Actions (CI: lint, tests) — Deploy: resuelto por [ADR-022](ADRs/ADR-022-Hosting-Vercel-Mastra-Cloud.md) | [ADR-018](ADRs/ADR-018-CI-CD.md) | Con frontend activo |
 
 ---

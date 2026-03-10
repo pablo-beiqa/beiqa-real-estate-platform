@@ -125,7 +125,7 @@ Clientes de Beiqa (empresas que buscan espacio).
 Configuración y credenciales por portal de scraping.
 
 - `id` — UUID
-- `portal_name` — Nombre: inmuebles24, easybroker, etc.
+- `portal_name` — Nombre: inmuebles24, cbre, colliers, finsa, pincali, etc.
 - `apify_actor_id` — ID del actor de Apify
 - `is_active` — Si el scraping está activo para este portal
 - `last_run_at` — Última ejecución
@@ -153,8 +153,8 @@ Tabla de tracking de errores del sistema.
 Listings que el sistema identificó como posibles duplicados.
 
 - `id` — UUID
-- `listing_a_id` — FK a `inmuebles24_listings`
-- `listing_b_id` — FK a `inmuebles24_listings`
+- `listing_a_id` — FK a `inmuebles24_listings` (nota: migrar a FK en `properties` golden record para dedup cross-portal)
+- `listing_b_id` — FK a `inmuebles24_listings` (nota: migrar a FK en `properties` golden record para dedup cross-portal)
 - `similarity_score` — Score de similitud (0-1)
 - `match_reasons` — JSONB: qué campos coincidieron (geo, precio, área, dirección)
 - `status` — pending, confirmed_duplicate, false_positive
