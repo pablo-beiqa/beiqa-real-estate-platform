@@ -39,7 +39,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 - [Mapa de Módulos](./01-Modules/) — Todos los módulos con dependencias y fases
 - [Roadmap](./03-Roadmap/Roadmap.md) — 13 milestones, 8 sprints (Q/Sprint hierarchy), [Backlog](./03-Roadmap/Backlog.md)
 - [Presupuesto Operativo](./04-Validation/Total-Budget.md) — Costos reales verificados ($747–896/mes)
-- [Arquitectura de Agentes](./02-Architecture/Agent-Architecture.md) — 6 agentes AI diseñados con Mastra
+- [Arquitectura de Agentes](./02-Architecture/Agent-Architecture.md) — 7 agentes AI en 3 tiers con Mastra
 
 ---
 

@@ -46,7 +46,7 @@
 
 | Módulo | Milestones | Alcance |
 |--------|-----------|---------|
-| **AI Brain** | Scoring Automatizado, Búsqueda Inteligente | Scoring Agent, Dedup Agent >95% |
+| **AI Brain** | Scoring Automatizado, Búsqueda Inteligente | Property Search & Match Agent, Dedup Agent >95% |
 | **Geospatial** | Inteligencia Geoespacial | H3 post-enrichment, GIS Agent, zone quality |
 | **Tenant Portal** | Portal con Shortlists | Shortlists UI, feedback, mapa, Vercel deploy |
 
@@ -65,12 +65,21 @@
 
 ```mermaid
 flowchart TD
-    subgraph MASTRA["Mastra — Capa Transversal de AI"]
+    subgraph MASTRA["Mastra — 7 Agentes AI (3 Tiers)"]
         direction LR
-        MA_NORM[Data Normalization Agent]
-        MA_ADDR[Address Enrichment Agent]
-        MA_GIS[GIS Analysis Agent]
-        MA_MATCH[Matching Agent]
+        subgraph T1["Tier 1: Data Pipeline"]
+            MA_ADDR[Address Enrichment]
+            MA_NORM[Data Normalization]
+            MA_DEDUP[Deduplication]
+        end
+        subgraph T2["Tier 2: Client Intelligence"]
+            MA_SCORE[Score Discovery]
+            MA_SEARCH[Property Search & Match]
+        end
+        subgraph T3["Tier 3: Intelligence"]
+            MA_GIS[GIS Analysis]
+            MA_MI[Market Intelligence]
+        end
     end
 
     subgraph S1["Sprint 1-2 — Core"]
@@ -90,11 +99,13 @@ flowchart TD
         APP[Internal App]
     end
 
-    MASTRA -.->|enriquecimiento| SCR
-    MASTRA -.->|normalización| DATA
-    MASTRA -.->|análisis geo| GEO
-    MASTRA -.->|matching| AI
-    MASTRA -.->|inteligencia| MI
+    MA_ADDR -.->|enriquecimiento| SCR
+    MA_NORM -.->|normalización| DATA
+    MA_DEDUP -.->|dedup cross-portal| DATA
+    MA_SCORE -.->|scoring| AI
+    MA_SEARCH -.->|matching| AI
+    MA_GIS -.->|análisis geo| GEO
+    MA_MI -.->|inteligencia| MI
 
     SCR --> DB
     DATA --> DB

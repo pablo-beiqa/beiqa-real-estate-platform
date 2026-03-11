@@ -195,7 +195,7 @@ Costos que **no** se incluyen en este presupuesto:
 | Address Enrichment (LLM) | ~$36 | ~60K propiedades × ~$0.0006/propiedad. Modelo TBD. |
 | Data Normalization (LLM) | ~$15–20 | Feature extraction de descripciones. Modelo TBD. |
 | Deduplication (LLM) | ~$1–2 | Solo para casos ambiguos (score 0.70–0.95). |
-| Scoring / Matching | ~$5–10 | On-demand, ~50–100 scorings/mes. |
+| Score Discovery + Property Search & Match | ~$5–10 | On-demand, ~50–100 scorings/mes. |
 | Market Intelligence | ~$3–5 | Generación de reportes por zona. |
 | GIS Analysis | ~$5–10 | Análisis contextual con LLM. |
 | **Total LLM mensual ongoing** | **~$67–88** | |

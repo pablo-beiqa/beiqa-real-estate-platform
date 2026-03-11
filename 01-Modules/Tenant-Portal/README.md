@@ -42,13 +42,13 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 | Sprint | Componente | Estado | Prioridad |
 |--------|-----------|--------|-----------|
 | Sprint 1 | Autenticación (Supabase Auth + magic link) | 🔴 | MUST |
-| Sprint 2 | Scoring desde Supabase (via Mastra Scoring Agent) | 🔴 | MUST |
+| Sprint 2 | Scoring desde Supabase (via Mastra Property Search & Match Agent) | 🔴 | MUST |
 | Sprint 3-4 | Shortlists con scores por criterio | 🔴 | MUST |
 | Sprint 3-4 | Feedback estructurado | 🔴 | MUST |
 | Sprint 3-4 | Mapa de propiedades (Atlas.co) | 🔴 | SHOULD |
 | TBD | Notificaciones (email/Slack) | 🔴 | SHOULD |
 
-> **Scoring**: El scoring será generado por el **Mastra Scoring Agent** (no local en el frontend). El Tenant Portal consume el resultado via Supabase.
+> **Scoring**: El scoring será generado por el **Mastra Property Search & Match Agent** (no local en el frontend). El Tenant Portal consume el resultado via Supabase.
 
 ---
 
@@ -108,7 +108,7 @@ Actualmente la interaccion con clientes se realiza a traves de correos electroni
 ### Necesita (upstream)
 - **Supabase** → Base de datos (propiedades, shortlists, feedback) + Auth (magic link, RLS) + Storage
 - **Scraper** → Datos de propiedades en Supabase (~25K listings I24 + ~3K otros portales)
-- **Mastra Scoring Agent** → Genera scoring de propiedades vs requerimientos de clientes (AI Brain)
+- **Mastra Property Search & Match Agent** → Genera scoring de propiedades vs requerimientos de clientes (AI Brain)
 - **HubSpot** → Datos de scoring via pipeline de Circleback
 
 ### Depende de este (downstream)

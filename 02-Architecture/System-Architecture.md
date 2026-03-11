@@ -37,13 +37,14 @@ flowchart TB
         HTTPTrigger[HTTP trigger\na Mastra post-scrape]
     end
 
-    subgraph AIBrain["AI Brain — Mastra ⚡ · Mastra Cloud"]
-        AddressAgent[Address Enrichment\nAgent]
-        NormAgent[Data Normalization\nAgent]
-        DedupAgent[Deduplication\nAgent]
-        ScoringAgent[Scoring / Matching\nAgent]
-        MarketAgent[Market Intelligence\nAgent]
-        GISAgent[GIS Analysis\nAgent]
+    subgraph AIBrain["AI Brain — Mastra ⚡ · Mastra Cloud (7 agentes, 3 tiers)"]
+        AddressAgent[Address Enrichment\nAgent P0]
+        NormAgent[Data Normalization\nAgent P0]
+        DedupAgent[Deduplication\nAgent P1]
+        ScoreDiscovery[Score Discovery\nAgent P1]
+        SearchMatch[Property Search &\nMatch Agent P1]
+        MarketAgent[Market Intelligence\nAgent P2]
+        GISAgent[GIS Analysis\nAgent P2]
     end
 
     subgraph DB[Base de Datos — Supabase]
@@ -113,15 +114,17 @@ flowchart TB
     AddressAgent --> LLM
     NormAgent --> LLM
     DedupAgent --> LLM
-    ScoringAgent --> LLM
+    ScoreDiscovery --> LLM
+    SearchMatch --> LLM
     MarketAgent --> LLM
 
     %% Data consumption
     GoldenRecord --> REST
     REST --> InternalApp
     REST --> TenantPortal
-    InternalApp -->|scoring request| ScoringAgent
-    TenantPortal -->|scoring request| ScoringAgent
+    InternalApp -->|scoring request| SearchMatch
+    TenantPortal -->|scoring request| SearchMatch
+    ScoreDiscovery -->|genera scoring| PG
 
     %% HubSpot (determinístico, queda en Trigger.dev)
     PG --> HubspotSync --> HubSpot
@@ -195,18 +198,19 @@ flowchart TB
 - **Repo**: `github.com/pablo-beiqa/beiqa-agents`
 - **Framework**: [Mastra](https://mastra.ai) (TypeScript, open source, Apache 2.0)
 - **Server**: Hono HTTP server — persistente, no serverless
-- **Scope**: Orquestación de agentes AI — enrichment, normalization, deduplication, scoring, market intelligence, GIS analysis
+- **Scope**: Orquestación de 7 agentes AI en 3 tiers — data pipeline, client intelligence, intelligence & analysis
 - **Comunicación**: HTTP API (Hono server) + Supabase shared DB + MCP clients (ArcGIS, etc.)
 
-**Agentes**:
-| Agente | Prioridad | Módulo que sirve |
-|--------|-----------|-----------------|
-| Address Enrichment | P0 | Data, Geospatial |
-| Data Normalization | P0 | Data |
-| Deduplication | P1 | Data |
-| Scoring / Matching | P1 | Internal App, Tenant Portal |
-| Market Intelligence | P2 | Market Intelligence |
-| GIS Analysis | P2 | Geospatial |
+**Agentes (3 Tiers)**:
+| Agente | Tier | Prioridad | Módulo que sirve |
+|--------|------|-----------|-----------------|
+| Address Enrichment | 1: Data Pipeline | P0 | Data, Geospatial |
+| Data Normalization | 1: Data Pipeline | P0 | Data |
+| Deduplication | 1: Data Pipeline | P1 | Data |
+| Score Discovery | 2: Client Intelligence | P1 | AI Brain, Internal App |
+| Property Search & Match | 2: Client Intelligence | P1 | Internal App, Tenant Portal |
+| GIS Analysis | 3: Intelligence & Analysis | P2 | Geospatial |
+| Market Intelligence | 3: Intelligence & Analysis | P2 | Market Intelligence |
 
 Ver arquitectura completa de agentes: [Agent-Architecture.md](./Agent-Architecture.md)
 
@@ -353,25 +357,27 @@ sequenceDiagram
     Mastra->>Supabase: Log en agent_runs
 ```
 
-### Flujo 4: Scoring on-demand (Mastra)
+### Flujo 4: Property Search & Match (Mastra)
 
 ```mermaid
 sequenceDiagram
-    participant FE as Frontend
+    participant User as Pablo / Jerónimo
     participant Mastra as Mastra API
-    participant SA as Scoring Agent
+    participant PSM as Property Search<br/>& Match Agent
     participant LLM as LLM (TBD)
     participant Supabase
 
-    FE->>Mastra: POST /api/agents/scoring/generate
-    Mastra->>SA: Generar scoring
-    SA->>Supabase: Query propiedades (filtros del requerimiento)
-    Supabase-->>SA: Propiedades candidatas
-    SA->>LLM: Evaluar fit propiedad-requerimiento
-    LLM-->>SA: Score + justificación por propiedad
-    SA->>Supabase: INSERT scoring_report + scoring_results
-    SA-->>Mastra: Shortlist generada
-    Mastra-->>FE: Respuesta con shortlist
+    User->>Mastra: POST /api/agents/search-match/query (o chat)
+    Mastra->>PSM: Buscar/matchear
+    PSM->>Supabase: Query scoring_documents (cliente)
+    Supabase-->>PSM: ScoringDocument con criterios
+    PSM->>Supabase: Query properties (filtros derivados)
+    Supabase-->>PSM: Propiedades candidatas
+    PSM->>LLM: Evaluar fit propiedad vs criterios
+    LLM-->>PSM: Score + justificación por propiedad
+    PSM->>Supabase: INSERT shortlist_results
+    PSM-->>Mastra: Shortlist generada
+    Mastra-->>User: Respuesta con shortlist rankeada
 ```
 
 ### Flujo 5: Sync HubSpot (one-way, Trigger.dev)

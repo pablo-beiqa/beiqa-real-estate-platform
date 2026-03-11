@@ -8,7 +8,7 @@
 
 ## Foco
 
-- Scoring/Matching Agent funcional (genera shortlists desde Supabase)
+- Property Search & Match Agent funcional (genera shortlists desde Supabase)
 - Deduplication Agent inicio
 - Shortlist UI inicio
 - Deploy Vercel (portal.beiqa.com)
@@ -18,7 +18,7 @@
 
 | Track | Deliverable | Issue |
 |-------|-------------|-------|
-| AI/Mastra | Scoring/Matching Agent | [#97](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/97) |
+| AI/Mastra | Property Search & Match Agent | [#97](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/97) |
 | AI/Mastra | Deduplication Agent v1 (inicio) | [#96](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/96) |
 | Scraper | H3 indexer post-enrichment | [#113](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/113) |
 | Frontend | Shortlist UI inicio | [#58](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/58) |

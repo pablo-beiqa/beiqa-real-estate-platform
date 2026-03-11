@@ -10,7 +10,7 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 
 **Estado actual**: El equipo de 5 personas (desarrollo 100% interno) ya tiene en producción una base de datos con ~25,000 propiedades (I24) + 4 scrapers adicionales activos (CBRE, Colliers, FINSA, Pincali), CRM integrado con HubSpot, y un scoring dashboard funcional. El costo operativo verificado es de **$747–$896 USD/mes** y el desarrollo no tiene costo incremental (equipo interno).
 
-**Diferenciación**: Mientras brokers tradicionales buscan manualmente, Beiqa cubre el mercado completo a un costo de $0.003–$0.009 USD por propiedad nueva. Con 6 agentes AI en diseño (matching inteligente, deduplicación cross-portal, inteligencia de mercado), la plataforma transforma datos crudos en recomendaciones accionables para clientes corporativos.
+**Diferenciación**: Mientras brokers tradicionales buscan manualmente, Beiqa cubre el mercado completo a un costo de $0.003–$0.009 USD por propiedad nueva. Con 7 agentes AI en 3 tiers (scoring inteligente, matching con alertas proactivas, deduplicación cross-portal, inteligencia de mercado), la plataforma transforma datos crudos en recomendaciones accionables para clientes corporativos.
 
 ---
 
@@ -60,20 +60,21 @@ Todas las decisiones de arquitectura están documentadas en 22 ADRs (15 aceptado
 
 ---
 
-## Arquitectura AI — 6 Agentes Mastra
+## Arquitectura AI — 7 Agentes Mastra (3 Tiers)
 
-La capa de inteligencia artificial es transversal a toda la plataforma. Framework: [Mastra](https://mastra.ai) (open source, Apache 2.0, $0).
+La capa de inteligencia artificial es transversal a toda la plataforma. Framework: [Mastra](https://mastra.ai) (open source, Apache 2.0, $0). Arquitectura en 3 tiers: Data Pipeline, Client Intelligence, Intelligence & Analysis.
 
-| Agente | Qué hace | Prioridad | Sprint |
-|--------|---------|-----------|--------|
-| Address Enrichment | Corrige direcciones y coordenadas incorrectas (~50% de I24/Pincali) | P0 | 1 |
-| Data Normalization | Normaliza datos de múltiples portales a un golden record unificado | P0 | 1-2 |
-| Deduplication | Detecta misma propiedad en diferentes portales (híbrido: determinístico + LLM) | P1 | 3 |
-| Scoring / Matching | Cruza requerimientos de clientes con propiedades para generar shortlists rankeadas | P1 | 3-4 |
-| Market Intelligence | Tendencias de precio, oferta/demanda, comparables por zona | P2 | 4 |
-| GIS Analysis | H3 indexing, AGEB lookup, proximidad, calidad de zona | P2 | 4 |
+| Agente | Tier | Qué hace | Prioridad | Sprint |
+|--------|------|---------|-----------|--------|
+| Address Enrichment | 1: Data Pipeline | Corrige direcciones y coordenadas incorrectas (~50% de I24/Pincali) | P0 | 1 |
+| Data Normalization | 1: Data Pipeline | Normaliza datos de múltiples portales a un golden record unificado | P0 | 1-2 |
+| Deduplication | 1: Data Pipeline | Detecta misma propiedad en diferentes portales (híbrido: determinístico + LLM) | P1 | 3 |
+| Score Discovery | 2: Client Intelligence | Extrae scoring de transcripts (Circleback) + input manual → ScoringDocument con 160+ criterios | P1 | 2-3 |
+| Property Search & Match | 2: Client Intelligence | Chatbot interactivo + matching autónomo con alertas proactivas, memoria por cliente | P1 | 3-4 |
+| GIS Analysis | 3: Intelligence | H3 indexing, AGEB lookup, 10+ fuentes, zone quality composite score | P2 | 5-6 |
+| Market Intelligence | 3: Intelligence | Tendencias de precio, oferta/demanda, comparables, reportes automáticos + on-demand | P2 | 5-6 |
 
-Ver [Agent-Architecture.md](../02-Architecture/Agent-Architecture.md) para la arquitectura completa con tools, métricas de evaluación, y diagramas de secuencia.
+Ver [Agent-Architecture.md](../02-Architecture/Agent-Architecture.md) para la arquitectura completa con tools, métricas de evaluación, memoria (3 capas), human-in-the-loop, y diagramas de secuencia.
 
 ---
 
@@ -129,7 +130,7 @@ Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para desglose completo, 
 | 3 | **Portal Autenticado** | Login magic link, RLS, aislamiento por tenant | Abr 12 | 2-3 |
 | 4 | **Design System Implementado** | Figma → componentes shadcn/ui en portal | Abr 26 | 3-4 |
 | 5 | **Golden Record Pipeline** | Staging → normalización → properties E2E | Abr 26 | 3-4 |
-| 6 | **Scoring Automatizado** | Scoring Agent genera shortlists, frontend consume API | May 10 | 4-5 |
+| 6 | **Scoring Automatizado** | Property Search & Match Agent genera shortlists, frontend consume API | May 10 | 4-5 |
 | 7 | **Portal con Shortlists** | UI de shortlists + feedback + mapa | May 24 | 5-6 |
 | 8 | **Inteligencia Geoespacial** | H3, AGEB, GIS Agent, zone quality | May 24 | 5-6 |
 | 9 | **Búsqueda Inteligente** | Dedup >95%, datos unificados cross-portal | May 24 | 5-6 |

@@ -23,7 +23,7 @@ Consolidar la capa de datos en Supabase con 5 scrapers produciendo automaticamen
 | **O2**: Geoespacial operativo | KR5: H3 indexing en produccion (res 5-11, calcula durante scraping) | ✅ |
 | | KR6: PostGIS trigger `populate_geo` funcionando | ✅ |
 | **O3**: Infraestructura AI agents | KR7: Repo beiqa-agents con Mastra inicializado (`mastra dev`) | 🟡 [#86](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/86) |
-| | KR8: Arquitectura de 6 agentes diseñada y documentada | ✅ |
+| | KR8: Arquitectura de 7 agentes (3 tiers) diseñada y documentada | ✅ |
 | **O4**: Fundaciones del frontend | KR9: Scoring dashboard funcional (Phase 0) | ✅ |
 | | KR10: Design system iniciado en Figma (Pamela) | 🟡 |
 | | KR11: MVP / vibe coding del portal | 🟡 |

@@ -1,8 +1,18 @@
 # Estrategia de IA / LLM
 
 **Fase**: R-2 (Tecnología y Plataforma)
-**Estado**: 🔴 Por investigar
+**Estado**: 🟡 Parcialmente resuelto
 **Depende de**: Cuestionario 06-Cerebro-IA (R-0), Deduplication Strategy (R-1)
+
+> **⚠️ Nota (2026-03-11)**: Este documento es investigación histórica de la fase R-2. Varias decisiones ya fueron tomadas:
+> - **Framework**: Mastra — decidido en [ADR-020](../../../02-Architecture/ADRs/ADR-020-Mastra.md)
+> - **Separación Trigger.dev/Mastra**: [ADR-021](../../../02-Architecture/ADRs/ADR-021-Separacion-Trigger-Mastra.md)
+> - **Arquitectura de agentes**: [Agent-Architecture.md](../../../02-Architecture/Agent-Architecture.md) (7 agentes, 3 tiers)
+> - **Criterios de scoring**: [Scoring-Criteria.md](./Scoring-Criteria.md) (160+ criterios, 7 grupos)
+> - **Memoria**: [Memory-Architecture.md](./Memory-Architecture.md) (3 capas)
+> - **GIS**: [GIS-Analysis-Strategy.md](./GIS-Analysis-Strategy.md) (10+ fuentes)
+>
+> Las secciones de SDK/Framework y costos de este documento están **parcialmente desactualizadas**. La selección de modelo LLM por agente sigue siendo TBD.
 
 ---
 

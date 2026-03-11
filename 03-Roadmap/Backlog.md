@@ -50,7 +50,7 @@
 | [#94](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/94) | Trigger.dev → Mastra HTTP | S3 | — |
 | [#95](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/95) | Enrichment queue processing | S4 | — |
 | [#96](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/96) | Deduplication Agent v1 | S5-6 | P1 |
-| [#97](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/97) | Scoring/Matching Agent | S5 | P1 |
+| [#97](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/97) | Score Discovery + Property Search & Match Agents | S5 | P1 |
 | [#98](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/98) | Market Intelligence Agent v1 | S7 | P2 |
 | [#99](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/99) | Orchestrator workflow E2E | S8 | P1 |
 | [#100](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/100) | Slack alerts agentes Mastra | S8 | — |

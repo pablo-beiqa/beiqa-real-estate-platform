@@ -28,7 +28,7 @@ Detalle completo: [Q1-2026/](Q1-2026/README.md) | [Q2-2026/](Q2-2026/README.md)
 | 3 | **Portal Autenticado** | Login magic link, RLS, aislamiento por tenant | Abr 12 | 2-3 |
 | 4 | **Design System Implementado** | Figma → componentes shadcn/ui usados en portal | Abr 26 | 3-4 |
 | 5 | **Golden Record Pipeline** | Staging → normalización → properties E2E | Abr 26 | 3-4 |
-| 6 | **Scoring Automatizado** | Scoring Agent genera shortlists, frontend consume API | May 10 | 4-5 |
+| 6 | **Scoring Automatizado** | Property Search & Match Agent genera shortlists, frontend consume API | May 10 | 4-5 |
 | 7 | **Portal con Shortlists** | UI de shortlists + feedback + mapa | May 24 | 5-6 |
 | 8 | **Inteligencia Geoespacial** | H3 post-enrichment, AGEB, GIS Agent, zone quality | May 24 | 5-6 |
 | 9 | **Búsqueda Inteligente** | Dedup >95%, datos unificados cross-portal | May 24 | 5-6 |
