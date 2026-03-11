@@ -5,6 +5,16 @@
 
 ---
 
+## 2026-03-11 — Reestructuración del Roadmap a jerarquía Q/Sprint
+
+- **Roadmap reestructurado** — De archivo monolítico (~16KB) a jerarquía Q > Sprint con carpetas `Q1-2026/`, `Q2-2026/`, `Q3-2026/` y templates reutilizables. `Roadmap.md` reescrito como índice (~80 líneas). Original archivado en `archive/Roadmap-Monolitico-v1.md`.
+- **13 milestones outcome-based** — Reemplazan M1-M4 genéricos: Scrapers Consolidados, Enrichment Agent Operativo, Portal Autenticado, Design System Implementado, Golden Record Pipeline, Scoring Automatizado, Portal con Shortlists, Inteligencia Geoespacial, Búsqueda Inteligente, Inteligencia de Mercado, Portal en Producción, Dashboard Interno, Operación Estable.
+- **OKRs definidos por Quarter** — Q1 (4 objetivos, 11 KRs) y Q2 (6 objetivos, 26 KRs) con capacidad del equipo y dependencias externas documentadas.
+- **Sprint 1-3 con detalle completo** — OKRs, DoD, deliverables por track (AI/Mastra, Scraper/Infra, Frontend), riesgos y dependencias. Sprint 4-8 con alto nivel.
+- **Backlog.md creado** — Issues agrupados por módulo (Scraper, Data, AI Brain, Geospatial, Frontend, Infra). GitHub Issues como source of truth.
+- **GitHub sincronizado** — 13 milestones creados, issues reasignados de M1-M4 a nuevos milestones, M1-M4 cerrados. 8 issues nuevos creados (#125-#132): I24 migration tracking, data quality monitoring, multi-tenant RLS, API rate limiting, tenant onboarding UX, cost estimation AI, budget recalculation, design system core.
+- **Propagación cross-file** — Executive-Summary.md, README.md, Modules/README.md actualizados con 13 milestones y nueva estructura.
+
 ## 2026-03-09 — Pincali scraper pipeline completo
 
 - **Pincali scraper completado end-to-end** — Nuevos archivos: `download-files.ts` (descarga imágenes de EasyBroker CDN → Supabase Storage), `save-to-supabase.ts` (upsert a `pincali_listings`, `price_history`, `touchLastSeen`, `updateStorageUrls`). Pipeline completo: discover → scrape → save → download images → update storage URLs.

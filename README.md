@@ -37,7 +37,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 ### Para planificación
 - [Mapa de Módulos](./01-Modules/) — Todos los módulos con dependencias y fases
-- [Roadmap (Sprints)](./03-Roadmap/Roadmap.md) — Sprint 1-2 detallados, 4 milestones, backlog
+- [Roadmap](./03-Roadmap/Roadmap.md) — 13 milestones, 8 sprints (Q/Sprint hierarchy), [Backlog](./03-Roadmap/Backlog.md)
 - [Presupuesto Operativo](./04-Validation/Total-Budget.md) — Costos reales verificados ($747–896/mes)
 - [Arquitectura de Agentes](./02-Architecture/Agent-Architecture.md) — 6 agentes AI diseñados con Mastra
 
@@ -143,7 +143,7 @@ beiqa-real-estate-platform/
 │   ├── ADRs/            # 22 Architecture Decision Records
 │   ├── Database/        # Schema implementado
 │   └── archive/         # Documentos legacy (referencia histórica)
-├── 03-Roadmap/          # Sprints y milestones del proyecto
+├── 03-Roadmap/          # Q/Sprint hierarchy, 13 milestones, backlog
 ├── 04-Validation/       # Presupuesto y costos reales
 └── 05-Communication/    # Materiales para stakeholders externos
 ```

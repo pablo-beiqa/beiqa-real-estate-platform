@@ -120,18 +120,27 @@ Ver [Total-Budget.md](../04-Validation/Total-Budget.md) para desglose completo, 
 
 ## Roadmap
 
-**Metodología**: Scrum (sprints de 2 semanas). Tracks paralelos: Scraper, AI/Mastra, Frontend.
+**Metodología**: Scrum (sprints de 2 semanas). Tracks paralelos: Scraper, AI/Mastra, Frontend. 8 sprints en H1 2026.
 
-| Milestone | Sprints | Due Date | Qué entrega |
-|-----------|---------|----------|-------------|
-| **M1: Datos Confiables** | 1-2 | Mar 29 | Scrapers en Supabase, golden record, primer agente AI, auth en portal |
-| **M2: Búsqueda Inteligente** | 3-4 | Abr 26 | Scoring AI, dedup cross-portal, shortlists para clientes |
-| **M3: Experiencia del Cliente** | 5-6 | May 24 | Portal live, feedback de clientes, pipeline E2E automatizado |
-| **M4: Operación Estable** | 7-8 | Jun 21 | Sistema estable, CI/CD, evals, documentación operativa |
+| # | Milestone | Outcome | Due | Sprint(s) |
+|---|-----------|---------|-----|-----------|
+| 1 | **Scrapers Consolidados** | 5 portales con staging tables en Supabase | Mar 29 | 1-2 |
+| 2 | **Enrichment Agent Operativo** | Address Enrichment E2E con confidence score | Abr 12 | 2-3 |
+| 3 | **Portal Autenticado** | Login magic link, RLS, aislamiento por tenant | Abr 12 | 2-3 |
+| 4 | **Design System Implementado** | Figma → componentes shadcn/ui en portal | Abr 26 | 3-4 |
+| 5 | **Golden Record Pipeline** | Staging → normalización → properties E2E | Abr 26 | 3-4 |
+| 6 | **Scoring Automatizado** | Scoring Agent genera shortlists, frontend consume API | May 10 | 4-5 |
+| 7 | **Portal con Shortlists** | UI de shortlists + feedback + mapa | May 24 | 5-6 |
+| 8 | **Inteligencia Geoespacial** | H3, AGEB, GIS Agent, zone quality | May 24 | 5-6 |
+| 9 | **Búsqueda Inteligente** | Dedup >95%, datos unificados cross-portal | May 24 | 5-6 |
+| 10 | **Inteligencia de Mercado** | Market Intel Agent, precio/m², comparables | Jun 7 | 6-7 |
+| 11 | **Portal en Producción** | Vercel live, ≥1 tenant activo, feedback loop | Jun 7 | 6-7 |
+| 12 | **Dashboard Interno** | Internal App leyendo golden record | Jun 21 | 7-8 |
+| 13 | **Operación Estable** | CI/CD, evals, monitoring, docs operativas | Jun 21 | 7-8 |
 
-**Sprint activo**: Sprint 1 (Mar 2-15) — Address Enrichment Agent, CBRE persistence a Supabase, golden record migrations, login magic link.
+**Sprint activo**: Sprint 1 (Mar 2-15) — Address Enrichment Agent, staging tables, golden record migrations, login magic link.
 
-Ver [Roadmap.md](../03-Roadmap/Roadmap.md) para OKRs, deliverables, y acceptance criteria por sprint.
+Ver [Roadmap.md](../03-Roadmap/Roadmap.md) para índice de Q/Sprints con OKRs y deliverables.
 
 ---
 

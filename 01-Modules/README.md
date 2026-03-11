@@ -22,34 +22,42 @@
 
 ---
 
-## Mapeo a Sprints del Proyecto
+## Mapeo a Milestones y Sprints
 
-### Sprint 1-2 — Core: Scrapers, Data, AI Brain, Auth (En curso)
+> Detalle completo en [03-Roadmap/Roadmap.md](../03-Roadmap/Roadmap.md). 13 milestones, 8 sprints (Q1-Q2 2026).
 
-| Módulo | Alcance |
-|--------|---------|
-| **Scraper** | CBRE/Colliers/FINSA/Pincali ✅ producción. I24 migración Apify→Trigger.dev Sprint 1-2. Golden record staging |
-| **Data** | Golden record schema, normalización vía Mastra agents |
-| **AI Brain** | Address Enrichment Agent, Data Normalization Agent, LLM eval |
-| **Tenant Portal** | Supabase Auth (magic link + password), scoring desde DB |
-| **Database** *(Arquitectura)* | Supabase activo ✅, PG 17, 32 migrations ✅, ~25K propiedades I24 + ~3K otros portales ✅ |
+### Q1 (Sprint 1-2) — Fundaciones
 
-### Sprint 3-4 — Inteligencia: Dedup, Scoring AI, Geospatial, Market Intel
+| Módulo | Milestones | Alcance |
+|--------|-----------|---------|
+| **Scraper** | Scrapers Consolidados | CBRE/Colliers/FINSA/Pincali ✅. I24 migración a Trigger.dev |
+| **Data** | Golden Record Pipeline (inicio) | Golden record schema, normalización vía Mastra agents |
+| **AI Brain** | Enrichment Agent Operativo (inicio) | Address Enrichment Agent, LLM eval |
+| **Tenant Portal** | Portal Autenticado (inicio) | Supabase Auth (magic link), scoring desde DB |
 
-| Módulo | Alcance |
-|--------|---------|
-| **Data** | Deduplication Agent, backfill completo |
-| **AI Brain** | Scoring/Matching Agent (migra de frontend) |
-| **Geospatial** | H3 indexer, AGEB lookup, GIS Analysis Agent |
-| **Market Intelligence** | Market Intelligence Agent, reportes por zona (Sprint 4+) |
-| **Tenant Portal** | Shortlists UI, feedback, mapa de opciones |
+### Q2 Sprint 3-4 — Inteligencia + Pipeline
 
-### Sprint 5+ — Experiencia y Operaciones
+| Módulo | Milestones | Alcance |
+|--------|-----------|---------|
+| **AI Brain** | Enrichment Agent (cierre), Golden Record Pipeline (cierre) | Backfill, normalization E2E, AGEB import |
+| **Tenant Portal** | Design System, Scoring Automatizado | Componentes shadcn/ui, scoring pages desde Supabase |
 
-| Módulo | Alcance |
-|--------|---------|
-| **Internal App** | Next.js — lee golden record, dashboard interno (Pamela diseño) |
-| **Tenant Portal** | Portal live, pipeline E2E |
+### Q2 Sprint 5-6 — Portal + Geoespacial
+
+| Módulo | Milestones | Alcance |
+|--------|-----------|---------|
+| **AI Brain** | Scoring Automatizado, Búsqueda Inteligente | Scoring Agent, Dedup Agent >95% |
+| **Geospatial** | Inteligencia Geoespacial | H3 post-enrichment, GIS Agent, zone quality |
+| **Tenant Portal** | Portal con Shortlists | Shortlists UI, feedback, mapa, Vercel deploy |
+
+### Q2 Sprint 7-8 — Producción + Operaciones
+
+| Módulo | Milestones | Alcance |
+|--------|-----------|---------|
+| **Market Intelligence** | Inteligencia de Mercado | Market Intel Agent, precio/m², comparables |
+| **Tenant Portal** | Portal en Producción | Tenant onboarding, ≥1 tenant activo |
+| **Internal App** | Dashboard Interno | Internal App lee golden record |
+| **Infra** | Operación Estable | CI/CD, evals, monitoring, docs |
 
 ---
 
