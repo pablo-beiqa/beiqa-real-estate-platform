@@ -5,6 +5,16 @@
 
 ---
 
+## 2026-03-11 — Reestructuración completa del módulo AI Brain
+
+- **7 agentes en 3 tiers** — Arquitectura rediseñada desde entrevista exhaustiva con Pablo. De 6 agentes planos a 3 tiers: Data Pipeline (Address Enrichment, Data Normalization, Deduplication), Client Intelligence (Score Discovery, Property Search & Match), Intelligence & Analysis (GIS Analysis, Market Intelligence).
+- **Score Discovery Agent (nuevo)** — Extrae scoring de transcripts Circleback + input manual → ScoringDocument con 160+ criterios en 7 grupos (A-G: Universal, Industrial, Comercial, Oficinas, Terreno, Operacional, Negociación).
+- **Property Search & Match Agent (nuevo)** — Reemplaza Scoring/Matching. Dos modos: chatbot interactivo (Pablo/Jerónimo) + matching autónomo con alertas proactivas. Memoria por cliente.
+- **5 archivos nuevos**: Product-Questions.md (64 preguntas respondidas), Requirements.md (MoSCoW por tier), Scoring-Criteria.md (160+ criterios), Memory-Architecture.md (3 capas), GIS-Analysis-Strategy.md (10+ fuentes).
+- **Agent-Architecture.md reescrito** — Source of truth con memoria (3 capas), HITL (review queue → Slack → aprende), alertas proactivas, feedback loop, diagramas de secuencia, schema Supabase (12 tablas nuevas propuestas).
+- **Propagación a 14 archivos** — System-Architecture, Executive-Summary, Modules README, Roadmap, Backlog, Sprint-05, Tenant-Portal, Total-Budget, Q1/Q2 READMEs, root README. 21 inconsistencias corregidas post-auditoría.
+- **Skill `/session-close` creado** — Protocolo de cierre de sesión como skill invocable (.claude/skills/session-close.md).
+
 ## 2026-03-11 — Reestructuración del Roadmap a jerarquía Q/Sprint
 
 - **Roadmap reestructurado** — De archivo monolítico (~16KB) a jerarquía Q > Sprint con carpetas `Q1-2026/`, `Q2-2026/`, `Q3-2026/` y templates reutilizables. `Roadmap.md` reescrito como índice (~80 líneas). Original archivado en `archive/Roadmap-Monolitico-v1.md`.
