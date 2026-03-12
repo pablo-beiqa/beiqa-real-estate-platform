@@ -66,10 +66,18 @@
 **Contexto**: La herramienta de sincronización de archivos (carpeta `Sync`) generó archivos `*-CONFLICT-1` cuando hubo cambios concurrentes. Parecían conflictos de git pero NO lo eran — no contenían marcadores `<<<<<<<`/`=======`/`>>>>>>>`.
 **Regla**: Los archivos que contengan "CONFLICT" en el nombre deben eliminarse — son artefactos de sync, no documentos válidos. Verificar periódicamente con `find . -name "*CONFLICT*"`.
 
+#### 2026-03-11 — CLAUDE.md: instrucciones conductuales > proceso/burocracia
+**Contexto**: El CLAUDE.md de 303 líneas tenía workflow de tareas (46 líneas), protocolo de cierre (14 líneas), MCP tools (10 líneas), errores comunes (7 líneas) y tablas de datos que se desactualizaban. Claude no seguía el workflow ni el protocolo. Al comprimir a 104 líneas con instrucciones conductuales directas ("cuestiona antes de ejecutar", "conecta con negocio"), el archivo es más efectivo.
+**Regla**: En CLAUDE.md, cada línea debe moldear comportamiento, prevenir un error específico, o apuntar a dónde buscar. No incluir datos que cambian más de 1 vez por trimestre. No incluir procesos que Claude no va a seguir — mejor ponerlos en skills invocables.
+
+#### 2026-03-11 — Datos replicados en CLAUDE.md generan desync imposible de mantener
+**Contexto**: La tabla de stack (15 líneas), módulos (13 líneas) y count de ADRs se desactualizaban constantemente respecto a sus fuentes de verdad (Stack-Decidido.md, 01-Modules/README.md, ADRs/README.md).
+**Regla**: CLAUDE.md no debe contener datos que ya viven en otro archivo. Usar tabla "Dónde encontrar información" que apunte a los archivos fuente. propagation-rules.md se actualizó para reflejar esto.
+
 ### Comunicación y tono
 
 _Aún no hay lecciones en esta categoría._
 
 ---
 
-*Última actualización: 2026-03-05*
+*Última actualización: 2026-03-11*

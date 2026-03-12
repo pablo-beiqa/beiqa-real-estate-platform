@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-03-11 — CLAUDE.md comprimido de 303 a 104 líneas
+
+- **CLAUDE.md reescrito completamente** — De 303 líneas a 104. Eliminadas secciones que se desactualizaban (tabla de stack, tabla de módulos, MCP tools, errores comunes, protocolo de cierre, workflow de tareas). Cada línea ahora moldea comportamiento, previene un error, o apunta a dónde buscar.
+- **Sección "Tu rol" rediseñada** — 6 instrucciones conductuales concretas: discovery antes de ejecutar, conectar con negocio, proponer alternativas, defender simplicidad, opinar fuerte/ceder rápido, verificar antes de cerrar.
+- **propagation-rules.md actualizado** — Eliminada CLAUDE.md como destino de propagación de módulos, stack table y ADR count (ya no contiene esos datos).
+
 ## 2026-03-11 — Reestructuración completa del módulo AI Brain
 
 - **7 agentes en 3 tiers** — Arquitectura rediseñada desde entrevista exhaustiva con Pablo. De 6 agentes planos a 3 tiers: Data Pipeline (Address Enrichment, Data Normalization, Deduplication), Client Intelligence (Score Discovery, Property Search & Match), Intelligence & Analysis (GIS Analysis, Market Intelligence).
@@ -101,4 +107,4 @@
 
 ---
 
-*Última actualización: 2026-03-09*
+*Última actualización: 2026-03-11*

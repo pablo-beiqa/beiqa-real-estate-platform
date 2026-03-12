@@ -171,6 +171,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| **2026-03-11** | **CLAUDE.md comprimido 303→104 líneas** — Reescritura completa. Sección "Tu rol" rediseñada con 6 instrucciones conductuales. Eliminadas secciones que se desactualizaban (stack table, módulos, MCP, workflow, protocolo cierre). |
 | **2026-03-09** | **Pincali pipeline completo** — download-files.ts + save-to-supabase.ts. Pipeline end-to-end: discover → scrape → save → download images → update storage URLs. Optimización de créditos Firecrawl. Pipeline docs corregido (sin HubSpot). |
 | **2026-03-08** | **Scrapers en producción + Protocolo de cierre** — CBRE/Colliers/FinSA en producción. I24 migrando a Trigger.dev. Protocolo automático de cierre de sesión. MEMORY.md persistente. |
 | **2026-03-05** | **Hosting Strategy + Integración Mastra** — ADR-022: Vercel (frontend) + Mastra Cloud (agents). Mastra adoptado como framework de AI agents (ADR-020, ADR-021). Agent-Architecture.md creado. Roadmap reescrito a sprints. |
@@ -183,5 +184,5 @@ beiqa-real-estate-platform/
 
 ---
 
-*Última actualización: 2026-03-09*
+*Última actualización: 2026-03-11*
 
