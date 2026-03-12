@@ -14,6 +14,54 @@ Este skill implementa el proceso validado en la sesión del 2026-03-11, document
 
 ---
 
+## Mecánica de confianza
+
+Al final de cada fase de entrevista (Fase 1, Fase 2, Fase 3), el skill evalúa su confianza en escala 0-100. Si la confianza es **<95**, el skill:
+
+1. Reporta el score explícitamente: `"Confianza actual: [N]/100"`
+2. Lista qué información falta o es ambigua
+3. Genera preguntas adicionales contextuales usando AskUserQuestion (100% dinámicas según lo que falte)
+4. Repite hasta llegar a ≥95/100
+
+Solo cuando confianza ≥95, el skill avanza a la siguiente fase.
+
+### Factores de confianza por fase
+
+**Después de Fase 1** (máximo: 100):
+| Factor | Puntaje |
+|--------|---------|
+| ≥2 tracks/áreas identificados con claridad | +25 |
+| Estado del sprint anterior conocido (si retro_pendiente=true) | +20 |
+| Contexto de negocio actualizado | +20 |
+| Visión del sprint clara y específica | +35 |
+| Visión vaga ("quiero avanzar en todo") | -20 |
+| Ningún track técnico específico mencionado | -20 |
+| Cambio de negocio importante no explicado | -15 |
+
+**Después de Fase 2** (máximo: 100, calculado sobre todos los deliverables):
+| Factor | Puntaje |
+|--------|---------|
+| Cada deliverable tiene owner definido | +10 por deliverable |
+| Cada deliverable tiene AC concreto (no vago) | +10 por deliverable |
+| Dependencias entre deliverables mapeadas | +5 por track |
+| AC vago como "que funcione" o "completado" | -10 por deliverable |
+| Deliverable sin owner | -10 por deliverable |
+| Deliverable de alto riesgo sin plan de contingencia | -15 |
+
+**Después de Fase 3** (máximo: 100):
+| Factor | Puntaje |
+|--------|---------|
+| OKRs aprobados explícitamente por Pablo | +30 |
+| Conflictos de capacidad resueltos | +20 |
+| Todos los deliverables mapeados a milestones | +20 |
+| Issues huérfanos con destino definido | +15 |
+| Actividades continuas identificadas | +15 |
+| OKRs no aprobados aún | -30 |
+| Conflicto de capacidad sin resolver | -20 |
+| Deliverable sin milestone | -10 por deliverable |
+
+---
+
 ## FASE 0 — Contexto automático (silenciosa)
 
 Ejecutar antes de hacer cualquier pregunta. No reportar progreso al usuario durante esta fase.
@@ -63,18 +111,81 @@ Guardar internamente: project number, Sprint field ID, iteration IDs disponibles
 
 ### Si `retro_pendiente = true` — incluir mini-retro
 
-Lanzar AskUserQuestion con estas preguntas:
-1. ¿Qué se completó del sprint anterior? ¿Qué quedó pendiente y por qué?
-2. ¿Hay cambios de contexto de negocio que afecten prioridades? (demos, urgencias, cambios con clientes)
-3. En tus propias palabras, ¿de qué va a tratar el próximo sprint?
+```json
+{
+  "questions": [
+    {
+      "question": "¿Cuál es el estado real del sprint anterior? ¿Qué se completó y qué quedó pendiente?",
+      "header": "Estado S{N}",
+      "options": [
+        {"label": "100% completado", "description": "Todos los deliverables del sprint cerraron correctamente"},
+        {"label": "~80% completado", "description": "La mayoría cerró, 1-2 deliverables quedan abiertos"},
+        {"label": "~50% completado", "description": "Mitad del sprint completada, la otra mitad queda pendiente"},
+        {"label": "Menos del 50%", "description": "Sprint difícil — mucho queda pendiente, hay que revisar capacidad"}
+      ],
+      "multiSelect": false
+    },
+    {
+      "question": "¿Hay cambios de contexto de negocio que afecten las prioridades del próximo sprint? (demos agendadas, urgencias de clientes, nuevos deals)",
+      "header": "Contexto negocio",
+      "options": [
+        {"label": "Sin cambios relevantes", "description": "El contexto sigue igual, las prioridades no cambian"},
+        {"label": "Hay novedades — explicar", "description": "Demos, urgencias o cambios con clientes que afectan lo que hacemos"}
+      ],
+      "multiSelect": false
+    },
+    {
+      "question": "En tus propias palabras, ¿de qué va a tratar el próximo sprint? ¿Cuáles son las áreas principales?",
+      "header": "Visión sprint",
+      "options": [
+        {"label": "Continuidad del anterior", "description": "Completar lo pendiente + avanzar en lo planeado en el roadmap"},
+        {"label": "Giro de prioridades", "description": "El contexto cambió y el sprint tiene foco diferente al roadmap original"},
+        {"label": "Nuevo territorio", "description": "Entramos a un área que no habíamos tocado antes"}
+      ],
+      "multiSelect": false
+    }
+  ]
+}
+```
 
 ### Si `retro_pendiente = false` — solo visión
 
-Lanzar AskUserQuestion con:
-1. ¿Hay cambios de contexto de negocio relevantes para este sprint?
-2. En tus propias palabras, ¿de qué va a tratar el próximo sprint?
+```json
+{
+  "questions": [
+    {
+      "question": "¿Hay cambios de contexto de negocio que afecten las prioridades del próximo sprint?",
+      "header": "Contexto negocio",
+      "options": [
+        {"label": "Sin cambios", "description": "El contexto sigue igual"},
+        {"label": "Hay novedades — explicar", "description": "Demos, urgencias o cambios con clientes"}
+      ],
+      "multiSelect": false
+    },
+    {
+      "question": "En tus propias palabras, ¿de qué va a tratar el próximo sprint? ¿Cuáles son las áreas principales?",
+      "header": "Visión sprint",
+      "options": [
+        {"label": "Continuidad del anterior", "description": "Completar lo pendiente y avanzar en lo planeado"},
+        {"label": "Giro de prioridades", "description": "El contexto cambió y el sprint tiene foco diferente"},
+        {"label": "Nuevo territorio", "description": "Entramos a un área nueva"}
+      ],
+      "multiSelect": false
+    }
+  ]
+}
+```
 
 **Escuchar atentamente la respuesta**: identificar los tracks/áreas que Pablo menciona. Estos son los únicos tracks del sprint. No agregar tracks que Pablo no mencionó.
+
+### Evaluación de confianza al cierre de Fase 1
+
+Calcular score usando la tabla de factores de la sección "Mecánica de confianza". Reportar:
+
+> "Confianza actual: [N]/100. [Si <95: Me falta claridad en: [lista de lo que falta]. Te pregunto:]"
+
+Si <95: lanzar AskUserQuestion adicional con preguntas contextuales sobre lo que falta (dinámicas, no scripted).
+Si ≥95: avanzar a Fase 2.
 
 ---
 
@@ -111,7 +222,20 @@ Para cada deliverable, preguntar:
 
 **Batching**: Agrupar 3-4 deliverables por ronda usando AskUserQuestion. Si un deliverable es ambiguo, de alto riesgo o crítico → dedicarle su propia pregunta.
 
-**Criterio de detención**: Cuando todos los deliverables tienen ACs claros y específicos, cerrar la sub-fase y pasar a Fase 3.
+**Criterio de detención**: Cuando todos los deliverables tienen ACs claros y específicos, cerrar la sub-fase.
+
+### Evaluación de confianza al cierre de Fase 2
+
+Calcular score usando la tabla de factores de la sección "Mecánica de confianza". Para cada deliverable, verificar:
+- ¿Tiene owner definido? (Pablo / Fabrizio / Pamela / Jerónimo)
+- ¿Tiene AC concreto y específico? (no vago como "que funcione" o "completado")
+- ¿Están mapeadas sus dependencias o se confirmó que no las tiene?
+
+Reportar:
+> "Confianza actual: [N]/100. [Si <95: Me falta claridad en estos deliverables: [lista con qué falta de cada uno]. Te pregunto:]"
+
+Si <95: lanzar AskUserQuestion con preguntas dinámicas específicamente sobre los deliverables con información incompleta (owner faltante, AC vago, dependencias no mapeadas). Repetir hasta ≥95.
+Si ≥95: avanzar a Fase 3.
 
 ---
 
@@ -148,22 +272,47 @@ Presentar tabla y preguntar: "¿Algún ajuste en el mapeo de deliverables a mile
 
 ### 3.4 — Proponer OKRs
 
-Basado en todo lo discutido, proponer 2-3 OKRs. Máximo 3-4 KRs por OKR. Formato:
+Basado en todo lo discutido, construir internamente 2-3 OKRs. Máximo 3-4 KRs por OKR. Incluir los OKRs propuestos directamente en el `question` del AskUserQuestion:
 
-```
-O1: [Nombre del objetivo]
-  KR1: [Key Result medible con criterio de éxito específico]
-  KR2: [Key Result medible]
-  Owner: [persona]
+```json
+{
+  "questions": [
+    {
+      "question": "Propongo estos OKRs para el sprint:\n\nO1: [nombre]\n  KR1: [descripción con criterio de éxito]\n  KR2: [descripción con criterio de éxito]\n\nO2: [nombre]\n  KR3: [descripción con criterio de éxito]\n  KR4: [descripción con criterio de éxito]\n\n¿Los apruebas?",
+      "header": "OKRs propuestos",
+      "options": [
+        {"label": "Aprobados", "description": "Los OKRs capturan bien la visión del sprint — proceder"},
+        {"label": "Ajustar O1", "description": "El primer objetivo necesita cambios — explicar cuáles"},
+        {"label": "Ajustar O2 o O3", "description": "Otro objetivo necesita cambios — explicar cuáles"},
+        {"label": "Rehacer los OKRs", "description": "No capturan bien el sprint — dar nueva dirección"}
+      ],
+      "multiSelect": false
+    }
+  ]
+}
 ```
 
-Preguntar: "¿Apruebas estos OKRs o quieres ajustar alguno?"
-Iterar hasta aprobación. No pasar a siguiente paso sin OKRs aprobados.
+Iterar hasta que Pablo seleccione "Aprobados". No pasar a siguiente paso sin OKRs aprobados.
 
 ### 3.5 — Actividades continuas
 
 Preguntar:
 > "¿Hay actividades de fondo este sprint? (learning, educación técnica, actualizaciones de repo, etc.) ¿Son deliverables formales o trabajo de background que se evalúa al cierre?"
+
+### Evaluación de confianza al cierre de Fase 3
+
+Calcular score usando la tabla de factores de la sección "Mecánica de confianza". Verificar:
+- ¿OKRs aprobados explícitamente? (+30)
+- ¿Conflictos de capacidad resueltos? (+20)
+- ¿Todos los deliverables mapeados a milestones? (+20)
+- ¿Issues huérfanos con destino definido? (+15)
+- ¿Actividades continuas identificadas? (+15)
+
+Reportar:
+> "Confianza actual: [N]/100. [Si <95: Me falta resolver: [lista]. Te pregunto:]"
+
+Si <95: lanzar AskUserQuestion con preguntas dinámicas sobre lo que falta. Repetir hasta ≥95.
+Si ≥95: avanzar a Fase 4 — generar el preview completo.
 
 ---
 
@@ -283,11 +432,27 @@ Semana 2 ({fechas}):
 
 ### Solicitar aprobación
 
-Después de renderizar el markdown completo:
-> "¿Procedo con la ejecución? Si quieres ajustar algo, dime qué cambiar y regenero el draft."
+Después de renderizar el markdown completo, lanzar:
 
-Si Pablo hace correcciones → ajustar el draft, mostrarlo completo nuevamente, y volver a preguntar.
-**No ejecutar nada** hasta recibir aprobación explícita.
+```json
+{
+  "questions": [
+    {
+      "question": "El sprint file completo está generado arriba. ¿Procedo con la ejecución? (crear issues nuevos, mover issues en el board, actualizar Backlog.md, propagación y commit)",
+      "header": "Aprobación final",
+      "options": [
+        {"label": "Proceder — todo correcto", "description": "El sprint file refleja exactamente lo que discutimos. Ejecutar todo ahora."},
+        {"label": "Ajuste menor — luego proceder", "description": "Hay algo pequeño que corregir. Indicar qué, regenero el draft y procedo."},
+        {"label": "Cambio importante", "description": "Hay algo significativo que cambiar antes de ejecutar. Describir el cambio."}
+      ],
+      "multiSelect": false
+    }
+  ]
+}
+```
+
+Si Pablo selecciona "Ajuste menor" o "Cambio importante": aplicar los cambios, mostrar el markdown completo actualizado, y volver a lanzar la misma AskUserQuestion.
+**No ejecutar nada** hasta recibir "Proceder — todo correcto".
 
 ---
 
