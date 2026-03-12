@@ -39,6 +39,7 @@
 
 | # | Título | Cuándo decidir |
 |---|--------|---------------|
+| ADR-023 | Multi-unit Buildings Data Model — Jerarquía de propiedades en Golden Record | Sprint 2 (bloquea #104, #105). [Issue #133](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/133) |
 | [ADR-013](ADR-013-OpenRouter.md) | OpenRouter — AI Routing y Orquestación | Con Mastra activo |
 | [ADR-015](ADR-015-Frontend-Next-js.md) | Frontend Next.js — Detalles | Fase 2 |
 | [ADR-016](ADR-016-Deduplicacion.md) | Algoritmo de Deduplicación | Con nuevos portales |

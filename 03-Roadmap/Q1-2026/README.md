@@ -34,8 +34,8 @@ Consolidar la capa de datos en Supabase con 5 scrapers produciendo automaticamen
 
 | Persona | Rol | Split Sprint 1 | Split Sprint 2 |
 |---------|-----|-----------------|-----------------|
-| **Pablo** | CEO / PO + Dev | 60% AI/Mastra, 20% Frontend, 20% Planning | 55% AI/Mastra, 25% Frontend, 20% Planning |
-| **Fabrizio** | Tech Lead | 70% Scraper/Infra, 30% DB/Migrations | 60% Scraper/Infra, 40% DB/Migrations |
+| **Pablo** | CEO / PO + Dev | 60% AI/Mastra, 20% Frontend, 20% Planning | 40% AI/Mastra, 20% Scrapers, 20% Frontend, 20% Planning |
+| **Fabrizio** | Tech Lead | 70% Scraper/Infra, 30% DB/Migrations | 40% Data/Golden Record, 30% Scraper test/deploy, 20% Infra, 10% Learning |
 | **Pamela** | Design | Figma designs (shortlist, feedback, dashboard) | Figma designs |
 
 ---
@@ -45,7 +45,7 @@ Consolidar la capa de datos en Supabase con 5 scrapers produciendo automaticamen
 | Sprint | Periodo | Milestones | Foco | Estado |
 |--------|---------|------------|------|--------|
 | [Sprint 01](./Sprint-01.md) | Mar 2-15 | Scrapers Consolidados | Staging tables, Mastra init | Activo |
-| [Sprint 02](./Sprint-02.md) | Mar 16-29 | Scrapers Consolidados, Enrichment Agent, Portal Autenticado | Enrichment Agent v1, golden record schema, auth frontend | Planificado |
+| [Sprint 02](./Sprint-02.md) | Mar 16-29 | Scrapers Consolidados, Enrichment Agent, Portal Autenticado | Fundaciones + Experimentación: golden record, scrapers nuevos (Cushman + Proximity), enrichment multimodal experiments, auth frontend | Planificado |
 
 ---
 

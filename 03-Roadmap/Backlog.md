@@ -12,17 +12,19 @@
 | Issue | Titulo | Sprint | Prioridad |
 |-------|--------|--------|-----------|
 | [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) | Modulo de escritura a Supabase | S1 | P0 |
-| [#15](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/15) | Modulo check de existencia | S2 | — |
+| [#15](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/15) | Modulo check de existencia | S1 | — |
 | [#18](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/18) | Modulo notificaciones Slack | S3 | P0 |
 | [#19](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/19) | Modulo descarga/upload imagenes | Backlog | P0 |
 | [#20](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/20) | Modulo deteccion anomalias | Backlog | P0 |
 | [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | Testing Pincali | S1 | — |
-| [#36](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/36) | Scraper Cushman | S5+ | P2 |
+| [#36](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/36) | Scraper Cushman | S2 | P1 |
 | [#108](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/108) | Staging table CBRE | S1 | P0 |
 | [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | Staging table Colliers | S1 | — |
 | [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | Staging table Pincali | S1 | — |
-| [#111](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/111) | Scraper Proximity Parks | S5+ | P2 |
-| [#125](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/125) | I24 scraper migration tracking | S2-3 | — |
+| [#111](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/111) | Scraper Proximity Parks | S2 | P1 |
+| [#125](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/125) | I24 scraper migration tracking | S3 | — |
+| [#134](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/134) | Framework testing scrapers + reportes | S2 | — |
+| [#135](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/135) | Pruebas I24 — verificar funcionamiento | S2 | — |
 
 ## Data / Golden Record
 
@@ -30,7 +32,8 @@
 |-------|--------|--------|-----------|
 | [#104](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/104) | Golden record: migrations (5 tablas) | S2 | P0 |
 | [#105](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/105) | Campos comunes golden record | S2 | P0 |
-| [#106](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/106) | Columnas enrichment en I24 | S2 | — |
+| [#106](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/106) | Columnas enrichment en I24 | Backlog | — |
+| [#133](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/133) | ADR-023: Multi-unit buildings data model | S2 | P0 |
 | [#107](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/107) | Human-in-the-loop review interface | S5+ | P1 |
 | [#126](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/126) | Data quality monitoring | S3-4 | — |
 | [#127](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/127) | Multi-tenant RLS rules | S3 | — |
@@ -42,7 +45,7 @@
 | [#86](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/86) | Inicializar repo beiqa-agents | S1 | P0 |
 | [#87](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/87) | Address Enrichment Agent v1 | S1-2 | P0 |
 | [#88](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/88) | Evaluacion modelos LLM | S2 | P0 |
-| [#89](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/89) | Coordinate Validator tool | S2 | — |
+| [#89](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/89) | Coordinate Validator tool | Backlog | — |
 | [#90](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/90) | Cost tracking agent_runs | Backlog | — |
 | [#91](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/91) | Backfill workflow I24 | S3 | P0 |
 | [#92](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/92) | Description address extractor | S3 | — |
@@ -102,6 +105,7 @@
 
 | Issue | Titulo | Sprint | Prioridad |
 |-------|--------|--------|-----------|
+| [#136](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/136) | TriggerDev infra: paid plan + cloud deploy | S2 | — |
 | [#119](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/119) | CI/CD pipeline (GitHub Actions) | S7 | P2 |
 | [#120](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/120) | Performance monitoring + alertas | S8 | — |
 | [#121](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/121) | Operations runbook | S8 | — |
@@ -119,9 +123,9 @@
 | [#9](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/9) | Dual-write Supabase + HubSpot | Backlog | — |
 | [#11](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/11) | Modelo datos broker/inmobiliaria | Testing | — |
 | [#14](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/14) | Modulo escritura HubSpot | Backlog | — |
-| [#27](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/27) | Replicar logica Clay en TriggerDev I24 | S2-3 | — |
-| [#29](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/29) | Testing Clay vs TriggerDev I24 | S2-3 | — |
-| [#30](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/30) | Migracion definitiva Clay | S2-3 | — |
+| [#27](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/27) | Replicar logica Clay en TriggerDev I24 | S3 | — |
+| [#29](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/29) | Testing Clay vs TriggerDev I24 | S3 | — |
+| [#30](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/30) | Migracion definitiva Clay | S3 | — |
 | [#31](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/31) | Reestructurar docs Scraper | Backlog | — |
 | [#33](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/33) | Template EXECUTION-LOG.md | Backlog | — |
 | [#42](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/42) | Documentar DB en Modulos/Data | S1 | — |
@@ -148,4 +152,4 @@
 
 ---
 
-*Actualizado: 2026-03-11. 132 issues. Source of truth: [GitHub Issues](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues).*
+*Actualizado: 2026-03-11. 136 issues. Source of truth: [GitHub Issues](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues).*
