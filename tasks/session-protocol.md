@@ -1,9 +1,8 @@
 # Protocolo de Cierre de Sesion
 
-> **DEPRECATED (2026-03-09)**: Este protocolo ha sido reemplazado por el plugin `beiqa-session`.
-> Ubicacion del plugin: `~/.claude/plugins/local/beiqa-session/`
-> Comando: `/cierre-sesion` | Skill: `session-close` (auto-trigger)
-> Este archivo se mantiene como referencia historica y sera eliminado en 2 semanas.
+> **MIGRADO (2026-03-11)**: Este protocolo ahora es un skill invocable: `.claude/skills/session-close.md`
+> Comando: `/session-close`
+> Este archivo se mantiene como referencia. El skill es la version ejecutable.
 
 ---
 

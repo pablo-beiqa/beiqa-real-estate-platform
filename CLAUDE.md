@@ -252,6 +252,7 @@ Claude puede resolver ciertos tipos de problemas de forma **autónoma** (sin pre
 | Skill | Invocación | Qué hace |
 |-------|-----------|---------|
 | Auditoría de consistencia | `/audit-consistency` | 11 checks cross-file: links, sprints, status, stack, ADRs, emojis. Solo lectura |
+| Cierre de sesión | `/session-close` | Protocolo completo: resumen, commits, propagación, lecciones, issues, presupuesto, MEMORY, CHANGELOG, próximos pasos |
 | Contenido BEIQA | `/beiqa-content` | Parrillas de contenido y copys para LinkedIn, Reddit, Substack, Blog |
 
 ---
