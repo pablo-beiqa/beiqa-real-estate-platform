@@ -1,6 +1,6 @@
 # sprint-planning
 
-Planifica un sprint completo para Beiqa: entrevista al usuario, define OKRs y deliverables, crea/mueve issues en GitHub, y actualiza toda la documentación del repositorio.
+Facilita el proceso completo de planificación de un sprint de Beiqa. Absorbe todo el contexto disponible del repo (silenciosamente), entrevista a Pablo con profundidad usando AskUserQuestion, genera el sprint file completo como preview, y ejecuta todos los cambios tras una sola aprobación: reescribir el sprint file, crear/mover issues en GitHub + Project Board, actualizar Backlog.md, propagación y commit.
 
 ## Cómo invocar
 
@@ -10,104 +10,176 @@ Planifica un sprint completo para Beiqa: entrevista al usuario, define OKRs y de
 
 ## Contexto
 
-Este skill implementa el proceso de planificación de sprint validado en sesiones anteriores. El sprint planning es un proceso **colaborativo** — Claude organiza y estructura, pero Pablo dicta la visión y prioridades.
+Este skill implementa el proceso validado en la sesión del 2026-03-11, documentado en `memory/skills-context.md`. La entrevista usa AskUserQuestion (nunca texto libre) y es **adaptativa**: ~8 rondas para sprints simples, hasta 14-16 para sprints complejos. Pablo dicta; el skill organiza.
 
 ---
 
-## Proceso completo
+## FASE 0 — Contexto automático (silenciosa)
 
-### FASE 1 — Recolectar contexto (automático)
+Ejecutar antes de hacer cualquier pregunta. No reportar progreso al usuario durante esta fase.
 
-Leer estos archivos en paralelo antes de hacer cualquier pregunta:
+### 0.1 — Detectar sprint siguiente
 
-1. `03-Roadmap/Roadmap.md` — milestones, estructura general
-2. Sprint anterior completo: `03-Roadmap/Q{X}-2026/Sprint-{N-1}.md`
-3. `03-Roadmap/Backlog.md` — todos los issues con sprint asignado
-4. Ejecutar `gh issue list --repo pablo-beiqa/beiqa-real-estate-platform --limit 200 --state open` — estado real de issues
-5. `tasks/lessons.md` — para no repetir errores
-6. `02-Architecture/ADRs/README.md` — ADRs pendientes que puedan bloquear
+1. Usar Glob para listar archivos `03-Roadmap/Q*-2026/Sprint-*.md`
+2. Identificar el número más alto (N) → el siguiente sprint es N+1
+3. Identificar el Quarter (Q{X}) del sprint siguiente leyendo `03-Roadmap/Roadmap.md`
 
-Con esta información, tener claro:
-- Qué sprint se está planeando (N) y sus fechas
-- Qué quedó pendiente del sprint anterior
-- Qué issues ya están asignados al sprint N
-- Qué milestones están activos
+### 0.2 — Leer estado actual
 
-### FASE 2 — Entrevista (preguntas a Pablo)
+1. Leer `03-Roadmap/Roadmap.md` completo — milestones activos, estructura de sprints, fechas
+2. Leer `03-Roadmap/Q{anterior}-2026/Sprint-{N}.md` (sprint anterior completo)
+3. **Detección de retro**: Si `## Review` del sprint anterior contiene solo el placeholder "Completar al cierre..." → flag `retro_pendiente = true`. Si está llena → `retro_pendiente = false`.
+4. Leer `03-Roadmap/Q{X}-2026/Sprint-{N+1}.md` si existe (puede ser un placeholder — no importa, se sobreescribirá)
+5. Leer `03-Roadmap/Backlog.md` completo — todos los issues y sus asignaciones de sprint actuales
+6. Leer `tasks/lessons.md` — no repetir errores pasados
+7. Leer `02-Architecture/ADRs/README.md` — verificar si hay ADRs propuestos que bloqueen deliverables
 
-**REGLA CRÍTICA**: No proponer un plan completo sin antes entrevistar. Pablo dicta, Claude organiza.
+### 0.3 — Consultar GitHub
 
-Preguntar en bloques temáticos usando AskUserQuestion. Esperar respuesta de cada bloque antes de continuar.
+Ejecutar en paralelo:
+```bash
+gh issue list --repo pablo-beiqa/beiqa-real-estate-platform --limit 200 --state open
+gh project list --owner pablo-beiqa
+```
 
-**Bloque 1 — Estado actual:**
-- ¿Cuál es el estado REAL del sprint que termina? ¿Qué se completó, qué quedó pendiente?
-- ¿Hay cambios de contexto de negocio? (clientes, demos, urgencias)
+Con el número de proyecto obtenido:
+```bash
+gh project field-list {PROJECT_NUMBER} --owner pablo-beiqa --format json
+```
 
-**Bloque 2 — Visión del sprint:**
-- "En tus propias palabras, ¿de qué va a tratar el próximo sprint?"
-- Dejar que Pablo dicte libremente. NO interrumpir con sugerencias.
+Guardar internamente: project number, Sprint field ID, iteration IDs disponibles (para ejecutar `gh project item-edit` en Fase 5).
 
-**Bloque 3 — Detalle por área** (para CADA área que Pablo mencionó):
-- ¿Qué específicamente se va a hacer?
-- ¿Quién lo hace? (Pablo, Fabrizio, Pamela)
-- ¿Cuál es el resultado esperado? (schema vacío, datos ingested, prototipo funcional, etc.)
-- ¿Hay dependencias o bloqueos?
+### 0.4 — Calcular capacidad base
 
-**Bloque 4 — Tradeoffs de capacidad:**
-- Mostrar conflictos de capacidad explícitamente
-- "Fabrizio no puede hacer X + Y + Z en 2 semanas. ¿Cuál es prioridad?"
-- Dejar que Pablo decida, no asumir
-
-**Bloque 5 — Issues existentes:**
-- Revisar issues asignados al sprint en Backlog.md
-- Presentar issues "huérfanos" (asignados pero no mencionados por Pablo)
-- Preguntar: ¿se mantienen, se mueven, se eliminan?
-
-**Bloque 6 — OKRs:**
-- Claude propone 2-3 OKRs basados en la entrevista
-- Pablo aprueba, ajusta, o rechaza
-- Iterar hasta tener OKRs aprobados
-
-**Bloque 7 — Actividades continuas:**
-- ¿Hay learning, educación, repo updates?
-- ¿Son deliverables formales o background?
-
-### FASE 3 — Ejecución
-
-Una vez aprobados OKRs y deliverables:
-
-1. **Reescribir `Sprint-{N}.md`** con formato estándar (ver template abajo)
-2. **Crear issues nuevos** en GitHub con `gh issue create --repo pablo-beiqa/beiqa-real-estate-platform`
-   - Labels disponibles: `documentation`, `enhancement`, `bug`, `data`, `scraper`, `testing`, `infra`, `triggerdev`, `frontend`, `ai-brain`, `geospatial`
-   - NO usar label `docs` (no existe) — usar `documentation`
-3. **Mover/actualizar issues existentes**: comentar cambios de sprint con `gh issue comment`
-4. **Actualizar `Backlog.md`**: reflejar issues nuevos, movidos, y cambios de sprint
-5. **Actualizar `ADRs/README.md`** si hay nuevos ADRs propuestos
-6. **Verificar propagación** según `tasks/propagation-rules.md`:
-   - Q{X}-2026/README.md (capacidad, descripción sprint)
-   - Roadmap.md (si cambió resumen del sprint)
-7. **Commit** con convención: `docs(roadmap): reestructurar Sprint {N} — {tema}`
-
-### FASE 4 — Resumen
-
-Presentar al usuario:
-- OKRs aprobados con owners
-- Deliverables por persona (tabla)
-- Issues creados (con números) y movidos
-- Dependencias críticas y riesgos
-- Confirmar que todo fue committeado
+- Pablo: ~10 días hábiles (2 semanas)
+- Fabrizio: ~10 días hábiles (2 semanas)
+- Total disponible: ~4 person-weeks
+- Pamela: diseño paralelo — no computa como capacidad de desarrollo, no bloquea
+- Jerónimo: ops — no computa como capacidad de desarrollo
 
 ---
 
-## Template de Sprint-{N}.md
+## FASE 1 — Snapshot (1 ronda con AskUserQuestion)
+
+### Si `retro_pendiente = true` — incluir mini-retro
+
+Lanzar AskUserQuestion con estas preguntas:
+1. ¿Qué se completó del sprint anterior? ¿Qué quedó pendiente y por qué?
+2. ¿Hay cambios de contexto de negocio que afecten prioridades? (demos, urgencias, cambios con clientes)
+3. En tus propias palabras, ¿de qué va a tratar el próximo sprint?
+
+### Si `retro_pendiente = false` — solo visión
+
+Lanzar AskUserQuestion con:
+1. ¿Hay cambios de contexto de negocio relevantes para este sprint?
+2. En tus propias palabras, ¿de qué va a tratar el próximo sprint?
+
+**Escuchar atentamente la respuesta**: identificar los tracks/áreas que Pablo menciona. Estos son los únicos tracks del sprint. No agregar tracks que Pablo no mencionó.
+
+---
+
+## FASE 2 — Deep Dive (adaptativo: ~5-10 rondas)
+
+### Calibración de complejidad
+
+Antes de comenzar, estimar la complejidad basada en los tracks mencionados en Fase 1:
+
+| Complejidad | Tracks | Deliverables esperados | Rondas Fase 2 | Total sprint |
+|-------------|--------|----------------------|---------------|-------------|
+| Simple | 2-3 | ≤8 | ~4-5 | ~8 rondas |
+| Media | 3-4 | 8-12 | ~6-8 | ~10-12 rondas |
+| Compleja | 4-5 | >12 | ~9-11 | ~14-16 rondas |
+
+### 2a — Listado de deliverables por track
+
+Para **cada track que Pablo mencionó** en Fase 1, usar AskUserQuestion para preguntar:
+- ¿Qué deliverables concretos incluye este track en el sprint?
+- ¿Quién los ejecuta? (Pablo / Fabrizio / Pamela / Jerónimo)
+- ¿Hay dependencias o bloqueos entre ellos, o con otros tracks?
+
+**Batching**: Hasta 4 tracks por ronda (límite de AskUserQuestion). Si hay 4 tracks, preguntar los 4 en paralelo en una sola ronda.
+
+**Regla crítica**: No preguntar sobre tracks que Pablo NO mencionó en Fase 1. Si no habló de frontend → no preguntar sobre frontend. Respetar sus exclusiones activas.
+
+### 2b — Acceptance Criteria por deliverable
+
+Una vez conocida la lista completa de deliverables, preguntar ACs específicos para cada uno.
+
+Para cada deliverable, preguntar:
+- ¿Cuál es el resultado esperado concreto? (ej: "schema con ≥5 tablas + migrations aplicadas + primeros datos ingested de ≥1 portal")
+- ¿Qué tiene que ser verdad para que este deliverable esté "listo"? (Acceptance Criteria)
+
+**Batching**: Agrupar 3-4 deliverables por ronda usando AskUserQuestion. Si un deliverable es ambiguo, de alto riesgo o crítico → dedicarle su propia pregunta.
+
+**Criterio de detención**: Cuando todos los deliverables tienen ACs claros y específicos, cerrar la sub-fase y pasar a Fase 3.
+
+---
+
+## FASE 3 — Síntesis (1-2 rondas con AskUserQuestion)
+
+### 3.1 — Issues huérfanos
+
+Comparar los issues marcados para Sprint {N+1} en Backlog.md vs los deliverables que Pablo mencionó en la entrevista. Identificar "huérfanos" (asignados al sprint pero no mencionados).
+
+Si hay huérfanos, preguntar en bloque (una sola AskUserQuestion):
+> "Estos issues estaban asignados a Sprint {N+1} pero no los mencionaste: [lista con #N: título]. ¿Qué hacemos con cada uno? (se mantienen / se mueven a Sprint {N+2} / se eliminan del backlog)"
+
+### 3.2 — Conflictos de capacidad
+
+Calcular la carga por persona sumando estimados rough por deliverable:
+- Deliverable pequeño (copy/paste, config): ~0.5-1d
+- Deliverable mediano (feature nueva, schema): ~1-3d
+- Deliverable grande (arquitectura, pipeline completo): ~3-5d
+
+Si la suma supera la capacidad base (10d por persona):
+- Mostrar exactamente qué no cabe: "Pablo tiene ~10d pero los deliverables suman ~{N}d: [lista con estimado]"
+- Preguntar: "¿Qué cede? ¿Cuál es la prioridad?"
+- Proponer activamente qué cortar con justificación de negocio (no solo alertar)
+
+### 3.3 — Milestones
+
+Leer milestones activos de Roadmap.md. Construir tabla de mapeo: cada deliverable → milestone que avanza.
+
+Si algún deliverable no mapea a ningún milestone existente:
+1. Proponer nuevo milestone (si tiene peso suficiente para justificarlo)
+2. O asignarlo al milestone existente más cercano en tiempo/tema
+
+Presentar tabla y preguntar: "¿Algún ajuste en el mapeo de deliverables a milestones?"
+
+### 3.4 — Proponer OKRs
+
+Basado en todo lo discutido, proponer 2-3 OKRs. Máximo 3-4 KRs por OKR. Formato:
+
+```
+O1: [Nombre del objetivo]
+  KR1: [Key Result medible con criterio de éxito específico]
+  KR2: [Key Result medible]
+  Owner: [persona]
+```
+
+Preguntar: "¿Apruebas estos OKRs o quieres ajustar alguno?"
+Iterar hasta aprobación. No pasar a siguiente paso sin OKRs aprobados.
+
+### 3.5 — Actividades continuas
+
+Preguntar:
+> "¿Hay actividades de fondo este sprint? (learning, educación técnica, actualizaciones de repo, etc.) ¿Son deliverables formales o trabajo de background que se evalúa al cierre?"
+
+---
+
+## FASE 4 — Preview + Aprobación (1 ronda)
+
+Generar el sprint file completo en markdown y renderizarlo directamente en la conversación. Seguir exactamente el formato de `03-Roadmap/Q1-2026/Sprint-02.md`.
+
+### Estructura del preview
 
 ```markdown
-# Sprint {N} ({fecha inicio}-{fecha fin}) — {Tema}
+# Sprint {N+1} ({fecha inicio}-{fecha fin}) — {Tema}
 
 > **Estado**: Planificado
 > **Quarter**: Q{X}-2026
-> **Tema**: {descripción corta}
-> **Milestones**: {milestones activos}
+> **Tema**: {descripción corta del tema central}
+> **Milestones**: {lista de milestones activos}
 
 ---
 
@@ -118,27 +190,35 @@ Presentar al usuario:
 | **O1: {nombre}** | KR1: {descripción} | {owner} |
 | O1 | KR2: {descripción} | {owner} |
 | **O2: {nombre}** | KR3: {descripción} | {owner} |
+...
 
 ### Actividades continuas (se evalúan al cierre, no son deliverables formales)
 
-- **{actividad}** — {descripción}
+- **{actividad}** — {personas} — {descripción breve}
 
 ---
 
 ## Definition of Done
 
-- [ ] {criterio 1}
-- [ ] {criterio 2}
+(Auto-generado a partir de los ACs de cada deliverable — un checkbox por AC crítico)
+
+- [ ] {AC del deliverable 1}
+- [ ] {AC del deliverable 2}
+- [ ] ...
+- [ ] Todo commiteado y pusheado
 
 ---
 
 ## Deliverables por Track
 
-### Track: {nombre} ({owner})
+### Track: {Nombre} ({Owner})
 
 | Deliverable | Issue | AC | Estado |
 |-------------|-------|----|--------|
-| {nombre} | [#{N}](url) | {acceptance criteria} | Pendiente |
+| {nombre} | [#{N}](url) o NUEVO | {AC específico de la entrevista} | Pendiente |
+...
+
+(repetir por cada track)
 
 ---
 
@@ -146,10 +226,15 @@ Presentar al usuario:
 
 ```
 Semana 1 ({fechas}):
-  {Owner}: {tarea} → {tarea}
+  Pablo: {tarea} (~{N}d) → {tarea} (~{N}d)
+  Fabrizio: {tarea} (~{N}d) → {tarea} (~{N}d)
+
 Semana 2 ({fechas}):
-  {Owner}: {tarea} → {tarea}
+  Pablo: {tarea} → {tarea}
+  Fabrizio: {tarea} → {tarea}
 ```
+
+**Dependencia crítica**: {si existe, describir la dependencia más importante y su fecha límite}
 
 ---
 
@@ -157,14 +242,15 @@ Semana 2 ({fechas}):
 
 | Riesgo / Dependencia | Impacto | Mitigación |
 |---------------------|---------|------------|
-| {riesgo} | Alto/Medio/Bajo | {mitigación} |
+| {riesgo} | Alto/Medio/Bajo | {mitigación concreta} |
 
 ---
 
-## Issues movidos fuera de Sprint {N}
+## Issues movidos fuera de Sprint {N+1}
 
 | Issue | Titulo | Destino | Razón |
 |-------|--------|---------|-------|
+| [#{N}](url) | {título} | S{N+2} / Backlog | {razón} |
 
 ---
 
@@ -172,6 +258,7 @@ Semana 2 ({fechas}):
 
 | Titulo | Labels | Sprint | Owner | Descripción |
 |--------|--------|--------|-------|-------------|
+| {título} | `{label}` | S{N+1} | {owner} | {descripción} |
 
 ---
 
@@ -183,6 +270,9 @@ Semana 2 ({fechas}):
 
 | Métrica | Target | Resultado |
 |---------|--------|-----------|
+| Issues cerrados | {N} | ... |
+| KRs completados | {N}/{N} | ... |
+{métricas específicas del sprint}
 
 ### Retrospectiva
 
@@ -191,13 +281,157 @@ Semana 2 ({fechas}):
 - **Acción**: ...
 ```
 
+### Solicitar aprobación
+
+Después de renderizar el markdown completo:
+> "¿Procedo con la ejecución? Si quieres ajustar algo, dime qué cambiar y regenero el draft."
+
+Si Pablo hace correcciones → ajustar el draft, mostrarlo completo nuevamente, y volver a preguntar.
+**No ejecutar nada** hasta recibir aprobación explícita.
+
+---
+
+## FASE 5 — Ejecución (automática tras aprobación)
+
+Ejecutar en este orden exacto:
+
+### 5.1 — Reescribir Sprint-{N+1}.md
+
+Si el archivo ya existe (placeholder): sobreescribir completamente.
+Si no existe: crear en `03-Roadmap/Q{X}-2026/Sprint-{N+1}.md`.
+Contenido = exactamente el markdown aprobado en Fase 4.
+
+### 5.2 — Crear issues nuevos en GitHub
+
+Para cada issue de la tabla "Issues nuevos a crear":
+
+```bash
+gh issue create \
+  --repo pablo-beiqa/beiqa-real-estate-platform \
+  --title "{título}" \
+  --body "{descripción}" \
+  --label "{label1},{label2}"
+```
+
+Guardar el número de issue creado (#N) para actualizar la tabla de deliverables en Sprint-{N+1}.md (reemplazar "NUEVO" por "[#{N}](url)").
+
+Labels válidos: `scraper`, `data`, `golden-record`, `ai-brain`, `mastra`, `triggerdev`, `devops`, `frontend`, `geospatial`, `documentation`, `P0`, `P1`, `P2`. **NO usar `docs`** (no existe).
+
+### 5.3 — Mover issues de sprint
+
+Para cada issue que cambia de sprint (huérfanos aceptados para mover, issues traídos de sprints anteriores):
+
+**a) Actualizar campo Sprint en GitHub Project Board:**
+
+```bash
+# 1. Obtener el item ID del issue en el proyecto
+gh project item-list {PROJECT_NUMBER} --owner pablo-beiqa --format json \
+  | jq '.items[] | select(.content.number == {ISSUE_NUMBER}) | .id'
+
+# 2. Actualizar el campo Sprint/Iteration
+gh project item-edit \
+  --project-id {PROJECT_ID} \
+  --id {ITEM_ID} \
+  --field-id {SPRINT_FIELD_ID} \
+  --iteration-id {ITERATION_ID_DEL_SPRINT}
+```
+
+Nota: Los IDs de proyecto, field y iteration se obtuvieron en Fase 0 paso 0.3.
+
+**b) Comentar en el issue (trazabilidad obligatoria):**
+
+```bash
+gh issue comment {N} \
+  --repo pablo-beiqa/beiqa-real-estate-platform \
+  --body "Movido de Sprint {X} a Sprint {Y} durante sprint planning {FECHA}: {razón breve}"
+```
+
+Siempre ejecutar ambos pasos juntos. Nunca uno sin el otro.
+
+### 5.4 — Actualizar Backlog.md
+
+Editar `03-Roadmap/Backlog.md`:
+- Cambiar la columna de sprint de los issues movidos (ej: `S2` → `S3`, `S5+` → `S3`)
+- Agregar filas para los issues nuevos creados en 5.2 (con su # y título)
+- Actualizar issues movidos fuera del sprint (→ Backlog, S{N+2}, etc.)
+
+### 5.5 — Actualizar Q{X}/README.md
+
+Marcar Sprint {N+1} como activo en el README del quarter correspondiente.
+
+**Si el sprint nuevo es el primero de un nuevo Quarter:**
+- `Q{X-1}/README.md`: marcar Sprint {N} como cerrado/completado
+- `Q{X}/README.md`: marcar Sprint {N+1} como activo y actualizar resumen
+
+### 5.6 — Verificar propagación
+
+Leer `tasks/propagation-rules.md`. Para cada archivo modificado, verificar sus dependientes:
+
+| Si se modificó... | Verificar que se actualizó... |
+|-------------------|-------------------------------|
+| `Roadmap.md` | Executive-Summary, README.md, 01-Modules/README.md |
+| `Backlog.md` | No tiene dependientes directos |
+| Sprint file | Q{X}/README.md |
+
+Aplicar correcciones menores autónomamente. Para cambios de significado/estructura: preguntar.
+
+### 5.7 — Commit
+
+```bash
+git add 03-Roadmap/Q{X}-2026/Sprint-{N+1}.md
+git add 03-Roadmap/Backlog.md
+git add 03-Roadmap/Q{X}-2026/README.md
+# + cualquier otro archivo modificado en 5.5 y 5.6
+
+git commit -m "$(cat <<'EOF'
+docs(roadmap): planificar Sprint {N+1} — {tema en 3-4 palabras}
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
+```
+
+### 5.8 — Resumen final
+
+```
+=== SPRINT {N+1} PLANIFICADO ===
+Periodo: {fecha inicio} - {fecha fin}
+Quarter: Q{X}-2026
+
+OKRs ({N}):
+  O1: {nombre}
+  O2: {nombre}
+  O3: {nombre (si aplica)}
+
+Deliverables: {N} total
+  Track AI/Mastra: {N} ({owner})
+  Track Scraper: {N} ({owner})
+  Track Data/Infra: {N} ({owner})
+  Track Frontend: {N} ({owner})
+  Track Design: {N} ({owner})
+
+Issues creados: {N}
+  [lista: #número — título]
+
+Issues movidos: {N}
+  [lista: #número Sprint X → Sprint Y]
+
+Milestones cubiertos: {lista}
+Commit: 1
+================================
+```
+
 ---
 
 ## Reglas de ejecución
 
-1. **NUNCA proponer plan sin entrevistar** — la entrevista es obligatoria. Pablo dicta, Claude organiza.
-2. **NUNCA asumir prioridades** — si hay conflicto de capacidad, presentar el tradeoff y dejar que Pablo decida.
-3. **Iterar OKRs** — proponer, recibir feedback, ajustar. No aceptar la primera versión sin validación.
-4. **Labels de GitHub**: verificar que existen antes de usarlos. Labels conocidos: `documentation`, `enhancement`, `bug`, `data`, `scraper`, `testing`, `infra`, `triggerdev`, `frontend`, `ai-brain`, `geospatial`.
-5. **Propagación obligatoria** — siempre verificar Q{X} README, Roadmap.md, Backlog.md después de cambios.
-6. **Un commit al final** — no hacer commits intermedios durante el planning.
+1. **NUNCA proponer el plan antes de terminar la entrevista** — Pablo dicta, el skill organiza. No inventar deliverables.
+2. **Usar SIEMPRE AskUserQuestion** para la entrevista. Nunca preguntas en texto libre. Máximo 4 preguntas por call.
+3. **Milestones son no-negociables** — ningún deliverable puede quedar sin milestone asignado.
+4. **Una sola aprobación antes de ejecutar** — después del preview completo en markdown. No pedir confirmación paso a paso.
+5. **Mover issues = board + comentar** — siempre ambos pasos. Nunca uno sin el otro.
+6. **gh project IDs**: descubrir dinámicamente en cada invocación (`gh project list`, `gh project field-list`). No hardcodear IDs.
+7. **Cross-quarter**: Si Sprint {N+1} es el primero de un nuevo Q, actualizar ambos README de quarter (anterior + nuevo).
+8. **No preguntar sobre tracks no mencionados** — si Pablo no habló de frontend, no preguntar sobre frontend. Respetar exclusiones.
+9. **Labels**: verificar que son válidos antes de usar. NO usar `docs` (usar `documentation`). Labels conocidos: `scraper`, `data`, `golden-record`, `ai-brain`, `mastra`, `triggerdev`, `devops`, `frontend`, `geospatial`, `documentation`, `P0`, `P1`, `P2`.
+10. **DoD auto-generado**: construir el checklist del DoD a partir de los ACs de cada deliverable. Pablo puede editarlo en el preview antes de aprobar.
