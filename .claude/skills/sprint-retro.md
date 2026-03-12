@@ -1,6 +1,6 @@
 # sprint-retro
 
-Ejecuta el cierre completo de un sprint: recolecta datos reales de forma silenciosa, entrevista a Pablo en profundidad (5 bloques), cruza perspectiva subjetiva con datos objetivos, propone carryover y lecciones, actualiza toda la documentación, y hace handoff formal al sprint planning.
+Ejecuta el cierre completo de un sprint: recolecta datos reales de forma silenciosa, entrevista a Pablo de forma adaptativa con AskUserQuestion hasta alcanzar 95/100 de confianza, cruza perspectiva subjetiva con datos objetivos, propone carryover y lecciones, actualiza toda la documentación, y hace handoff formal al sprint planning.
 
 ## Cómo invocar
 
@@ -31,25 +31,70 @@ Ejecutar **en paralelo** antes de hacer cualquier pregunta a Pablo:
 
 ---
 
-### FASE 2 — Entrevista de cierre (5 bloques)
+### FASE 2 — Entrevista adaptativa (hasta 95/100 de confianza)
 
-Usar AskUserQuestion. Esperar respuesta de cada bloque antes de continuar. **Los 5 bloques son obligatorios** — no saltarse ninguno aunque parezca que ya se respondió en otro.
+**Instrucción base**: Leer el sprint file (ya cargado en FASE 1) y entrevistar a Pablo en detalle sobre **todo lo relevante**: implementación técnica, proceso, trade-offs, decisiones, sorpresas, aprendizajes. Usar **siempre** AskUserQuestion — nunca preguntas en texto libre. Cada pregunta debe tener 2-4 opciones + Other (que el tool provee automáticamente). Después de cada ronda, reportar confianza explícitamente. No pasar a FASE 3 hasta alcanzar **95/100**.
 
-**Llamada 1 — Bloques 1 y 2** (Completado + No completado):
+---
 
-- Bloque 1: ¿Qué se completó de lo planeado? ¿Cómo se logró? ¿Hubo algo que facilitó el trabajo?
-- Bloque 2: ¿Qué NO se completó? Para cada item incompleto, ¿por qué no? (subestimación de esfuerzo / cambio de prioridad / bloqueo técnico / falta de claridad en la definición / falta de tiempo)
+#### Dominios obligatorios (cubrir todos, en cualquier orden)
 
-**Llamada 2 — Bloques 3 y 4** (Proceso + Sorpresas):
+| # | Dominio | Preguntas clave |
+|---|---------|-----------------|
+| 1 | **Completado** | ¿Qué se completó? ¿Cómo se logró? ¿Qué facilitó el trabajo? |
+| 2 | **No completado + causa raíz** | ¿Qué no se completó? ¿Por qué exactamente? |
+| 3 | **Proceso y comunicación** | ¿Qué funcionó bien? ¿Qué falló? ¿Hubo fricción con Fabrizio/Pamela? |
+| 4 | **Sorpresas y aprendizajes** | ¿Qué sorprendió? ¿Qué cambia la estrategia técnica? |
+| 5 | **Evaluación de OKRs** | ¿Se cumplieron? ¿Eran realistas? ¿KRs necesitan reformularse? |
+| 6 | **Intención de carryover** | Para cada incompleto: ¿siguiente sprint, backlog, o descartar? |
 
-- Bloque 3: ¿Qué funcionó bien? (herramientas, comunicación, coordinación con Fabrizio/Pamela) ¿Qué falló o puede mejorar? ¿Hubo fricción?
-- Bloque 4: ¿Qué te sorprendió (positiva o negativamente)? ¿Qué aprendiste que no sabías al inicio del sprint? ¿Algo que cambia la estrategia técnica?
+#### Dominios adaptativos (agregar si los datos de FASE 1 lo sugieren)
 
-**Llamada 3 — Bloque 5** (OKRs):
+- Si hay >3 deliverables incompletos → profundizar en bloqueos técnicos específicos
+- Si hay commits en semana 2 pero no en semana 1 → preguntar sobre arranque lento
+- Si hay issues cerrados que no estaban en el sprint original → preguntar sobre scope creep
+- Si `tasks/lessons.md` tiene lecciones repetidas del sprint anterior → preguntar si se aplicaron
+- Si detecta cambios de arquitectura en commits → preguntar qué decisiones se tomaron y por qué
 
-- ¿Se cumplieron los OKRs del sprint?
-- Para cada KR que no se cumplió: ¿era realista desde el inicio?
-- ¿Los KRs eran medibles y alcanzables, o necesitan reformularse para futuros sprints?
+---
+
+#### Formato de cada ronda
+
+**Máximo 4 preguntas por llamada AskUserQuestion.** Batching: agrupar preguntas del mismo dominio. Si un dominio requiere más de 4 preguntas, dividirlo en sub-rondas.
+
+Ejemplo de pregunta con opciones (para dominio 2):
+```
+question: "¿Cuál fue la causa principal de que [deliverable X] no se completara?"
+header: "Causa raíz — [deliverable X]"
+options: [
+  { label: "Subestimación del esfuerzo", description: "Más complejo de lo estimado al planear" },
+  { label: "Cambio de prioridad", description: "Surgió algo más urgente durante el sprint" },
+  { label: "Bloqueo técnico", description: "Dependencia, error, o problema técnico sin resolver" },
+  { label: "Falta de claridad", description: "El deliverable no estaba bien definido al inicio" }
+]
+// Other siempre disponible automáticamente
+```
+
+---
+
+#### Reporte de confianza (después de CADA ronda, visible para Pablo)
+
+```
+**Confianza actual: X/100**
+Tengo claro: [lista de dominios con suficiente detalle]
+Necesito clarificar: [lista de puntos ambiguos o sin responder]
+→ [Si <95%: "Lanzo ronda {N+1} sobre: [temas específicos]"]
+→ [Si ≥95%: "Entendimiento suficiente. Paso al análisis cruzado."]
+```
+
+#### Criterio para alcanzar 95/100
+
+- ✅ Todos los deliverables incompletos tienen causa raíz específica (no "falta de tiempo" genérico)
+- ✅ Todos los OKRs evaluados con semáforo + justificación
+- ✅ Al menos una lección potencial identificada
+- ✅ Intención de carryover clara para cada incompleto
+- ✅ Sin respuestas ambiguas sin profundizar ("no sé", "más o menos", "algo así")
+- ✅ Dominios 1-6 cubiertos con respuestas concretas y accionables
 
 ---
 
@@ -192,7 +237,7 @@ Lecciones documentadas: N
 ## Reglas de ejecución
 
 1. **Datos silenciosos primero** — recolectar todo antes de preguntar. NO mostrar métricas a Pablo antes de la entrevista para no sesgar respuestas.
-2. **5 bloques obligatorios** — no saltarse ninguno aunque parezca redundante.
+2. **Entrevista adaptativa hasta 95/100** — usar AskUserQuestion con opciones en todas las preguntas. Reportar confianza después de cada ronda. Sin límite de rondas — continuar hasta alcanzar el umbral.
 3. **Semáforo OKRs**: 🟢 ≥80% / 🟡 40-79% / 🔴 <40% o no iniciado.
 4. **Carryover explícito** — cada incompleto tiene destino documentado. Nunca dejar incompletos "flotando".
 5. **Lecciones proactivas** — Claude propone basado en patrones; Pablo aprueba antes de escribir.
