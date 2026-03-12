@@ -99,6 +99,6 @@ Resolver autónomamente (sin preguntar paso a paso):
 
 ## Skills y commits
 
-**Skills**: `/audit-consistency` (11 checks cross-file), `/session-close` (protocolo completo de cierre), `/beiqa-content` (parrillas de contenido).
+**Skills**: `/audit-consistency` (11 checks cross-file), `/session-close` (protocolo completo de cierre), `/beiqa-content` (parrillas de contenido), `/sprint-planning` (planificación completa de sprint con entrevista + OKRs + issues), `/sprint-retro` (cierre de sprint con retrospectiva y métricas), `/sync-repo` (sincronización rápida de docs con trabajo en repos de código).
 
 **Commits**: `<tipo>(<scope>): <descripción en español>`. Tipos: `docs`, `feat`, `fix`, `refactor`, `chore`. Scopes: por carpeta o módulo. Español, lowercase, imperativo, sin punto final.
