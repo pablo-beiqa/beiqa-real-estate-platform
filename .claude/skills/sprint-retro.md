@@ -1,6 +1,6 @@
 # sprint-retro
 
-Ejecuta el cierre completo de un sprint: recolecta datos reales, entrevista al usuario sobre lo completado y aprendizajes, actualiza documentación, mueve deliverables incompletos, y documenta la retrospectiva.
+Ejecuta el cierre completo de un sprint: recolecta datos reales de forma silenciosa, entrevista a Pablo en profundidad (5 bloques), cruza perspectiva subjetiva con datos objetivos, propone carryover y lecciones, actualiza toda la documentación, y hace handoff formal al sprint planning.
 
 ## Cómo invocar
 
@@ -10,77 +10,117 @@ Ejecuta el cierre completo de un sprint: recolecta datos reales, entrevista al u
 
 ## Contexto
 
-Este skill se ejecuta al **final de un sprint** (o al inicio del siguiente, antes del planning). Combina datos objetivos (issues cerrados, commits) con la perspectiva subjetiva de Pablo para generar una retrospectiva útil.
+Este skill se ejecuta al **final de un sprint** (o al inicio del siguiente, antes del planning). Combina datos objetivos (issues cerrados, commits) con la perspectiva subjetiva de Pablo para generar una retrospectiva útil y honesta. **El retro va siempre antes del planning** — garantiza que el agente de planning tiene acceso a lecciones frescas, carryover documentado, y el estado real del equipo.
 
 ---
 
 ## Proceso completo
 
-### FASE 1 — Recolectar datos (automático)
+### FASE 1 — Recolectar datos (automático, silencioso)
 
-Ejecutar en paralelo:
+Ejecutar **en paralelo** antes de hacer cualquier pregunta a Pablo:
 
-1. Leer sprint actual: `03-Roadmap/Q{X}-2026/Sprint-{N}.md`
-2. Ejecutar `gh issue list --repo pablo-beiqa/beiqa-real-estate-platform --limit 200 --state all` — ver qué issues se cerraron durante el sprint
-3. Para cada deliverable del sprint, verificar: ¿se completó? (basándose en issues cerrados y estado documentado)
-4. Ejecutar `git log --after={fecha_inicio_sprint} --before={fecha_fin_sprint} --oneline` para ver commits del periodo
-5. Leer `tasks/lessons.md` — lecciones existentes para no duplicar
+1. Leer `03-Roadmap/Roadmap.md` para identificar el sprint activo y sus fechas
+2. Leer `03-Roadmap/Q{X}-2026/Sprint-{N}.md` — OKRs, deliverables planeados, fechas
+3. Ejecutar `gh issue list --repo pablo-beiqa/beiqa-real-estate-platform --limit 200 --state all` — issues cerrados durante el sprint
+4. Ejecutar `git log --after="{fecha_inicio_sprint}" --before="{fecha_fin_sprint}" --oneline` — actividad real del periodo
+5. Leer `tasks/lessons.md` — para no duplicar lecciones existentes
+6. Leer `01-Modules/README.md` — estado actual de módulos (para detectar cambios después)
 
-### FASE 2 — Entrevista de cierre
+**CRÍTICO**: NO mostrar estos datos a Pablo antes de la entrevista. Dejar que su perspectiva sea completamente libre y sin sesgo de métricas.
 
-Preguntar a Pablo usando AskUserQuestion:
+---
 
-**Bloque 1 — Completado vs planeado:**
-- ¿Qué se completó de lo planeado?
-- ¿Qué NO se completó y por qué?
+### FASE 2 — Entrevista de cierre (5 bloques)
 
-**Bloque 2 — Retrospectiva:**
-- ¿Qué salió bien? (proceso, comunicación, herramientas)
-- ¿Qué salió mal o puede mejorar?
-- ¿Hubo sorpresas o aprendizajes inesperados?
+Usar AskUserQuestion. Esperar respuesta de cada bloque antes de continuar. **Los 5 bloques son obligatorios** — no saltarse ninguno aunque parezca que ya se respondió en otro.
 
-**Bloque 3 — Lecciones:**
-- ¿Hay algo que agregar a `tasks/lessons.md`?
-- Proponer lecciones basadas en lo que Pablo describió
+**Llamada 1 — Bloques 1 y 2** (Completado + No completado):
 
-**Bloque 4 — Carryover:**
-- Para cada deliverable incompleto: ¿se mueve al siguiente sprint o se descarta?
-- ¿Cambió la prioridad de algo?
+- Bloque 1: ¿Qué se completó de lo planeado? ¿Cómo se logró? ¿Hubo algo que facilitó el trabajo?
+- Bloque 2: ¿Qué NO se completó? Para cada item incompleto, ¿por qué no? (subestimación de esfuerzo / cambio de prioridad / bloqueo técnico / falta de claridad en la definición / falta de tiempo)
 
-### FASE 3 — Actualizar documentación
+**Llamada 2 — Bloques 3 y 4** (Proceso + Sorpresas):
 
-1. **Llenar sección "Review" del Sprint-{N}.md**:
-   - Métricas de cierre (issues cerrados, KRs completados, deliverables entregados)
-   - Retrospectiva (Bien / Mejorar / Acción)
-   - Cambiar estado del sprint de "Activo" a "Cerrado"
+- Bloque 3: ¿Qué funcionó bien? (herramientas, comunicación, coordinación con Fabrizio/Pamela) ¿Qué falló o puede mejorar? ¿Hubo fricción?
+- Bloque 4: ¿Qué te sorprendió (positiva o negativamente)? ¿Qué aprendiste que no sabías al inicio del sprint? ¿Algo que cambia la estrategia técnica?
 
-2. **Mover deliverables incompletos**:
-   - Agregar a Sprint-{N+1}.md como carryover (si existe)
-   - O documentar en Backlog.md con sprint actualizado
+**Llamada 3 — Bloque 5** (OKRs):
 
-3. **Actualizar Backlog.md**:
-   - Issues completados: marcar como cerrados
-   - Issues movidos: actualizar sprint asignado
+- ¿Se cumplieron los OKRs del sprint?
+- Para cada KR que no se cumplió: ¿era realista desde el inicio?
+- ¿Los KRs eran medibles y alcanzables, o necesitan reformularse para futuros sprints?
 
-4. **Cerrar/comentar issues en GitHub**:
-   - `gh issue close <N> --repo pablo-beiqa/beiqa-real-estate-platform --comment "Completado en Sprint {N}"`
-   - `gh issue comment <N> --repo pablo-beiqa/beiqa-real-estate-platform --body "Movido a Sprint {N+1}: {razón}"`
+---
 
-5. **Agregar lecciones a `tasks/lessons.md`** (si Pablo aprobó)
+### FASE 3 — Análisis cruzado (automático, interno)
 
-6. **Verificar propagación**:
-   - Q{X}-2026/README.md (OKRs status)
-   - Roadmap.md (si cambió estado del sprint)
+Cruzar datos de FASE 1 con respuestas de FASE 2. No mostrar este proceso al usuario — usarlo internamente para preparar las propuestas de FASE 4.
 
-### FASE 4 — Commit
+- Verificar cada deliverable del sprint: ✅ Completo / ⚠️ Parcial / ❌ No iniciado
+- Detectar discrepancias entre lo que Pablo dice y los issues realmente cerrados en GitHub
+- Comparar deliverables completados con `01-Modules/README.md` para detectar módulos cuyo estado debería cambiar
+- Proponer lecciones basadas en patrones (ej: "Fabrizio tuvo más carga de lo estimado en 2 sprints consecutivos", "Issues de infra suelen subestimarse")
 
-`docs(roadmap): cerrar Sprint {N} — retrospectiva y métricas de cierre`
+---
 
-Presentar resumen final:
+### FASE 4 — Propuestas para aprobación (secuencial)
+
+Presentar cada propuesta y esperar aprobación antes de ejecutar.
+
+**4a. Carryover items** — Para cada deliverable incompleto, Claude propone destino:
+
+- Opción A: Sprint {N+1} (alta prioridad, se retoma inmediatamente)
+- Opción B: Backlog con sprint=TBD (importante pero no urgente)
+- Opción C: Descartar (cerrar el issue, ya no aplica)
+
+Presentar propuestas en tabla y pedir aprobación en bloque.
+
+**Si Sprint-{N+1}.md no existe aún**: documentar carryover en `Backlog.md` con `sprint='S{N+1}'` y nota `[CARRYOVER de S{N}: {razón}]`. El skill de planning lo recogerá desde ahí.
+
+**4b. Lecciones** — Claude propone lecciones concretas basadas en el análisis:
+
+Proponer con el mismo formato de `tasks/lessons.md`. Pablo aprueba, rechaza, o modifica cada una antes de escribir. No agregar lecciones que ya existan.
+
+**4c. Module status** — Si detectó cambios de estado:
+
+- "Propongo actualizar módulo X de 'En desarrollo' a 'Funcional' dado que el deliverable Y se completó. ¿De acuerdo?"
+- Esperar aprobación explícita antes de actualizar `01-Modules/README.md`
+
+**4d. GitHub issues** — Preguntar issue por issue antes de cerrar:
+
+- "¿Cerrar #133 — ADR-023 (completado en Sprint {N})?"
+- Esperar respuesta. Pasar al siguiente solo después de confirmar.
+
+---
+
+### FASE 5 — Actualizar documentación
+
+Ejecutar solo después de tener todas las aprobaciones de FASE 4.
+
+1. **Sprint-{N}.md** — Llenar sección `## Review` completa (ver template abajo)
+   - Cambiar `**Estado**: Activo` a `**Estado**: Cerrado`
+2. **Backlog.md** — Marcar issues cerrados + agregar carryover items con sprint='S{N+1}'
+3. **tasks/lessons.md** — Agregar lecciones aprobadas
+4. **01-Modules/README.md** — Aplicar cambios de estado aprobados
+5. **Propagación obligatoria**:
+   - `03-Roadmap/Q{X}-2026/README.md` — actualizar estado del sprint a "Cerrado"
+   - `03-Roadmap/Roadmap.md` — actualizar resumen del sprint si cambió
+
+---
+
+### FASE 6 — Commit + Handoff formal
+
+**Commit**:
+```
+docs(roadmap): cerrar Sprint {N} — retrospectiva y métricas de cierre
+```
+
+**Resumen final**:
 ```
 === CIERRE SPRINT {N} ===
 Periodo: {fechas}
-KRs completados: X/Y
+OKRs: X🟢 Y🟡 Z🔴
 Issues cerrados: N
 Deliverables completados: X/Y
 Carryover a Sprint {N+1}: N items
@@ -88,13 +128,76 @@ Lecciones documentadas: N
 ========================
 ```
 
+**Handoff explícito** (siempre al final):
+> Sprint {N} cerrado. Para planificar el siguiente, ejecuta `/sprint-planning`.
+>
+> Contexto clave para el planning:
+> - Carryover: [lista de items con sus razones]
+> - Lecciones frescas: [lecciones documentadas en este cierre]
+> - Estado del equipo: [observaciones relevantes sobre capacidad/fricción]
+
+---
+
+## Template expandido — Sección Review en Sprint-{N}.md
+
+```markdown
+## Review ({fecha cierre})
+
+### Métricas de Cierre
+
+| Métrica | Target | Resultado |
+|---------|--------|-----------|
+| Issues cerrados | {N} planeados | {N} cerrados |
+| Deliverables completos | {N} | {N} |
+| OKRs completados | {N} | {N} |
+
+### OKRs — Evaluación
+
+| Objetivo | Key Result | Estado | Notas |
+|----------|------------|--------|-------|
+| **O1: {nombre}** | KR1: {descripción} | 🟢 | {completado} |
+| O1 | KR2: {descripción} | 🟡 | Parcial: {razón} |
+| **O2: {nombre}** | KR3: {descripción} | 🔴 | No iniciado: {razón} |
+
+> 🟢 ≥80% completado / 🟡 40-79% / 🔴 <40% o no iniciado
+
+### Deliverables — Estado Final
+
+| Deliverable | Issue | Estado | Causa (si incompleto) |
+|-------------|-------|--------|----------------------|
+| {nombre} | #{N} | ✅ Completo | - |
+| {nombre} | #{N} | ⚠️ Parcial | {causa raíz} |
+| {nombre} | #{N} | ❌ No iniciado | {bloqueado por X / cambio de prioridad} |
+
+### Retrospectiva
+
+- **Bien**: {qué funcionó — proceso, herramientas, comunicación}
+- **Mejorar**: {qué falló o puede mejorar}
+- **Acción**: {qué se va a cambiar en el siguiente sprint}
+
+### Carryover a Sprint {N+1}
+
+| Issue | Deliverable | Razón del Carryover | Destino |
+|-------|-------------|---------------------|---------|
+| #{N} | {nombre} | {razón} | S{N+1} / Backlog |
+
+### Lecciones Documentadas en este Cierre
+
+- {lección 1}
+- {lección 2}
+```
+
 ---
 
 ## Reglas de ejecución
 
-1. **Datos objetivos primero** — recolectar issues cerrados y commits ANTES de entrevistar
-2. **No juzgar** — si algo no se completó, documentar la razón sin criticar
-3. **Pedir aprobación** para cerrar issues en GitHub y para agregar lecciones
-4. **Carryover explícito** — cada deliverable incompleto debe tener destino: siguiente sprint, backlog, o descartado
-5. **Métricas honestas** — no inflar KRs completados. Si un KR se completó parcialmente, documentar el porcentaje
-6. **Propagación obligatoria** — verificar Q{X} README y Roadmap.md
+1. **Datos silenciosos primero** — recolectar todo antes de preguntar. NO mostrar métricas a Pablo antes de la entrevista para no sesgar respuestas.
+2. **5 bloques obligatorios** — no saltarse ninguno aunque parezca redundante.
+3. **Semáforo OKRs**: 🟢 ≥80% / 🟡 40-79% / 🔴 <40% o no iniciado.
+4. **Carryover explícito** — cada incompleto tiene destino documentado. Nunca dejar incompletos "flotando".
+5. **Lecciones proactivas** — Claude propone basado en patrones; Pablo aprueba antes de escribir.
+6. **Issues GitHub** — preguntar uno por uno antes de cerrar.
+7. **Propagación obligatoria** — Q{X} README y Roadmap.md siempre.
+8. **Handoff formal** — el retro siempre termina con contexto concreto para el planning.
+9. **No juzgar** — documentar causas sin crítica. Si algo no se completó, registrar la razón con neutralidad.
+10. **Métricas honestas** — si un KR se completó parcialmente, es 🟡 o 🔴, no 🟢.
