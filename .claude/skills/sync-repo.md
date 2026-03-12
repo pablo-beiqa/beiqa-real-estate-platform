@@ -16,6 +16,49 @@ Puede ser ejecutado por **Pablo o Fabrizio** — el skill se adapta al dominio d
 
 ---
 
+## Mecánica de confianza
+
+La entrevista usa **AskUserQuestion** (nunca texto libre) y un sistema de confianza explícito. Si la confianza es **<95**, el skill:
+
+1. Reporta el score: `"Confianza: [N]/100 — necesito saber más sobre X, Y."`
+2. Lista qué información falta o es ambigua
+3. Genera preguntas adicionales con AskUserQuestion (dinámicas, basadas en lo que falta)
+4. Repite hasta ≥95/100
+
+Solo cuando confianza ≥95, el skill avanza a la siguiente fase. Si el usuario dice "no recuerdo" o "avanza", documentar los aspectos sin confirmar como **(pendiente de verificar)** y proceder.
+
+### Factores de confianza por fase
+
+**Después de FASE 3** (entendimiento del trabajo realizado — máximo: 100):
+
+| Factor | Puntaje |
+|--------|---------|
+| Repos identificados con claridad | +15 |
+| Tipo de trabajo confirmado por repo (código, DB, infra, diseño) | +15 |
+| Estado de deliverables del sprint confirmado | +20 |
+| Decisiones arquitectónicas identificadas o descartadas | +15 |
+| Issues impactados identificados (cerrar, crear, editar) | +15 |
+| Lecciones aprendidas preguntadas y respondidas | +10 |
+| Stack o dependencias nuevas confirmadas o descartadas | +10 |
+| Respuesta vaga sin follow-up ("hice algo", "avancé") | -15 |
+| Módulo afectado sin confirmar estado | -10 |
+| Decisión técnica mencionada sin detalle | -10 |
+
+**Después de FASE 5** (confianza en el impacto detectado — máximo: 100):
+
+| Factor | Puntaje |
+|--------|---------|
+| Todos los deliverables activos con estado propuesto | +25 |
+| Issues a ejecutar claramente mapeados | +25 |
+| Módulos con cambio de estado evaluados | +20 |
+| ADR/Stack changes evaluados | +15 |
+| Propagación mapeada según `tasks/propagation-rules.md` | +15 |
+| Deliverable con estado ambiguo | -15 |
+| Issue sin contexto suficiente para ejecutar | -10 |
+| Propagación no verificada | -10 |
+
+---
+
 ## Proceso completo
 
 ### FASE 1 — Recolectar contexto (automático, silencioso)
@@ -41,9 +84,12 @@ Guardar todo internamente como baseline para drift detection en FASE 5.
 
 ---
 
-### FASE 2 — Identificar al usuario (1 pregunta con AskUserQuestion)
+### FASE 2 — Identificar al usuario (AskUserQuestion)
 
-Preguntar: "¿Quién está corriendo este sync? (Pablo o Fabrizio)"
+Usar AskUserQuestion:
+- **question**: "¿Quién está corriendo este sync?"
+- **header**: "Usuario"
+- **options**: Pablo (scrapers dev, AI, frontend, producto) | Fabrizio (schema, infra, testing, deploy)
 
 Adaptar las preguntas de FASE 3 según el dominio:
 
@@ -54,30 +100,46 @@ Adaptar las preguntas de FASE 3 según el dominio:
 
 ---
 
-### FASE 3 — Entrevista dinámica (interactiva, multi-ronda)
+### FASE 3 — Entrevista dinámica (AskUserQuestion + loop de confianza)
 
-**Pregunta semilla** (siempre la misma): "¿En qué trabajaste estos últimos días? Describe libremente — repos, features, bugs, decisiones, lo que sea."
+**Toda pregunta al usuario usa AskUserQuestion.** Nunca texto libre. Máximo 4 preguntas por call.
 
-**Follow-ups basados en juicio del agente** — no hay bloques fijos. Profundizar en cada tema que el usuario mencione con preguntas técnicas relevantes. Ejemplos de profundidad por categoría:
+**Pregunta semilla** (ronda 1 — siempre la misma):
 
-| Si menciona... | Preguntar sobre... |
-|----------------|-------------------|
-| Scraper | ¿Qué portal? ¿Template base? ¿Staging table creada? ¿H3? ¿Triggers? ¿TriggerDev job? |
-| Schema/DB | ¿Tablas creadas? ¿Migrations? ¿RLS? ¿Datos ingested? ¿Qué portales? |
-| Frontend | ¿Qué páginas? ¿Auth? ¿Middleware? ¿Componentes nuevos? |
-| AI/Mastra | ¿Qué agente? ¿Modelos probados? ¿Resultados? ¿Costos? |
-| Decisión arquitectónica | ¿Qué se decidió? ¿Alternativas? ¿Quién participó? ¿Necesita ADR? |
-| Stack change | ¿Qué cambió? ¿Por qué? ¿Impacto en costo? ¿Depreca algo? |
-| Bug fix | ¿Causa raíz? ¿Documentado como issue? ¿Afecta otros módulos? |
-| Tests | ¿Tipo? ¿Cobertura? ¿Bugs encontrados? ¿Issues creados? |
-| Infra/DevOps | ¿TriggerDev? ¿Vercel? ¿Supabase? ¿Variables de entorno? |
+Usar AskUserQuestion:
+- **question**: "¿En qué repo(s) trabajaste estos últimos días?"
+- **header**: "Repo"
+- **options**: beiqa-scraper | beiqa-frontend | beiqa-agents | Múltiples repos
+
+**Follow-ups dinámicos** (rondas 2+) — el agente genera las opciones basándose en la respuesta anterior. Profundizar en cada área mencionada con opciones relevantes al contexto. Ejemplos de profundidad por categoría:
+
+| Si menciona... | Opciones sugeridas en el siguiente AskUserQuestion |
+|----------------|---------------------------------------------------|
+| Scraper | ¿Qué portal? / ¿Staging table creada? / ¿TriggerDev job deployed? / ¿H3 + triggers? |
+| Schema/DB | ¿Tablas creadas? / ¿Migrations aplicadas? / ¿RLS configurado? / ¿Datos ingested? |
+| Frontend | ¿Qué páginas/rutas? / ¿Auth/middleware? / ¿Componentes nuevos? / ¿Deploy a Vercel? |
+| AI/Mastra | ¿Qué agente? / ¿Modelos probados? / ¿Resultados documentados? / ¿Costo estimado? |
+| Decisión arquitectónica | ¿Qué se decidió? / ¿Alternativas evaluadas? / ¿Merece ADR? / ¿Quién participó? |
+| Stack change | ¿Nueva dep o servicio? / ¿Depreca algo? / ¿Impacto en costo? / ¿Documentado? |
+| Bug fix | ¿Causa raíz identificada? / ¿Issue cerrado? / ¿Afecta otros módulos? |
+| Tests | ¿Tipo de tests? / ¿Cobertura? / ¿Bugs encontrados y trackeados? |
+| Infra/DevOps | ¿TriggerDev? / ¿Supabase config? / ¿Variables de entorno nuevas? |
 
 No preguntar sobre temas fuera del dominio del usuario (no preguntar a Fabrizio sobre decisiones de producto; no preguntar a Pablo sobre RLS en detalle).
 
-**Pregunta obligatoria de cierre** (SIEMPRE, última ronda):
-> "¿Alguna lección aprendida estos días? Algo que descubrieron que no sabían, algún error que no quieren repetir, algún patrón que funcionó bien."
+**Loop de confianza** — antes de cada ronda de preguntas:
+1. Reportar: `"Confianza: [N]/100 — necesito saber más sobre X, Y."` (usando factores de la sección Mecánica de confianza)
+2. Lanzar AskUserQuestion con las preguntas más críticas para subir la confianza
+3. Repetir hasta ≥95/100
 
-**Sin límite de rondas**: Puede ser 2 rondas si el trabajo fue simple, o 8-10 si hubo cambios complejos en múltiples repos. La profundidad la dicta el contenido, no un tope arbitrario. El objetivo es capturar TODO lo que cambió con el nivel de detalle necesario para actualizar la documentación con precisión.
+**Fallback**: Si el usuario dice "no recuerdo", "no sé" o "avanza" — documentar el aspecto como **(pendiente de verificar)** y proceder.
+
+**Pregunta obligatoria de cierre** (SIEMPRE, última ronda — AskUserQuestion):
+- **question**: "¿Alguna lección aprendida estos días? ¿Algo que descubrieron que no sabían, un error que no quieren repetir, o un patrón que funcionó bien?"
+- **header**: "Lecciones"
+- **options**: Sí, hay algo que documentar | No hay lecciones esta vez | Hay varias cosas
+
+**Sin límite de rondas**: 2 rondas si el trabajo fue simple, 8-10 si hubo cambios complejos. La profundidad la dicta el contenido. Solo avanzar a FASE 4 cuando confianza ≥95.
 
 ---
 
@@ -121,6 +183,8 @@ Comparar lo dicho en entrevista vs lo encontrado en repos:
 ---
 
 ### FASE 5 — Drift detection + propuestas (automático + aprobación)
+
+**Antes de presentar propuestas**, evaluar confianza en el impacto detectado usando la tabla de FASE 5 de la sección Mecánica de confianza. Si confianza <95: reportar `"Confianza en impacto: [N]/100 — necesito clarificar X."` y hacer preguntas adicionales con AskUserQuestion. Solo cuando confianza ≥95, presentar el bloque de propuestas.
 
 Comparar estado documentado (FASE 1) vs estado real (FASE 3 + FASE 4) en 6 dimensiones. Construir un **mapa completo de impacto** y presentar TODAS las propuestas agrupadas para aprobación.
 
@@ -276,3 +340,4 @@ Próxima sync sugerida: {fecha o condición}
 13. **Profundidad sin límite** — la entrevista va tan profundo como sea necesario para capturar todo el trabajo realizado. Si el usuario empieza a planificar un sprint nuevo completo (OKRs, deliverables futuros), sugerir `/sprint-planning`, pero no cortar la conversación prematuramente.
 14. **Repos locales primero** — intentar acceso local a directorios hermanos antes de usar GitHub API. Siempre usar comillas en paths con espacios.
 15. **NUNCA modificar CLAUDE.md** — este archivo se mantiene manualmente. Sync-repo puede actualizar Executive-Summary, README, Roadmap, módulos, Stack-Decidido, ADRs, pero NUNCA CLAUDE.md.
+16. **SIEMPRE AskUserQuestion en la entrevista** — ninguna pregunta al usuario se hace como texto libre. Toda pregunta usa AskUserQuestion con opciones relevantes al contexto. Máximo 4 preguntas por call.
