@@ -11,16 +11,16 @@
 
 | Issue | Titulo | Sprint | Prioridad |
 |-------|--------|--------|-----------|
-| [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) | Modulo de escritura a Supabase | S1 | P0 |
+| [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) | Modulo de escritura a Supabase | ~~S1~~ ✅ Completado | P0 |
 | [#15](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/15) | Modulo check de existencia | S1 | — |
-| [#18](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/18) | Modulo notificaciones Slack | S3 | P0 |
+| [#18](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/18) | Modulo notificaciones Slack | S1-2 En progreso | P0 |
 | [#19](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/19) | Modulo descarga/upload imagenes | Backlog | P0 |
 | [#20](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/20) | Modulo deteccion anomalias | Backlog | P0 |
-| [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | Testing Pincali | S1 | — |
+| [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | Testing Pincali | ~~S1~~ ✅ Completado | — |
 | [#36](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/36) | Scraper Cushman | S2 | P1 |
-| [#108](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/108) | Staging table CBRE | S1 | P0 |
-| [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | Staging table Colliers | S1 | — |
-| [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | Staging table Pincali | S1 | — |
+| [#108](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/108) | Staging table CBRE | ~~S1~~ ✅ Completado | P0 |
+| [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | Staging table Colliers | ~~S1~~ ✅ Completado | — |
+| [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | Staging table Pincali | ~~S1~~ ✅ Completado | — |
 | [#111](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/111) | Scraper Proximity Parks | S2 | P1 |
 | [#125](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/125) | I24 scraper migration tracking | S3 | — |
 | [#134](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/134) | Framework testing scrapers + reportes | S2 | — |
@@ -105,7 +105,7 @@
 
 | Issue | Titulo | Sprint | Prioridad |
 |-------|--------|--------|-----------|
-| [#136](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/136) | TriggerDev infra: paid plan + cloud deploy | S2 | — |
+| [#136](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/136) | TriggerDev infra: paid plan + cloud deploy | ~~S2~~ ✅ Completado | — |
 | [#119](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/119) | CI/CD pipeline (GitHub Actions) | S7 | P2 |
 | [#120](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/120) | Performance monitoring + alertas | S8 | — |
 | [#121](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/121) | Operations runbook | S8 | — |

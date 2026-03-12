@@ -74,10 +74,14 @@
 **Contexto**: La tabla de stack (15 líneas), módulos (13 líneas) y count de ADRs se desactualizaban constantemente respecto a sus fuentes de verdad (Stack-Decidido.md, 01-Modules/README.md, ADRs/README.md).
 **Regla**: CLAUDE.md no debe contener datos que ya viven en otro archivo. Usar tabla "Dónde encontrar información" que apunte a los archivos fuente. propagation-rules.md se actualizó para reflejar esto.
 
+#### 2026-03-12 — TriggerDev: plan gratuito insuficiente para scrapers en producción
+**Contexto**: Al activar TriggerDev para scrapers con corridas periódicas (cron bisemanal, miles de propiedades), se confirmó que el plan gratuito permite un ambiente de desarrollo en la nube pero con créditos limitados que se agotan en producción real.
+**Regla**: Para scrapers con cron productivo y volumen real, activar plan de pago de TriggerDev desde el inicio. El free tier es válido para desarrollo y testing, no para producción sostenida.
+
 ### Comunicación y tono
 
 _Aún no hay lecciones en esta categoría._
 
 ---
 
-*Última actualización: 2026-03-11*
+*Última actualización: 2026-03-12*

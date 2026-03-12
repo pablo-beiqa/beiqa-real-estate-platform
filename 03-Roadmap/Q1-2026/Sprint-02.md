@@ -36,7 +36,7 @@
 - [ ] Scrapers Cushman + Proximity Parks en producción con staging tables, H3, triggers
 - [ ] Framework de testing de scrapers funcionando con reportes de ≥1 corrida
 - [ ] I24 validado: scraper corriendo correctamente con resultados documentados
-- [ ] TriggerDev en plan de pago, jobs deployed a la nube
+- [x] TriggerDev en plan de pago, jobs deployed a la nube
 - [ ] `beiqa-agents` repo: `mastra dev` arranca, estructura agents/tools/workflows
 - [ ] Enrichment experiments: tabla con resultados de ≥2 LLMs × ≥2 señales (texto + fotos)
 - [ ] Estimación de costos AI/LLM para 40K+ props documentada
@@ -71,8 +71,8 @@
 | ADR-023: Multi-unit buildings | NUEVO | Decisión documentada: edificios multi-piso, misma propiedad cross-portal, renta+venta simultánea. Formato MADR. | Pendiente |
 | Golden Record schema + primeros datos | [#104](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/104) + [#105](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/105) | Schema ≥5 tablas basado en ADR-023. Migrations aplicadas. Primeros datos ingested de ≥1 portal. RLS. | Pendiente |
 | Framework testing scrapers + reportes | NUEVO | Framework que documenta: # éxitos, # errores, gestión de casos, datos validados por portal. Reportes de primera corrida. | Pendiente |
-| Pruebas I24 | NUEVO | Verificar que scraper I24 (Apify) funciona correctamente. Documentar resultados, errores, datos validados en Supabase. | Pendiente |
-| TriggerDev infra: paid plan + cloud deploy | NUEVO | Plan de pago activado. Todos los jobs deployed a la nube. Todo corriendo en producción. | Pendiente |
+| Pruebas I24 | [#135](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/135) | Verificar que scraper I24 (Firecrawl stealth) funciona correctamente. Primera corrida real, datos validados en Supabase. ⚠️ Apify desactivado Mar 10 — I24 sin fuente activa hasta validar este issue. **Prioridad alta.** | En progreso |
+| TriggerDev infra: paid plan + cloud deploy | [#136](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/136) | Plan de pago activado. Todos los jobs deployed a la nube. Todo corriendo en producción. | Completado |
 | Configurar Supabase Auth | [#47](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/47) | @supabase/ssr configurado en beiqa-frontend. Redirect URLs. Email provider para magic links. Smoke test. | Pendiente |
 
 ### Track: Frontend / Tenant Portal (Pablo)

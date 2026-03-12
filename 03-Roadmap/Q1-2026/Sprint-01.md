@@ -17,9 +17,9 @@
 ## Definition of Done
 
 - [ ] `mastra dev` corre localmente en beiqa-agents
-- [ ] ≥3 staging tables creadas con schema alineado
-- [ ] Modulo de escritura a Supabase reutilizable y testeado
-- [ ] Codigo commiteado y pusheado
+- [x] ≥3 staging tables creadas con schema alineado
+- [x] Modulo de escritura a Supabase reutilizable y testeado
+- [x] Codigo commiteado y pusheado
 
 ---
 
@@ -36,11 +36,11 @@
 
 | Deliverable | Issue | AC | Estado |
 |-------------|-------|----|--------|
-| Staging table CBRE | [#108](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/108) | `cbre_listings` creada. Schema alineado a CbreProperty. | In Progress |
-| Staging table Colliers | [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | `colliers_listings` creada. Schema alineado. | In Progress |
-| Staging table Pincali | [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | `pincali_listings` ya existe con 1,761 props. Alinear schema. | In Progress |
-| Modulo escritura Supabase | [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) | Upsert a staging tables. Testeada con CBRE. ON CONFLICT. | In Progress |
-| Testing Pincali validacion | [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | Ejecucion de prueba, datos validados en Supabase. | In Progress |
+| Staging table CBRE | [#108](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/108) | `cbre_listings` creada. Schema alineado a CbreProperty. | ✅ Done |
+| Staging table Colliers | [#109](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/109) | `colliers_listings` creada. Schema alineado. | ✅ Done |
+| Staging table Pincali | [#110](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/110) | `pincali_listings` ya existe con 1,761 props. Alinear schema. | ✅ Done |
+| Modulo escritura Supabase | [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) | Upsert a staging tables. Testeada con CBRE. ON CONFLICT. | ✅ Done |
+| Testing Pincali validacion | [#26](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/26) | Ejecucion de prueba, datos validados en Supabase. | ✅ Done |
 
 ### Track: Frontend / Tenant Portal (Pablo)
 
@@ -72,6 +72,9 @@ Trabajo realizado antes de Mar 2 que contribuye a los milestones de Q1:
 | H3 indexing en produccion | — | ✅ res 5-11, calcula durante scraping |
 | PostGIS trigger populate_geo | — | ✅ Funcionando |
 | Scoring dashboard Phase 0 | — | ✅ beiqa-frontend |
+| TriggerDev paid plan + cloud deploy | [#136](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/136) | ✅ Done |
+| I24 scraper migrado a Firecrawl stealth (Apify desactivado Mar 10) | — | ✅ Done |
+| Pincali biweekly cron + Slack notifications | — | ✅ Done |
 
 ---
 

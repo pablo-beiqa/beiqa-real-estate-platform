@@ -8,7 +8,7 @@
 
 Beiqa es una empresa de **representación de tenants corporativos** en bienes raíces comerciales/industriales (CDMX, EdoMex, Morelos, Puebla). La plataforma tecnológica automatiza la búsqueda de propiedades, centraliza datos de múltiples portales inmobiliarios, y genera inteligencia de mercado para cerrar más deals, más rápido.
 
-**Estado actual**: El equipo de 5 personas (desarrollo 100% interno) ya tiene en producción una base de datos con ~25,000 propiedades (I24) + 4 scrapers adicionales activos (CBRE, Colliers, FINSA, Pincali), CRM integrado con HubSpot, y un scoring dashboard funcional. El costo operativo verificado es de **$747–$896 USD/mes** y el desarrollo no tiene costo incremental (equipo interno).
+**Estado actual**: El equipo de 5 personas (desarrollo 100% interno) ya tiene en producción una base de datos con ~48,000 propiedades (I24) + 4 scrapers activos (CBRE, Colliers, FINSA, Pincali), CRM integrado con HubSpot, y un scoring dashboard funcional. Apify desactivado — I24 migrado a Firecrawl stealth (pendiente validación primera corrida). El costo operativo verificado es de **$747–$896 USD/mes** y el desarrollo no tiene costo incremental (equipo interno).
 
 **Diferenciación**: Mientras brokers tradicionales buscan manualmente, Beiqa cubre el mercado completo a un costo de $0.003–$0.009 USD por propiedad nueva. Con 7 agentes AI en 3 tiers (scoring inteligente, matching con alertas proactivas, deduplicación cross-portal, inteligencia de mercado), la plataforma transforma datos crudos en recomendaciones accionables para clientes corporativos.
 
@@ -30,8 +30,8 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 
 | Componente | Estado | Detalle |
 |-----------|--------|---------|
-| Base de datos (Supabase) | ✅ Producción | PostgreSQL 17 + PostGIS, 32 migrations, RLS, ~25K propiedades I24 + ~3K otros portales |
-| Scraper Inmuebles24 | ⚠️ Migrando | Apify → Trigger.dev+Firecrawl (Sprint 1-2), ~25K propiedades |
+| Base de datos (Supabase) | ✅ Producción | PostgreSQL 17 + PostGIS, 32 migrations, RLS, ~48K propiedades I24 + ~3K otros portales |
+| Scraper Inmuebles24 | ⚠️ Pendiente validación | Firecrawl stealth (Apify desactivado Mar 10). Scraper construido, pendiente primera corrida |
 | Scraper FinSA | ✅ Producción | beiqa-scraper, API directa, H3, validación, Slack, flyers |
 | Scrapers CBRE, Colliers | ✅ Producción | Trigger.dev + Firecrawl, persistencia a Supabase + Storage |
 | Scraper Pincali | ✅ Producción | Trigger.dev + Firecrawl, persistencia a `pincali_listings` (1,761 propiedades) |
@@ -49,7 +49,7 @@ Beiqa es una empresa de **representación de tenants corporativos** en bienes ra
 | Capa | Tecnología | Función |
 |------|-----------|---------|
 | Base de datos | Supabase (PostgreSQL 17 + PostGIS + Auth + Storage + REST API) | Source of truth de propiedades |
-| Scraping | Apify + Firecrawl + Browserbase | Extracción multi-portal |
+| Scraping | Firecrawl + Browserbase + Trigger.dev (Apify desactivado) | Extracción multi-portal |
 | Orquestación | Trigger.dev | Scrapers, cron, sync (sin AI — per ADR-021) |
 | AI Agents | Mastra (en implementación) | Enrichment, normalization, dedup, scoring, market intel |
 | Frontend | Next.js 15 | Tenant Portal + Internal App (Fase 2-3) |

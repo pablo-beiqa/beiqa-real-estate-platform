@@ -51,9 +51,9 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 #### Lo que ya está funcionando
 - ✅ Base de datos Supabase en producción (PostgreSQL 17, 32 migrations, PostGIS, RLS)
-- ✅ Apify actor para Inmuebles24 contratado y operando
-- ✅ ~25,000 propiedades de I24 en Supabase + ~3K en otros portales
-- ✅ CBRE, Colliers, FINSA y Pincali scrapers en producción (Trigger.dev + Supabase + Storage)
+- ✅ I24 migrado de Apify a Firecrawl stealth (Trigger.dev). **Apify desactivado Mar 10.** ~48K props en Supabase. Pendiente validación primera corrida.
+- ✅ ~48,000 propiedades de I24 en Supabase + ~3K en otros portales
+- ✅ CBRE, Colliers, FINSA y Pincali scrapers en producción (Trigger.dev + Supabase + Storage + Slack notifications)
 - ✅ Trigger.dev integrado para scrapers, automatizaciones, sync HubSpot (AI migrado a Mastra — ADR-021)
 - ✅ Firecrawl ($99/mo) como motor de scraping para Pincali, CBRE, Colliers
 - ✅ Browserbase ($20/mo) como cloud browser para scraping complejo
@@ -65,7 +65,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 #### Próximas prioridades (Sprint 1-2)
 - Golden record schema (`properties` table) + pipeline de normalización
 - Mastra AI agents (Address Enrichment, Data Normalization)
-- Migración I24 de Apify a Trigger.dev+Firecrawl
+- I24 validación: primera corrida real + datos en Supabase (#135 — prioridad alta, Apify ya desactivado)
 - Tenant Portal auth (magic link + password)
 - Scoring dashboard refactorizado a DB
 
@@ -77,7 +77,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 
 | Módulo | Descripción | Sprint | Estado |
 |--------|-------------|--------|--------|
-| [Scraper](./01-Modules/Scraper/) | Extracción automatizada de 5+ portales (Apify, Firecrawl, Browserbase) | 1+ | 🟢 En desarrollo |
+| [Scraper](./01-Modules/Scraper/) | Extracción automatizada de 5+ portales (Firecrawl, Browserbase, Trigger.dev). Apify desactivado. I24 pendiente validación. | 1+ | 🟢 En desarrollo |
 | [Data](./01-Modules/Data/) | Normalización, deduplicación, integración de fuentes externas | 1-2 | 🟢 En desarrollo |
 | [AI Brain](./01-Modules/AI-Brain/) | Agentes AI con Mastra (enrichment, normalization, matching) | 1+ | 🟢 En desarrollo |
 | [Geospatial](./01-Modules/Geospatial/) | Análisis geoespacial, H3 index, AGEB | 3+ | 🟡 En pruebas |
@@ -94,7 +94,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 | Componente | Tecnología | Estado | ADR |
 |-----------|-----------|--------|-----|
 | Base de datos | Supabase (PostgreSQL + PostGIS + Auth + Storage + REST API) | ✅ Producción | [ADR-001](./02-Architecture/ADRs/ADR-001-Supabase-Plataforma.md) |
-| Scraping (I24) | Apify (migrando a Trigger.dev+Firecrawl) | ⚠️ Migrando | [ADR-002](./02-Architecture/ADRs/ADR-002-Estrategia-Scraping.md) |
+| Scraping (I24) | ~~Apify~~ desactivado — Firecrawl stealth (Trigger.dev). Pendiente validación. | ⚠️ Pendiente validación | [ADR-002](./02-Architecture/ADRs/ADR-002-Estrategia-Scraping.md) |
 | Scraping (motor) | Firecrawl (HTTP engine, LLM extraction) | ✅ Activo | [ADR-007](./02-Architecture/ADRs/ADR-007-Firecrawl.md) |
 | Scraping (browser) | Browserbase (cloud browser sessions) | ✅ Activo | [ADR-008](./02-Architecture/ADRs/ADR-008-Browserbase.md) |
 | Automatización | Trigger.dev (scrapers, sync, cron — ejecución durable) | ✅ Activo | [ADR-003](./02-Architecture/ADRs/ADR-003-Trigger-dev.md) |
@@ -132,7 +132,7 @@ BEIQA Platform es una herramienta interna diseñada para **reducir el tiempo de 
 beiqa-real-estate-platform/
 ├── 00-Project/          # Visión, contexto, stakeholders, personas
 ├── 01-Modules/          # 7 módulos funcionales auto-contenidos
-│   ├── Scraper/         # Extracción de datos (Apify + Firecrawl + Trigger.dev)
+│   ├── Scraper/         # Extracción de datos (Firecrawl + Trigger.dev — Apify desactivado)
 │   ├── Internal-App/    # App web del equipo (Next.js) — Fase 2-3
 │   ├── Data/            # Normalización, dedup, fuentes externas
 │   ├── Market-Intelligence/  # Análisis y tendencias
@@ -171,6 +171,7 @@ beiqa-real-estate-platform/
 
 | Fecha | Cambio |
 |-------|--------|
+| **2026-03-12** | **Sync Sprint 1 cierre** — Apify desactivado (I24 migrado a Firecrawl stealth, ~48K props). 5 issues Sprint 1 cerrados (#108, #109, #110, #13, #26). TriggerDev paid plan activado (#136). Pincali biweekly + Slack notifications. I24 validación en progreso (#135). |
 | **2026-03-11** | **CLAUDE.md comprimido 303→104 líneas** — Reescritura completa. Sección "Tu rol" rediseñada con 6 instrucciones conductuales. Eliminadas secciones que se desactualizaban (stack table, módulos, MCP, workflow, protocolo cierre). |
 | **2026-03-09** | **Pincali pipeline completo** — download-files.ts + save-to-supabase.ts. Pipeline end-to-end: discover → scrape → save → download images → update storage URLs. Optimización de créditos Firecrawl. Pipeline docs corregido (sin HubSpot). |
 | **2026-03-08** | **Scrapers en producción + Protocolo de cierre** — CBRE/Colliers/FinSA en producción. I24 migrando a Trigger.dev. Protocolo automático de cierre de sesión. MEMORY.md persistente. |
@@ -184,5 +185,5 @@ beiqa-real-estate-platform/
 
 ---
 
-*Última actualización: 2026-03-11*
+*Última actualización: 2026-03-12*
 

@@ -8,7 +8,7 @@
 
 | Módulo | Descripción | Sprint | Estado |
 |--------|-------------|--------|--------|
-| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Trigger.dev + Firecrawl). CBRE/Colliers/FINSA/Pincali en producción. I24 migrando de Apify | Sprint 1+ | 🟢 En desarrollo |
+| [Scraper](./Scraper/) | Extracción automatizada de propiedades (Trigger.dev + Firecrawl). CBRE/Colliers/FINSA/Pincali en producción con Slack notifications. I24 scraper construido (Apify desactivado Mar 10), pendiente validación primera corrida | Sprint 1+ | 🟢 En desarrollo |
 | [Data](./Data/) | Normalización (Mastra agents), integración de fuentes externas | Sprint 1-2 | 🟢 En desarrollo |
 | [AI Brain](./AI-Brain/) | Agentes AI con Mastra (enrichment, normalization, matching) | Sprint 1+ | 🟢 En desarrollo |
 | [Geospatial](./Geospatial/) | Análisis geoespacial, H3, AGEB, mapas | Sprint 3+ | 🟡 En pruebas |
