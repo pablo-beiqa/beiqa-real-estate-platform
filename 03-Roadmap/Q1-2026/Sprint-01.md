@@ -1,6 +1,6 @@
 # Sprint 1 (Mar 2-15)
 
-> **Estado**: Activo
+> **Estado**: Cerrado
 > **Quarter**: Q1-2026
 > **Milestones**: Scrapers Consolidados, Enrichment Agent Operativo (inicio)
 
@@ -90,17 +90,65 @@ Trabajo realizado antes de Mar 2 que contribuye a los milestones de Q1:
 
 ## Review (Mar 15)
 
-> Completar al cierre del sprint.
+### Métricas de Cierre
 
-### Metricas de Cierre
-
-| Metrica | Target | Resultado |
+| Métrica | Target | Resultado |
 |---------|--------|-----------|
-| Issues cerrados | 5-7 | ... |
-| KRs completados | 3/3 | ... |
+| Issues cerrados (sprint) | 5-7 | 6 (#108, #109, #110, #26, #136, #13) + pre-sprint (#21-25, #84, #85) |
+| KRs completados | 3/3 | 2/3 (KR1 parcial → S2) |
+
+### OKRs — Evaluación
+
+| Objetivo | Key Result | Estado | Notas |
+|----------|------------|--------|-------|
+| **O1: Infraestructura AI agents** | KR1: `beiqa-agents` repo con `mastra dev` funcionando | 🟡 Parcial | Repo creado, mastra dev corre. Sin estructura de agentes. Carryover a S2 como #86. |
+| **O2: Scrapers persisten con staging tables** | KR2: ≥3 staging tables creadas (CBRE, Colliers, Pincali) | 🟢 Completo | #108, #109, #110 cerrados Mar 12. |
+| O2 | KR3: Módulo de escritura a Supabase funcional | 🟢 Completo | #13 cerrado. Módulo reutilizable y testeado con CBRE. |
+
+> 🟢 ≥80% completado / 🟡 40-79% / 🔴 <40% o no iniciado
+
+### Deliverables — Estado Final
+
+| Deliverable | Issue | Estado | Causa (si incompleto) |
+|-------------|-------|--------|----------------------|
+| Staging table CBRE | #108 | ✅ Completo | - |
+| Staging table Colliers | #109 | ✅ Completo | - |
+| Staging table Pincali | #110 | ✅ Completo | - |
+| Módulo escritura Supabase | #13 | ✅ Completo | - |
+| Testing Pincali validación | #26 | ✅ Completo | - |
+| TriggerDev paid plan + cloud deploy | #136 | ✅ Completo | Adelantado (completado antes del sprint formal) |
+| beiqa-agents: Mastra init | #86 | ⚠️ Parcial | Priorización deliberada: tiempo ocupado en scrapers/infra/trabajo de clientes. Carryover a S2. |
+| Address Enrichment skeleton | #87 | ❌ No iniciado | Postergado — reemplazado por enrichment experiments en S2 |
+
+**Completado fuera del plan original:**
+- I24 scraper migrado a Firecrawl (Apify desactivado Mar 10)
+- FinSA scraper + integración Supabase (#84, #85)
+- Pincali biweekly cron + Slack notifications
 
 ### Retrospectiva
 
-- **Bien**: ...
-- **Mejorar**: ...
-- **Accion**: ...
+- **Bien**: Capacidad de adaptación a cambios imprevistos (I24 migration, TriggerDev). Fabrizio ejecutó infra rápido. El equipo pivotó sin conflicto cuando surgieron urgencias.
+- **Mejorar**: Sprint planning sin estimación de esfuerzo ni capacity real por persona. Trabajo de clientes/ops desplazó trabajo del sprint sin estar documentado. Pablo en 4 tracks simultáneos genera carryover acumulado.
+- **Acción**: Sprint 2 arranca con capacity real (días disponibles × 0.8) y buffer explícito para imprevistos + aprendizaje. Pamela migra a GitHub Issues para mayor visibilidad.
+
+### Autoevaluación del Equipo
+
+| Persona | Puntuación | Fortaleza | Área de mejora |
+|---------|------------|-----------|----------------|
+| Pablo | 60/100 | Adaptabilidad, visión de producto | Estimación de carga, reducir trabajo de clientes, foco en construir |
+| Fabrizio | 55/100 | Ejecución de código y DB | Investigación, decisiones técnicas, planeamiento |
+| Pamela | 70/100 | Diseño en Figma | Agilidad, ownership de deliverables, migrar a GitHub |
+
+### Carryover a Sprint 2
+
+| Issue | Deliverable | Razón del Carryover | Destino |
+|-------|-------------|---------------------|---------|
+| #86 | beiqa-agents init + estructura de agentes | KR1 parcial — init básico hecho, falta estructura de agentes implementada | S2 (ya está en plan) |
+| (sprint planning S2) | Visualización/análisis de datos scrapeados | Contemplado pero no planeado en S1 | Crear en sprint planning S2 |
+| (sprint planning S2) | Brochures/templates por ICP + presentaciones | Trabajo ops; Pamela lidera como primer issue en GitHub | Crear en sprint planning S2 |
+
+### Lecciones Aprendidas en este Sprint
+
+1. **Capacity planning**: El sprint debe planificarse con capacity real por persona (días disponibles × 0.8), reservando el 20% para trabajo imprevisto, bugs, y trabajo de cliente no anticipado.
+
+2. **Bloque de aprendizaje como deliverable formal**: El tiempo de aprendizaje (Mastra, GIS, nuevas herramientas) debe estar en el sprint plan explícitamente. Si no está en el plan, siempre se sacrifica.

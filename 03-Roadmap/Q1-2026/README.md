@@ -19,7 +19,7 @@ Consolidar la capa de datos en Supabase con 5 scrapers produciendo automaticamen
 | **O1**: Capa de datos consolidada en Supabase | KR1: 5 scrapers produciendo datos en staging tables | ✅ |
 | | KR2: ≥28K propiedades en Supabase (I24 + portales custom) | ✅ |
 | | KR3: Estructura Supabase definida (32 migrations, PostGIS, RLS) | ✅ |
-| | KR4: Modulo de escritura a Supabase reutilizable | 🟡 [#13](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/13) |
+| | KR4: Modulo de escritura a Supabase reutilizable | ✅ |
 | **O2**: Geoespacial operativo | KR5: H3 indexing en produccion (res 5-11, calcula durante scraping) | ✅ |
 | | KR6: PostGIS trigger `populate_geo` funcionando | ✅ |
 | **O3**: Infraestructura AI agents | KR7: Repo beiqa-agents con Mastra inicializado (`mastra dev`) | 🟡 [#86](https://github.com/pablo-beiqa/beiqa-real-estate-platform/issues/86) |
@@ -44,7 +44,7 @@ Consolidar la capa de datos en Supabase con 5 scrapers produciendo automaticamen
 
 | Sprint | Periodo | Milestones | Foco | Estado |
 |--------|---------|------------|------|--------|
-| [Sprint 01](./Sprint-01.md) | Mar 2-15 | Scrapers Consolidados | Staging tables, Mastra init | Activo |
+| [Sprint 01](./Sprint-01.md) | Mar 2-15 | Scrapers Consolidados | Staging tables, Mastra init | Cerrado |
 | [Sprint 02](./Sprint-02.md) | Mar 16-29 | Scrapers Consolidados, Enrichment Agent, Portal Autenticado | Fundaciones + Experimentación: golden record, scrapers nuevos (Cushman + Proximity), enrichment multimodal experiments, auth frontend | Planificado |
 
 ---
