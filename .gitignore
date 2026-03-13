@@ -8,7 +8,11 @@
 .agents/
 .augment/
 .claude/*
+!.claude/commands/
 !.claude/skills/
+!.claude/agents/
+!.claude/agent-memory/
+!.claude/settings.json
 .codebuddy/
 .commandcode/
 .continue/
@@ -35,8 +39,8 @@
 .windsurf/
 .zencoder/
 
-# Skills (herramientas de AI agents, no artefactos del proyecto)
-skills/
+# Skills globales (raíz del proyecto, no dentro de .claude/)
+/skills/
 skills-lock.json
 
 # OS

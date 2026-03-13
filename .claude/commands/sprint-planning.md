@@ -1,3 +1,10 @@
+---
+description: "Facilita la planificación completa de un sprint nuevo con entrevista adaptativa (~8-16 rondas), OKRs, y ejecución de todos los cambios: sprint file, issues, board, backlog, propagación, y commit"
+argument-hint: "[sprint-number]"
+allowed-tools: ["Read", "Glob", "Grep", "Write", "Edit", "Bash", "Task", "AskUserQuestion", "TodoWrite"]
+model: "sonnet"
+---
+
 # sprint-planning
 
 Facilita el proceso completo de planificación de un sprint de Beiqa. Absorbe todo el contexto disponible del repo (silenciosamente), entrevista a Pablo con profundidad usando AskUserQuestion, genera el sprint file completo como preview, y ejecuta todos los cambios tras una sola aprobación: reescribir el sprint file, crear/mover issues en GitHub + Project Board, actualizar Backlog.md, propagación y commit.

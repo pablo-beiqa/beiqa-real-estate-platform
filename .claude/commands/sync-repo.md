@@ -1,3 +1,9 @@
+---
+description: "Sincroniza el repo de documentación con el trabajo real del equipo — ejecutar cada 2-3 días o tras bloque significativo de trabajo en beiqa-scraper, beiqa-frontend, o beiqa-agents"
+allowed-tools: ["Read", "Glob", "Grep", "Write", "Edit", "Bash", "Task", "AskUserQuestion", "TodoWrite"]
+model: "sonnet"
+---
+
 # sync-repo
 
 Sincroniza el repositorio de documentación de Beiqa con el trabajo real del equipo. Entrevista dinámica y profunda al usuario, verifica repos de código, detecta drift entre documentación y realidad, y ejecuta todas las actualizaciones necesarias — incluyendo ADRs completos, lecciones aprendidas, y creación de issues nuevos.

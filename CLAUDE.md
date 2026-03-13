@@ -97,8 +97,31 @@ Resolver autónomamente (sin preguntar paso a paso):
 | Reglas de propagación | [tasks/propagation-rules.md](tasks/propagation-rules.md) |
 | Estado de módulos | [01-Modules/README.md](01-Modules/README.md) |
 
-## Skills y commits
+## Commands, Skills y Agents
 
-**Skills**: `/audit-consistency` (11 checks cross-file), `/session-close` (protocolo completo de cierre), `/beiqa-content` (parrillas de contenido), `/sprint-planning` (planificación completa de sprint con entrevista + OKRs + issues), `/sprint-retro` (cierre de sprint con retrospectiva y métricas), `/sync-repo` (sincronización rápida de docs con trabajo en repos de código).
+**Estructura `.claude/`**:
+```
+.claude/
+├── settings.json          # Permisos del proyecto (gh, git, rtk permitidos)
+├── commands/              # Slash-commands invocables por el usuario
+├── skills/                # Building blocks para agentes (no invocables directamente)
+├── agents/                # Subagentes especializados
+└── agent-memory/          # Memoria persistente por agente
+```
+
+**Commands** (invocar con `/nombre`):
+- `/sprint-planning` — planificación completa de sprint con entrevista adaptativa + OKRs + issues
+- `/sprint-retro` — cierre de sprint con retrospectiva hasta 95/100 de confianza
+- `/sync-repo` — sincronización docs↔código cada 2-3 días
+- `/session-close` — protocolo completo de cierre de sesión (9 pasos)
+- `/audit-consistency` — auditoría cross-file (11 checks, solo lectura)
+
+**Skills** (building blocks para agentes, no invocar directamente):
+- `issue-creator` — schema y comandos para GitHub Issues
+- `propagation-checker` — tabla de propagación cross-file
+- `doc-formatter` — estándares de formato (ADRs, sprints, backlog)
+
+**Agents** (subagentes autónomos, invocar via Task tool):
+- `sprint-researcher` — investiga estado real del sprint (GitHub + git log), retorna diff estructurado
 
 **Commits**: `<tipo>(<scope>): <descripción en español>`. Tipos: `docs`, `feat`, `fix`, `refactor`, `chore`. Scopes: por carpeta o módulo. Español, lowercase, imperativo, sin punto final.

@@ -1,3 +1,10 @@
+---
+description: "Auditoría completa de consistencia del repo — detecta links rotos, status mismatches, ADR count drift, stack sync, y convenciones de emojis. Solo lee, nunca modifica."
+argument-hint: "[links|sprints|status|stack]"
+allowed-tools: ["Read", "Glob", "Grep"]
+model: "haiku"
+---
+
 # audit-consistency
 
 Ejecuta una auditoría completa de consistencia del repositorio de documentación de Beiqa. Detecta inconsistencias entre archivos — sprint conflicts, status mismatches, broken links, ADR count drift, stack sync, y convenciones de emojis. No modifica ningún archivo; solo reporta hallazgos.

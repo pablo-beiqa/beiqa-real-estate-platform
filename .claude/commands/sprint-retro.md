@@ -1,3 +1,9 @@
+---
+description: "Ejecuta el cierre completo de un sprint: retrospectiva adaptativa hasta 95/100 de confianza, análisis cruzado objetivo/subjetivo, carryover, lecciones, actualización de docs, y handoff formal al planning"
+allowed-tools: ["Read", "Glob", "Grep", "Write", "Edit", "Bash", "Task", "AskUserQuestion", "TodoWrite"]
+model: "sonnet"
+---
+
 # sprint-retro
 
 Ejecuta el cierre completo de un sprint: recolecta datos reales de forma silenciosa, entrevista a Pablo de forma adaptativa con AskUserQuestion hasta alcanzar 95/100 de confianza, cruza perspectiva subjetiva con datos objetivos, propone carryover y lecciones, actualiza toda la documentación, y hace handoff formal al sprint planning.

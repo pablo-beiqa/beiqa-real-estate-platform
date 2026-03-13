@@ -1,3 +1,9 @@
+---
+description: "Ejecuta el protocolo completo de cierre de sesión: resumen, commits pendientes, propagación cross-archivo, lecciones, GitHub Issues, presupuesto, MEMORY.md, CHANGELOG/README, y próximos pasos"
+allowed-tools: ["Read", "Glob", "Grep", "Write", "Edit", "Bash", "Task", "AskUserQuestion", "TodoWrite"]
+model: "sonnet"
+---
+
 # session-close
 
 Ejecuta el protocolo completo de cierre de sesión para el repositorio de documentación de Beiqa. Genera un resumen estructurado, verifica commits, propagación, lecciones, GitHub Issues, presupuesto, CHANGELOG/README, MEMORY.md, y propone próximos pasos. Interactúa con el usuario cuando necesita aprobación.
